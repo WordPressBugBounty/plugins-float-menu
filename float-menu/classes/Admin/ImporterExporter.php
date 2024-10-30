@@ -71,13 +71,33 @@ class ImporterExporter {
 	 * @throws \JsonException
 	 */
 	public static function import_data(): void {
-		if ( self::get_file_extension( $_FILES['import_file']['name'] ) !== 'json' ) {
-			wp_die( esc_attr__( 'Please upload a valid .json file', 'float-menu' ), esc_attr__( 'Error', 'float-menu' ),
+
+		$verify = AdminActions::verify( WOWP_Plugin::PREFIX . '_import_data' );
+
+		if ( ! $verify ) {
+			return;
+		}
+
+		if ( ! isset( $_FILES['import_file'] ) || empty( $_FILES['import_file']['name'] ) ) {
+			wp_die( esc_attr__( 'Please select a file to import', 'float-menu' ),
+				esc_attr__( 'Error', 'float-menu' ),
 				[ 'response' => 400 ] );
 		}
 
+		if ( self::get_file_extension( sanitize_text_field( $_FILES['import_file']['name'] ) ) !== 'json' ) {
+			wp_die(
+				esc_html__( 'Please upload a valid .json file', 'float-menu' ),
+				esc_html__( 'Error', 'float-menu' ),
+				[ 'response' => 400 ] );
+		}
 
-		$import_file = $_FILES['import_file']['tmp_name'];
+		if ( empty( $_FILES['import_file']['tmp_name'] ) ) {
+			wp_die( esc_attr__( 'Please select a file to import', 'float-menu' ),
+				esc_attr__( 'Error', 'float-menu' ),
+				[ 'response' => 400 ] );
+		}
+
+		$import_file = sanitize_text_field( $_FILES['import_file']['tmp_name'] );
 		$settings    = wp_json_file_decode( $import_file );
 
 		$columns = DBManager::get_columns();
@@ -145,8 +165,8 @@ class ImporterExporter {
 	 * @throws \JsonException
 	 */
 	public static function export_item( $id = 0, $action = '' ) {
-		$page   = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
-		$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : $action;
+		$page   = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : $action;
 		$id     = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ( $page !== WOWP_Plugin::SLUG ) || ( $action !== 'export' ) || empty( $id ) ) {

@@ -3,10 +3,10 @@ Contributors: Wpcalc, lobov
 Donate link: https://wow-estore.com/item/float-menu-pro/
 Tags: sidebar menu, floating menu, side menu, sticky menu, float menu
 Requires at least: 4.3
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 6.0.4
-License: GPLv2 or later
+Stable tag: 6.0.5
+License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Easily create floating menus of varying complexity. Use its capabilities to place unique navigation on the site.
@@ -100,6 +100,11 @@ Search for answers and ask your questions at [support center](https://wordpress.
 1. Menu
 
 == Changelog ==
+= 6.0.5 =
+* Fixed: main icon in the admin menu.
+* Fixed: minor bugs
+* Update: translate file
+
 = 6.0.4 =
 * Fixed: re-write the function 'Mobile Rules'
 

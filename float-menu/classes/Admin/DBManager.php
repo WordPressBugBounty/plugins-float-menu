@@ -22,8 +22,8 @@ use FloatMenuLite\WOWP_Plugin;
 class DBManager {
 
 	public static function remove_item() {
-		$page   = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
-		$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
+		$page   = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 		$id     = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : '';
 
 		if ( ( $page !== WOWP_Plugin::SLUG ) || ( $action !== 'delete' ) || empty( $id ) ) {

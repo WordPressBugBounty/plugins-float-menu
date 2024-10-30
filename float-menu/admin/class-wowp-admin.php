@@ -40,6 +40,7 @@ class WOWP_Admin {
             <a href="<?php echo esc_url(WOWP_Plugin::info('pro'));?>" target="_blank">PRO Plugin</a>
             <a href="<?php echo esc_url(WOWP_Plugin::info('support'));?>" target="_blank">Support</a>
             <a href="<?php echo esc_url(WOWP_Plugin::info('rating'));?>" target="_blank" class="wpie-color-orange">Rating</a>
+            <a href="https://www.wordfence.com/r/a0fe3fadb6e08d58/products/wordfence-free/" class="wpie-color-success" target="_blank">Secure your site</a>
         </div>
 		<?php
 	}

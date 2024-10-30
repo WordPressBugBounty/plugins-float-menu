@@ -149,7 +149,7 @@ class Dashboard {
 
 		$current_page = self::get_current_page();
 
-		$action = ( isset( $_REQUEST["action"] ) ) ? sanitize_text_field( $_REQUEST["action"] ) : '';
+		$action = ( isset( $_REQUEST["action"] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST["action"] ) ) : '';
 
 		echo '<h2 class="nav-tab-wrapper wpie-nav-tab-wrapper">';
 		foreach ( $pages as $key => $page ) {
@@ -171,7 +171,7 @@ class Dashboard {
 	public static function get_current_page(): string {
 		$default = DashboardHelper::first_file( 'pages' );
 
-		return ( isset( $_REQUEST["tab"] ) ) ? sanitize_text_field( $_REQUEST["tab"] ) : $default;
+		return ( isset( $_REQUEST["tab"] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST["tab"] ) ) : $default;
 	}
 
 	public static function include_pages(): void {
