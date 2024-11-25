@@ -128,6 +128,10 @@ class Menu_Maker {
 			$out .= 'rel="' . esc_attr( $param['menu_1']['link_rel'][ $i ] ) . '" ';
 		}
 
+		if ( ! empty( $param['menu_1']['aria_label'][ $i ] ) ) {
+			$out .= 'aria-label="' . esc_attr( $param['menu_1']['aria_label'][ $i ] ) . '" ';
+		}
+
 		return trim( $out );
 	}
 

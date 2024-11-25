@@ -5,7 +5,7 @@ Tags: sidebar menu, floating menu, side menu, sticky menu, float menu
 Requires at least: 4.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 6.0.6
+Stable tag: 6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ Float Menu is a free WordPress plugin to create and place a unique floating menu
 
 The Float Menu extension will create the convenient floating menu for your site. The panel does not take up much of the screen space and is always available to the user. Connecting the tool to a web resource will provide an opportunity to increase its usability and attractiveness. The menu is easily customizable for different site themes.
 
-[Look Demo PRO](https://wow-estore.com/interactive-demo-float-menu-pro/)
+[Look Demo PRO](https://demo.wow-estore.com/float-menu-pro/)
 
 = Main features =
 
@@ -67,10 +67,9 @@ Open access to all the extension features with the Pro-version of the plugin. It
 * set the display of navigation on all pages of the resource or in individual posts, use to output the category, IDs and exclusions, insert the panel via the shortcode;
 * And more...
 
-[Preview of Pro version](https://wow-estore.com/interactive-demo-float-menu-pro/)
+[Preview of Pro version](https://demo.wow-estore.com/float-menu-pro/)
 
 Try our new [WordPress popup plugin](https://wordpress.org/plugins/popup-box/)
-
 
 = Use with other plugins to maximize your results =
 * [Popup Box – new WordPress popup plugin](https://wordpress.org/plugins/popup-box/)
@@ -100,6 +99,10 @@ Search for answers and ask your questions at [support center](https://wordpress.
 1. Menu
 
 == Changelog ==
+= 6.1 =
+* Added: Attribute 'aria-label'
+* Fixed: save link
+
 = 6.0.6 =
 * Updated: FontAwesome Icon.
 

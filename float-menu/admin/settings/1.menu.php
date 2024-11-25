@@ -102,9 +102,11 @@ $count = ( ! empty( $options['menu_1']['item_type'] ) ) ? count( $options['menu_
 										esc_html_e( 'Attributes', 'float-menu' ); ?></div>
                                     <div class="wpie-fields">
 										<?php
-										$field->create( 'menu_1-button_id', $i ); ?><?php
-										$field->create( 'menu_1-button_class', $i ); ?><?php
-										$field->create( 'menu_1-link_rel', $i ); ?>
+										$field->create( 'menu_1-button_id', $i );
+										$field->create( 'menu_1-button_class', $i );
+										$field->create( 'menu_1-link_rel', $i );
+										$field->create( 'menu_1-aria_label', $i );
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -205,9 +207,9 @@ $count = ( ! empty( $options['menu_1']['item_type'] ) ) ? count( $options['menu_
 								esc_html_e( 'Attributes', 'float-menu' ); ?></div>
                             <div class="wpie-fields">
 								<?php
-								$field->create( 'menu_1-button_id', - 1 ); ?><?php
-								$field->create( 'menu_1-button_class', - 1 ); ?><?php
-								$field->create( 'menu_1-link_rel', - 1 ); ?>
+								$field->create( 'menu_1-button_id', - 1 );
+								$field->create( 'menu_1-button_class', - 1 );
+                                $field->create( 'menu_1-aria_label', - 1 ); ?>
                             </div>
                         </div>
 

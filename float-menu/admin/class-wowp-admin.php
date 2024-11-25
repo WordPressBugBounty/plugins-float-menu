@@ -62,10 +62,6 @@ class WOWP_Admin {
 			] );
 		}
 
-		if ( isset( $request['menu_1']['item_link'] ) ) {
-			$param['menu_1']['item_link'] = map_deep( $request['menu_1']['item_link'], 'esc_url' );
-		}
-
 		if ( isset( $request['popupcontent'] ) ) {
 			$param['popupcontent'] = wp_kses_post( wp_unslash( $request['popupcontent'] ) );
 		}

@@ -98,6 +98,11 @@ $args = [
 		'title' => __( 'Attribute: rel', 'float-menu' ),
 	],
 
+	'aria_label' => [
+		'type'  => 'text',
+		'title' => __( 'Aria label', 'float-menu' ),
+	],
+
 
 ];
 
