@@ -74,7 +74,7 @@ class Menu_Maker {
 		if ( $value === 'link' ) {
 			$link   = $param['menu_1']['item_link'][ $i ] ?? '#';
 			$target = ! empty( $param['menu_1']['new_tab'][ $i ] ) ? '_blank' : '_self';
-			$out    .= 'href="' . esc_url( $link ) . '" ';
+			$out    .= 'href="' . esc_attr( $link ) . '" ';
 			$out    .= 'target="' . esc_attr( $target ) . '" ';
 			$out    .= $this->item_atts( $i );
 		}
