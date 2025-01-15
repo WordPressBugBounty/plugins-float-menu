@@ -3,7 +3,7 @@
  * Plugin Name:       Float Menu Lite
  * Plugin URI:        https://wow-estore.com/item/float-menu-pro/
  * Description:       Easily create floating menus of varying complexity
- * Version:           6.1.3
+ * Version:           6.1.4
  * Author:            Wow-Company
  * Author URI:        https://wow-estore.com
  * License:           GPL-2.0+
@@ -163,11 +163,11 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 
 			$columns = "
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			title VARCHAR(200) DEFAULT '' NOT NULL,
-			param LONGTEXT NOT NULL,
-			status BOOLEAN DEFAULT 0 NOT NULL,
-			mode BOOLEAN DEFAULT 0 NOT NULL,
-			tag TEXT NOT NULL,
+			title VARCHAR(200),
+			param longtext,
+			status boolean DEFAULT 0 NOT NULL,
+			mode boolean DEFAULT 0 NOT NULL,
+			tag text,
 			PRIMARY KEY  (id)
 			";
 
