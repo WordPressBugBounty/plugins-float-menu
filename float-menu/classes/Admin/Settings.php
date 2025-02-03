@@ -20,6 +20,10 @@ use FloatMenuLite\WOWP_Plugin;
 
 class Settings {
 
+	public function __construct() {
+//		add_action('wp_ajax_'.WOWP_Plugin::PREFIX . '_ajax_settings', [$this, 'save_item']);
+	}
+
 	public static function init(): void {
 
 		$pages   = DashboardHelper::get_files( 'settings' );
@@ -36,7 +40,7 @@ class Settings {
 		echo '<div class="wpie-tabs-contents">';
 		foreach ( $pages as $key => $page ) {
 			$file = DashboardHelper::get_folder_path( 'settings' ) . '/' . $key . '.' . $page['file'] . '.php';
-			echo '<input type="radio" class="wpie-tab-toggle" name="setting_tab" value="' . absint( $key ) . '" id="setting_tab_' . absint( $key ) . '" ' . checked( $key, $checked, false ) . '>';
+			echo '<input type="radio" class="wpie-tab-toggle" name="param[setting_tab]" value="' . absint( $key ) . '" id="setting_tab_' . absint( $key ) . '" ' . checked( $key, $checked, false ) . '>';
 			if ( file_exists( $file ) ) {
 				echo '<div class="wpie-tab-content">';
 				require_once $file;
@@ -48,24 +52,29 @@ class Settings {
 	}
 
 	public static function save_item() {
+		$raw_data = file_get_contents('php://input');
+		$request = json_decode($raw_data, true);
 
-		if ( empty( $_POST['submit_settings'] ) ) {
-			return false;
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			wp_send_json_error(['message' => 'Invalid JSON']);
 		}
 
-		$id = isset( $_POST['tool_id'] ) ? absint( wp_unslash( $_POST['tool_id'] ) ) : 0;
+		if (!isset($request['security']) || !wp_verify_nonce($request['security'], WOWP_Plugin::PREFIX . '_settings')) {
+			wp_send_json_error(['message' => 'Invalid nonce'], 400);
+		}
 
-		$settings = apply_filters( WOWP_Plugin::PREFIX . '_save_settings', $_POST );
+		$info = $request['info'];
 
-		$removes      = [ 'wpie_buttons_settings', '_wp_http_referer', 'submit_settings' ];
-		$keys_flipped = array_flip( $removes );
-		$settings     = array_diff_key( $settings, $keys_flipped );
+
+		$id = isset( $info['tool_id'] ) ? absint( $info['tool_id'] ) : 0;
+
+		$settings = apply_filters( WOWP_Plugin::PREFIX . '_save_settings', $info['param'] );
 
 		$data    = [
-			'title'  => isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '',
-			'status' => isset( $_POST['status'] ) ? 1 : 0,
-			'mode'   => isset( $_POST['mode'] ) ? 1 : 0,
-			'tag'    => isset( $_POST['tag'] ) ? sanitize_text_field( wp_unslash( $_POST['tag'] ) ) : '',
+			'title'  => isset( $info['title'] ) ? sanitize_text_field( wp_unslash( $info['title'] ) ) : '',
+			'status' => isset( $info['status'] ) ? 1 : 0,
+			'mode'   => isset( $info['mode'] ) ? 1 : 0,
+			'tag'    => isset( $info['tag'] ) ? sanitize_text_field( wp_unslash( $info['tag'] ) ) : '',
 			'param'  => maybe_serialize( $settings ),
 		];
 		$formats = [
@@ -86,12 +95,13 @@ class Settings {
 			$id_item = $id;
 		}
 
-		wp_safe_redirect( Link::save_item( $id_item ) );
+		wp_send_json_success(['id' => absint($id_item) ]);
 		exit;
-
+		// phpcs:enable
 	}
 
 	public static function deactivate_item( $id = 0 ): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
@@ -101,6 +111,7 @@ class Settings {
 	}
 
 	public static function activate_item( $id = 0 ): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
@@ -110,6 +121,7 @@ class Settings {
 	}
 
 	public static function deactivate_mode( $id = 0 ): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
@@ -119,6 +131,7 @@ class Settings {
 	}
 
 	public static function activate_mode( $id = 0 ): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
@@ -127,14 +140,15 @@ class Settings {
 	}
 
 	public static function get_options() {
-
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$id = isset( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : 0;
 
 		if ( empty( $id ) ) {
 			return false;
 		}
 
-		$action = isset( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash($_REQUEST['action'] ) ) : 'update';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$action = isset( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : 'update';
 		$result = DBManager::get_data_by_id( $id );
 
 		if ( empty( $result ) ) {

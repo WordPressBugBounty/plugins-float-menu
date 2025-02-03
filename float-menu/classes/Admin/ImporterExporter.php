@@ -71,13 +71,12 @@ class ImporterExporter {
 	 * @throws \JsonException
 	 */
 	public static function import_data(): void {
-
-		$verify = AdminActions::verify( WOWP_Plugin::PREFIX . '_import_data' );
+		$verify = AdminActions::verify(WOWP_Plugin::PREFIX . '_import_data');
 
 		if ( ! $verify ) {
 			return;
 		}
-
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification is handled elsewhere.
 		if ( ! isset( $_FILES['import_file'] ) || empty( $_FILES['import_file']['name'] ) ) {
 			wp_die( esc_attr__( 'Please select a file to import', 'float-menu' ),
 				esc_attr__( 'Error', 'float-menu' ),
@@ -103,6 +102,7 @@ class ImporterExporter {
 		$columns = DBManager::get_columns();
 
 		$update = ! empty( $_POST['wpie_import_update'] ) ? '1' : '';
+		// phpcs:enable
 
 		foreach ( $settings as $key => $val ) {
 			$data    = [];
@@ -165,8 +165,11 @@ class ImporterExporter {
 	 * @throws \JsonException
 	 */
 	public static function export_item( $id = 0, $action = '' ) {
-		$page   = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
-		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : $action;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page   = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash($_GET['page']) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash($_GET['action']) ) : $action;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$id     = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ( $page !== WOWP_Plugin::SLUG ) || ( $action !== 'export' ) || empty( $id ) ) {

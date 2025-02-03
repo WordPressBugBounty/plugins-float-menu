@@ -29,13 +29,6 @@ $args = [
 		'label' => __( 'Disable', 'float-menu' ),
 	],
 
-	'velocity' => [
-		'type'  => 'checkbox',
-		'title' => __( 'Velocity.js', 'float-menu' ),
-		'val'   => 0,
-		'label' => __( 'Disable', 'float-menu' ),
-	],
-
 	'mobile' => [
 		'type'  => 'number',
 		'title' => [
@@ -58,18 +51,11 @@ $args = [
 		'addon' => 'px'
 	],
 
-	'mobile_rules' => [
-		'type'  => 'number',
-		'title' => [
-			'label'  => __( 'Mobile Rules', 'float-menu' ),
-			'name'   => 'mobile_rules_on',
-			'toggle' => true,
-		],
-		'val'   => 768,
-		'addon' => 'px',
+	'mobile_rules_on' => [
+		'type'  => 'checkbox',
+		'title' => __( 'Mobile Rules', 'float-menu' ),
+		'label' => __( 'Enable', 'float-menu' ),
 	],
-
-
 ];
 
 return $args;

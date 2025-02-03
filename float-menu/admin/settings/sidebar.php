@@ -42,7 +42,7 @@ if ( ! empty( $options['id'] ) ) {
 
         <div class="wpie-field">
             <label class="wpie-field__label has-icon">
-                <span class="dashicons dashicons-tag"></span>
+                <span class="wpie-icon wpie_icon-tag"></span>
                 <input list="wpie-tags" type="text" name="tag" id="tag"
                        value="<?php echo esc_attr( $tag ); ?>">
                 <datalist id="wpie-tags">
@@ -55,10 +55,10 @@ if ( ! empty( $options['id'] ) ) {
             <label class="wpie-field__label has-icon">
 				<?php if ( ! empty( $link ) ): ?>
                     <a href="<?php echo esc_url( $link ); ?>" target="_blank">
-                        <span class="dashicons dashicons-admin-links"></span>
+                        <span class="has-tooltip on-right is-pointer" data-tooltip="Open Link"><span class="wpie-icon wpie_icon-link"></span></span>
                     </a>
 				<?php else: ?>
-                    <span class="dashicons dashicons-admin-links"></span>
+                    <span class="wpie-icon wpie_icon-link"></span>
 				<?php endif; ?>
                 <input type="url" name="link" id="link" value="<?php echo esc_url( $link ); ?>">
             </label>
@@ -67,7 +67,7 @@ if ( ! empty( $options['id'] ) ) {
 		<?php if ( ! empty( $shortcode ) ) : ?>
             <div class="wpie-field">
                 <label class="wpie-field__label has-icon">
-                    <span class="dashicons dashicons-shortcode"></span>
+                    <span class="has-tooltip on-right is-pointer can-copy" data-tooltip="Copy"><span class="dashicons dashicons-shortcode" ></span></span>
                     <input type="text" id="shortcode" value="<?php echo esc_attr( $shortcode ); ?>" readonly>
                 </label>
             </div>
@@ -87,6 +87,7 @@ if ( ! empty( $options['id'] ) ) {
         </div>
 
         <div class="wpie-action__btn">
+            <span class="spinner"></span>
 			<?php submit_button( null, 'primary', 'submit_settings', false ); ?>
         </div>
     </div>
@@ -95,4 +96,3 @@ if ( ! empty( $options['id'] ) ) {
 
 <?php
 require_once plugin_dir_path( __FILE__ ) . 'pro-plugin.php';
-

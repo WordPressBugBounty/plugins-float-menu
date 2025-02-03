@@ -29,7 +29,7 @@ class Conditions {
 			'mode'           => self::mode( $result->mode ),
 		];
 
-		$check = apply_filters(WOWP_Plugin::PREFIX . '_conditions',  $check);
+		$check = apply_filters( WOWP_Plugin::PREFIX . '_conditions', $check );
 
 		if ( in_array( false, $check, true ) ) {
 			return false;
@@ -46,6 +46,5 @@ class Conditions {
 	private static function mode( $mode ): bool {
 		return empty( $mode ) || current_user_can( 'manage_options' );
 	}
-
 
 }

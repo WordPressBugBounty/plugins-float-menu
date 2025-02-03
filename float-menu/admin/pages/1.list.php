@@ -58,6 +58,6 @@ $wp_plugins = [
 		$list_table->display();
 		?>
         <input type="hidden" name="page" value="<?php echo esc_attr( $table_page ); ?>"/>
-		<?php wp_nonce_field( WOWP_Plugin::PREFIX . '_nonce', WOWP_Plugin::PREFIX . '_list_action' ); ?>
+	    <?php wp_nonce_field( WOWP_Plugin::PREFIX . '_nonce', WOWP_Plugin::PREFIX . '_list_action' ); ?>
     </form>
 <?php

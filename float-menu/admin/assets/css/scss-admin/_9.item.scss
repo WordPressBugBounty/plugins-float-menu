@@ -134,6 +134,11 @@
     cursor: pointer;
   }
 
+  .wpie_icon-copy {
+    color: rgb(var(--wpie-rgb-blurple));
+    cursor: pointer !important;
+  }
+
   list-style: none;
 
   &::-webkit-details-marker {
@@ -195,8 +200,6 @@
   }
 
   .wpie-remove {
-    //content: '\f335';
-    //font-family: dashicons;
     position: absolute;
     transform: translateX(50%);
     right: calc(-2rem);
@@ -216,4 +219,11 @@
   font-weight: 700;
   color: rgb(var(--wpie-rgb-blurple));
 
+}
+
+.shifted-right {
+  margin-left: 30px;
+  .wpie-item_heading {
+    background-color: #F2FCF9;
+  }
 }

@@ -1,1423 +1,624 @@
-/*! ========= INFORMATION ============================
-    - document:  Float Menu Pro
-	- brand:     Wow-Company
-	- brand-url: https://wow-company.com/
-    - store-url: https://wow-estore.com/
-	- author:    Dmytro Lobov
-	- url:       https://wow-estore.com/item/float-menu-pro/
-==================================================== */
-
 'use strict';
 
-(function ($) {
+class FloatMenu {
 
-    var defaults = {
-        // Main
-        position: ['left', 'center'],
-        offset: [0, 0],
-        buttonShape: 'round',
-        buttonColor: 'custom',
-        buttonOverColor: 'custom',
-        iconColor: 'white',
-        iconOverColor: 'white',
-        labelColor: 'match',
-        labelTextColor: 'match',
-        labelEffect: 'slide-out-fade',
-        labelAnimate: 'default',
-        labelConnected: false,
-        labelsOn: true,
-        sideSpace: false,
-        buttonSpace: false,
-        labelSpace: false,
-        mobileEnable: false,
-        mobileScreen: 768,
-        // Subbar
-        subPosition: ['circular', 100, -90, 90],
-        subEffect: ['slide', 30],
-        subAnimate: [400, 'easeOutQuad'],
-        subSpace: false,
-        subOpen: 'mouseover',
-        subTop: 42,
-        // Window
-        windowPosition: ['center', 'center'],
-        windowOffset: [0, 0],
-        windowCorners: 'match',
-        windowColor: 'match',
-        windowShadow: true,
-        // Other
-        showAfterPosition: false,
-        hideAfterPosition: false,
-        barAnimate: [250, 'easeOutQuad'],
-        hideUnderWidth: false,
-        shareTarget: 'default',
-    };
-    var labelAnimateDefaults = {
-        'default': [400, 'easeOutQuad'],
-        'fade': [200, 'easeOutQuad'],
-        'slide-in-in': {
-            show: [400, 'easeOutQuad'],
-            hide: [400, 'swing'],
-        },
-    };
+    static ATTR = `data-float-menu`;
 
-    var methods = {
-        'build': build,
-        'destroy': destroy,
-    };
+    static initialize() {
+        window.floatMenus = {};
+        document.querySelectorAll(`[${FloatMenu.ATTR}]`).forEach((floatmenu) => {
+            const instance = new FloatMenu(floatmenu);
+            const match = floatmenu.className.match(/float-menu-(\d+)/);
+            if (match && match[1]) {
+                const key = match[1];
+                window.floatMenus[key] = instance;
+            }
+        });
+    }
 
-    $.fn.floatingMenu = function (arg) {
-        if (typeof arg === 'object' || !arg) {
-            build.apply(this, arguments);
-        } else if (methods[arg]) {
-            methods[arg].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else {
-            $.error('The method ' + arg + ' does not exist in Float Menu.');
+    constructor(floatmenuElement, options = {}) {
+        if (!(floatmenuElement instanceof HTMLElement)) {
+            return;
         }
-    };
 
-    function build(options) {
-        var settings = createSettings(options);
+        const defaultConfig = {
+            'position': ['left', 'center'],
+        };
 
-        return this.each(function () {
-            var sidebar = $(this);
+        this.element = floatmenuElement;
+        this.config = Object.assign({}, defaultConfig, this.#parseConfig(), options);
+        if (this.config === null) return;
 
-            if (sidebar.data('fm-built')) destroy.apply(this);
-            sidebar.data('fm-built', true);
+        this.items = floatmenuElement.querySelectorAll(`.fm-item`);
+        this.links = floatmenuElement.querySelectorAll(`.fm-link`);
+        this.labels = floatmenuElement.querySelectorAll(`.fm-label`);
 
-            // VARS
-            var bar = sidebar.children('.fm-bar');
-            var barList = bar.children();
-            var sbwindow = sidebar.children('.fm-window');
+        if (this.items.length === 0) {
+            return;
+        }
 
-            var $window = $(window);
-            var $document = $(document);
+        const ITEM_PADDING = 15;
 
-            var barVisible = true;
-            var right = false;
-            var csub = null;
-            var cwindow = null;
-            var nextMargins = [];
+        this.itemWidth = this.items[0].offsetWidth + ITEM_PADDING;
 
-            // INIT
-            if (settings.position[0] === 'right') {
-                right = true;
-                bar.addClass('fm-right');
+        if (this.config?.remove) {
+            this.element.removeAttribute(FloatMenu.ATTR);
+        }
+
+        this.init();
+
+    }
+
+    init() {
+
+        this.screen();
+        window.addEventListener('resize', this.screen.bind(this));
+        this.mobileStyle();
+        window.addEventListener('resize', this.mobileStyle.bind(this));
+        this.labelDisabele();
+        this.mobileClick();
+        this.position();
+        this.appearance();
+        this.setLinkProperties();
+        this.setSubMenu();
+        this.extraText();
+        this.visibleMenu();
+        this.closePopup();
+    }
+
+    appearance() {
+        if (!this.config?.appearance) {
+            return;
+        }
+
+        if (this.config?.appearance?.shape) {
+            this.element.classList.add(this.config?.appearance?.shape);
+        }
+
+        if (this.config?.appearance?.sideSpace) {
+            this.element.classList.add('-side-space');
+        }
+
+        if (this.config?.appearance?.buttonSpace) {
+            this.element.classList.add('-button-space');
+        }
+
+        if (this.config?.appearance?.labelConnected) {
+            this.element.classList.add('-label-connect');
+        }
+
+        if (this.config?.appearance?.subSpace) {
+            this.element.classList.add('-sub-space');
+        }
+
+    }
+
+    labelDisabele() {
+
+
+        if (!this.config?.label?.off) {
+            return false;
+        }
+        this.links.forEach((label) => {
+            label.classList.add('-label-hidden');
+        });
+    }
+
+    screen() {
+        if (!this.config?.screen) {
+            return;
+        }
+
+        const {small, large} = this.config.screen;
+        const viewportWidth = window.innerWidth;
+
+        const hideMenu = () => {
+            this.element.classList.add('fm-hidden');
+        };
+
+        const showMenu = () => {
+            this.element.classList.remove('fm-hidden');
+        };
+
+        if (typeof small !== 'undefined' && viewportWidth <= small) {
+            hideMenu();
+            return;
+        }
+
+        if (typeof large !== 'undefined' && viewportWidth >= large) {
+            hideMenu();
+            return;
+        }
+
+        if (typeof small === 'undefined' || typeof large === 'undefined' ||
+            (viewportWidth > small && viewportWidth < large)) {
+            showMenu();
+        }
+
+    }
+
+    closePopup() {
+        const popups = this.element.querySelectorAll(`.fm-window`);
+        if (popups.length === 0) {
+            return;
+        }
+
+        popups.forEach((popup) => {
+            const close = popup.querySelector(`.fm-close`);
+            if (close) {
+                close.addEventListener('click', () => {
+                    popup.close();
+                });
             }
 
-            if (settings.buttonShape !== 'square') bar.addClass('fm-' + settings.buttonShape);
+            popup.addEventListener('click', closeOnBackDropClick);
 
-            if (settings.labelConnected) bar.addClass('fm-connected');
+            function closeOnBackDropClick({currentTarget, target}) {
+                const dialogElement = currentTarget;
+                const isClickedOnBackDrop = target === dialogElement;
+                if (isClickedOnBackDrop) {
+                    dialogElement.close();
+                }
+            }
+        });
+    }
 
-            if (settings.buttonColor !== 'custom') bar.addClass('fm-' + settings.buttonColor + '-button');
-            if (settings.buttonOverColor !== 'custom') bar.addClass('fm-' + settings.buttonOverColor + '-button-over');
+    extraText() {
+        const textBox = this.element.querySelectorAll(`.fm-extra-text`);
+        if (textBox.length === 0) {
+            return;
+        }
 
-            if (settings.iconColor !== 'custom') bar.addClass('fm-' + settings.iconColor + '-icon');
-            if (settings.iconOverColor !== 'custom') bar.addClass('fm-' + settings.iconOverColor + '-icon-over');
+        textBox.forEach(text => {
+            const space = parseFloat(this.config?.label?.space) || 0;
+            text.style.setProperty('--text_margin', space);
+            const item = text.closest('.fm-item');
+            const link = item.querySelector('.fm-link');
 
-            if (settings.labelColor !== 'custom') bar.addClass('fm-' + settings.labelColor + '-label');
-            if (settings.labelTextColor !== 'custom') bar.addClass('fm-' + settings.labelTextColor + '-label-text');
-
-            if (settings.sideSpace) bar.addClass('fm-side-space');
-            if (settings.buttonSpace) bar.addClass('fm-button-space');
-            if (settings.labelSpace) bar.addClass('fm-label-space');
-
-            if (settings.windowCorners === 'round') sbwindow.addClass('fm-round');
-            if (settings.windowColor !== 'custom') sbwindow.addClass('fm-' + settings.windowColor);
-            if (settings.windowShadow) sbwindow.addClass('fm-winshadow');
-
-            buildList(bar);
-
-            // Subbar animate fix.
-            barList.each(function (ind) {
-                nextMargins[ind] = getInt(barList.eq(ind).css('margin-top'));
+            item.addEventListener('mouseenter', () => {
+                link.classList.toggle('-active');
+            });
+            item.addEventListener('mouseleave', () => {
+                link.classList.toggle('-active');
             });
 
-            sbwindow.children('.fm-shadow').on('click', closeWindow);
+        });
 
-            sbwindow.children('.fm-panel').each(buildPanel);
+    }
 
-            resize();
+    visibleMenu() {
 
-            $window.on('resize.superSidebar', resize);
+        if (
+            (!this.config.visible || this.config.visible.every(v => v === 'show' || v === '0')) &&
+            (!this.config.time || this.config.time.every(t => t === 'show' || t === '0'))
+        ) {
+            this.element.classList.add('fm-ready');
+            return;
+        }
 
-            if (settings.showAfterPosition) {
-                if ($window.scrollTop() < settings.showAfterPosition) {
-                    bar.css('opacity', 0).addClass('fm-hide');
-                    barVisible = false;
+        let isReady = false;
+
+        const showMenu = () => {
+            if (!isReady) {
+                this.element.classList.add('fm-ready');
+                isReady = true;
+            }
+        };
+
+        const hideMenu = () => {
+            if (isReady) {
+                this.element.classList.remove('fm-ready');
+                isReady = false;
+            }
+        };
+
+        if (this.config.time) {
+            const time = this.config.time || ['show', '0'];
+            const [timeAction, timeValue] = time;
+            const timeThreshold = Number(timeValue);
+
+            if (timeAction === 'show' && timeThreshold > 0) {
+                setTimeout(showMenu, timeThreshold * 1000);
+            }
+
+            if (timeAction === 'hide' && timeThreshold > 0) {
+                showMenu();
+                setTimeout(hideMenu, timeThreshold * 1000);
+            }
+        }
+
+        if (this.config.visible) {
+
+            const visible = this.config.visible || ['show', '0'];
+            const [visibleAction, visibleValue] = visible;
+            const visibleThreshold = Number(visibleValue);
+
+            if (visibleAction === 'hide') {
+                showMenu();
+            }
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+                if (visibleAction === 'show') {
+                    if (scrollTop >= visibleThreshold) {
+                        showMenu();
+
+                    } else {
+                        hideMenu();
+                    }
                 }
 
-                $window.on('scroll.superSidebar', function () {
-                    if ($window.scrollTop() < settings.showAfterPosition) {
-                        if (barVisible) hideBar();
+                if (visibleAction === 'hide') {
+                    if (scrollTop > visibleThreshold) {
+                        hideMenu();
                     } else {
-                        if (!barVisible) showBar();
+                        showMenu();
                     }
+                }
+
+            });
+        }
+
+    }
+
+    mobileStyle() {
+
+        if (!this.config?.mobile) {
+            return;
+        }
+
+        const screenWidth = window.innerWidth;
+        const screen = parseInt(this.config?.mobile[0]) || 0;
+        const iconSize = parseInt(this.config?.mobile[1]) || 24;
+        const labelSize = parseInt(this.config?.mobile[2]) || 15;
+
+        if (screenWidth < screen) {
+            this.element.style.setProperty('--fm-icon-size', iconSize);
+            this.element.style.setProperty('--fm-label-size', labelSize);
+        } else {
+            this.element.style.removeProperty('--fm-icon-size');
+            this.element.style.removeProperty('--fm-label-size');
+        }
+
+    }
+
+    mobileClick() {
+        if (!this._isMobile()) {
+            return;
+        }
+
+        if (!this.config?.mobileRules) {
+            return;
+        }
+
+        this.links.forEach((link) => {
+            let timer;
+            link.addEventListener('click', (event) => {
+
+                if (!link.classList.contains('-active')) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    this.links.forEach((otherLink) => {
+                        otherLink.classList.remove('-active');
+                    });
+
+                    link.classList.add('-active');
+                    clearTimeout(timer);
+
+                    setTimeout(() => {
+                        link.classList.remove('-active');
+                        link.blur();
+                    }, 3000);
+                }
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!this.element.contains(event.target)) {
+                this.links.forEach((link) => {
+                    const item = link.closest('.fm-item');
+                    link.classList.remove('-active');
+                    item.classList.remove('-active');
                 });
             }
+        });
 
-            if (settings.hideAfterPosition) {
-                if ($window.scrollTop() > settings.hideAfterPosition) {
-                    bar.css('opacity', 0).addClass('fm-hide');
-                    barVisible = false;
+    }
+
+    position() {
+        let side = this.config?.position[0] || 'left';
+        let align = this.config?.position[1] || 'center';
+
+        this.element.classList.add(`-${side}`);
+        this.element.classList.add(`-${align}`);
+
+        const style = this.element.getBoundingClientRect();
+        let offsetSide = 0;
+        let offsetTop = 0;
+
+        if (this.config?.offset) {
+            offsetSide = parseInt(this.config?.offset[0]);
+            offsetTop = parseInt(this.config?.offset[1]);
+        }
+
+        if (offsetSide !== 0) {
+            this.element.style.setProperty('--fm-offset', `${offsetSide}px`);
+        }
+
+        let top = style.top + offsetTop;
+        if (align !== 'center') {
+            this.element.style.top = `${top}px`;
+        } else {
+            const menuHeight = this.element.offsetHeight;
+            top = top - menuHeight / 2;
+            this.element.style.top = `${top}px`;
+        }
+
+    }
+
+    setLinkProperties() {
+        const space = parseFloat(this.config?.label?.space) || 0;
+        const labelEffect = this.config?.label?.effect || 'none';
+
+        this.links.forEach((link) => {
+            const label = link.querySelector('.fm-label');
+            const labelWidth = label.offsetWidth + space;
+            const iconWidth = link.offsetWidth;
+            const width = iconWidth + labelWidth;
+            link.style.setProperty('--_width', labelWidth);
+            link.classList.add(`-${labelEffect}`);
+        });
+    }
+
+    setSubMenu() {
+        if (!this.config?.sub) {
+            return;
+        }
+
+        const hasSub = this.element.querySelectorAll('.fm-has-sub');
+        if (hasSub.length === 0) {
+            return;
+        }
+
+        const position = this.config?.sub?.position || 'under';
+        const effect = this.config?.sub?.effect || 'none';
+        const open = this.config?.sub?.open || 'click';
+
+        let activeSub = null;
+
+        hasSub.forEach((sub) => {
+            sub.classList.add(`fm-sub-${position}`);
+            sub.classList.add(`-sub-${effect}`);
+
+            const previousElements = [];
+            let sibling = sub.previousElementSibling;
+
+            while (sibling) {
+                if (sibling.classList.contains('fm-item')) {
+                    previousElements.push(sibling);
                 }
-
-                $window.on('scroll.superSidebar', function () {
-                    if ($window.scrollTop() > settings.hideAfterPosition) {
-                        if (barVisible) hideBar();
-                    } else {
-                        if (!barVisible) showBar();
-                    }
-                });
+                sibling = sibling.previousElementSibling;
             }
 
-            bar.addClass('fm-css-anim');
+            this.setSubProperties(sub, effect, position);
 
-            sidebar.addClass('fm-ready');
-
-            // FUNCTIONS
-            function buildList(list) {
-                list.children().each(function (i) {
-                    if ($(this).hasClass('fm-sub')) buildSub(this, i);
-                    else buildButton(this);
-                });
-            }
-
-            function buildButton(btn) {
-                var button = $(btn);
-                var link = button.children('a, .fm-link');
-                var icon = link.children('.fm-icon');
-                var label = link.children('.fm-label');
-                var mask, hit = null;
-
-                var linkClick = 0;
-                var screen = $(window).width();
-
-                var maskHtml = '<div class="fm-mask"></div>';
-                var hitHtml = '<div class="fm-hit"></div>';
-
-                var iw, lw;
-                var side = right ? 'right' : 'left';
-                var dist = 40;
-                var maskOff = false;
-                var start = {}, show = {}, end = {};
-                var showLabel, hideLabel;
-
-                var showTime = settings.labelAnimate.show[0];
-                var showEase = settings.labelAnimate.show[1];
-                var hideTime = settings.labelAnimate.hide[0];
-                var hideEase = settings.labelAnimate.hide[1];
-
-                if (settings.labelsOn && label.length) {
-                    iw = getInt(icon.css('width'));
-                    lw = label.outerWidth(true);
-                    if (settings.position[0] === 'left') {
-                        label.css({'left': iw + 'px'});
-                    } else {
-                        label.css({'right': iw + 'px'});
-                    }
-
-
-                    if (settings.buttonShape === 'round' || settings.buttonShape === 'rounded') maskOff = true;
-
-                    if (settings.labelConnected && settings.position[0] === 'left') {
-                        label.css({'left': 0, 'padding-left': iw + 12 + 'px'});
-                    } else if (settings.labelConnected && settings.position[0] === 'right') {
-                        label.css({'right': 0, 'padding-right': iw + 12 + 'px'});
-                    }
-
-                    if (!settings.labelConnected &&
-                        (settings.labelSpace || settings.buttonShape === 'round' || settings.buttonShape === 'rounded' ||
-                            settings.buttonShape === 'rounded-out')) {
-                        hit = $(hitHtml).appendTo(link);
-                    }
-
-
-                    switch (settings.labelEffect) {
-                        case 'fade':
-                            start = {'opacity': 0};
-                            show = {'opacity': 1};
-
-                            label.css(start);
-
-                            showLabel = function () {
-                                if (hit) hit.addClass('fm-show');
-                                label.velocity('stop').addClass('fm-show').velocity(show, showTime, showEase);
-                            };
-                            hideLabel = function () {
-                                label.velocity('stop').velocity(start, hideTime, hideEase, function () {
-                                    label.removeClass('fm-show');
-                                    if (hit) hit.removeClass('fm-show');
-                                });
-                            };
-                            break;
-                        case 'slide-out':
-                        case 'slide-out-fade':
-                            mask = link.wrap(maskHtml).parent();
-                            mask.css('width', iw);
-                            if (maskOff) mask.addClass('fm-off');
-
-                            start[side] = -lw + iw;
-                            if (settings.labelConnected) show[side] = 0;
-                            else show[side] = iw;
-
-                            if (settings.labelEffect === 'slide-out-fade') {
-                                start['opacity'] = 0;
-                                show['opacity'] = 1;
-                            }
-
-                            label.css(start);
-
-                            showLabel = function () {
-                                mask.css('width', iw + lw);
-                                if (maskOff) mask.removeClass('fm-off');
-                                if (hit) hit.addClass('fm-show');
-                                label.velocity('stop').addClass('fm-show').velocity(show, showTime, showEase, function () {
-                                    mask.addClass('fm-off');
-                                });
-                            };
-                            hideLabel = function () {
-                                mask.removeClass('fm-off');
-                                label.velocity('stop').velocity(start, hideTime, hideEase, function () {
-                                    label.removeClass('fm-show');
-                                    mask.css('width', iw);
-                                    if (maskOff) mask.addClass('fm-off');
-                                    if (hit) hit.removeClass('fm-show');
-                                });
-                            };
-                            break;
-                        case 'slide-in':
-                            start = {'opacity': 0};
-                            start[side] = iw + dist;
-                            show = {'opacity': 1};
-                            show[side] = iw;
-
-                            label.css(start);
-
-                            showLabel = function () {
-                                if (hit) hit.addClass('fm-show');
-                                label.velocity('stop').addClass('fm-show').velocity(show, showTime, showEase);
-                            };
-                            hideLabel = function () {
-                                label.velocity('stop').velocity(start, hideTime, hideEase, function () {
-                                    label.removeClass('fm-show');
-                                    if (hit) hit.removeClass('fm-show');
-                                });
-                            };
-                            break;
-                        case 'slide-out-out':
-                        case 'slide-in-in':
-                            mask = link.wrap(maskHtml).parent();
-                            mask.css('width', iw);
-                            if (maskOff) mask.addClass('fm-off');
-
-                            if (settings.labelEffect === 'slide-out-out') {
-                                start[side] = -lw + iw;
-                                show[side] = iw;
-                                end[side] = iw + dist;
-                            } else {
-                                start[side] = iw + dist;
-                                show[side] = iw;
-                                end[side] = -lw + iw;
-                            }
-                            start['opacity'] = 0;
-                            show['opacity'] = 1;
-                            end['opacity'] = 0;
-
-                            showLabel = function () {
-                                mask.css('width', iw + lw + dist);
-                                if (maskOff) mask.removeClass('fm-off');
-                                if (hit) hit.addClass('fm-show');
-                                label.velocity('stop').css(start).addClass('fm-show').velocity(show, showTime, showEase, function () {
-                                    mask.css('width', iw + lw);
-                                    mask.addClass('fm-off');
-                                });
-                            };
-                            hideLabel = function () {
-                                mask.removeClass('fm-off');
-                                mask.css('width', iw + lw + dist);
-                                label.velocity('stop').velocity(end, hideTime, hideEase, function () {
-                                    label.removeClass('fm-show');
-                                    mask.css('width', iw);
-                                    if (maskOff) mask.addClass('fm-off');
-                                    if (hit) hit.removeClass('fm-show');
-                                });
-                            };
-                            break;
-                        default:
-                            showLabel = function () {
-                                if (hit) hit.addClass('fm-show');
-                                label.addClass('fm-show');
-                            };
-                            hideLabel = function () {
-                                label.removeClass('fm-show');
-                                if (hit) hit.removeClass('fm-show');
-                            };
-                            break;
-                    }
-
-                    if (settings.mobileEnable == true && settings.mobileScreen >= screen) {
-                        link.on('touchend', function (e) {
-                            if (!label.hasClass('fm-show')) {
-                                e.preventDefault();
-                                showLabel();
-                                touchAnyWhere(link, label);
-                            }
-                        });
-
-                    } else {
-                        link.on('mouseenter', showLabel);
-                        link.on('mouseleave', hideLabel);
-                    }
-                }
-
-                function touchAnyWhere(link, label) {
-                    $(document).on('touchstart', function (e) {
-                        if (!$(e.target).closest(link).length) {
-                            label.removeClass('fm-show');
-                        }
-                    });
-                }
-
-                var shareVal = link.data('share');
-                var shareData;
-                var shareUrl;
-                var shareTarget;
-                var href;
-                var labelShow;
-
-                if (shareVal) {
-                    if (shareVal === 'pinterest') {
-                        link.on('click', pinterestShare);
-                    } else {
-                        shareData = settings.shareServices[shareVal];
-
-                        if (shareData) {
-                            shareUrl = shareData.url.replace('{URL}', PAGE_URL).replace('{TITLE}', PAGE_TITLE);
-
-                            link.attr('href', shareUrl);
-
-                            if (shareData.target === 'app') {
-                                link.attr('target', '_self');
-                            } else {
-                                if (settings.shareTarget === 'default') shareTarget = shareData.target;
-                                else shareTarget = settings.shareTarget;
-
-                                if (shareTarget === 'popup') {
-                                    link.on('click', {'url': shareUrl, 'params': shareData.popup}, sharePopup);
-                                } else {
-                                    link.attr('target', '_blank');
-                                }
-                            }
-                        } else {
-                            warn('There is no share data for "' + shareVal + '".');
-                        }
-                    }
-                } else {
-                    href = link.attr('href');
-
-                    if (href && href.indexOf('fm-popup') > -1 && href !== '#') {
-                        link.on('click', function () {
-                            openWindow(href);
-                            return false;
-                        });
-                    }
-                }
-
-                labelShow = link.attr('data-label');
-
-                if (labelShow === 'show') {
-                    showLabel();
-                }
-
-            }
-
-            function buildSub(sub, ind) {
-                var sub = $(sub);
-                var icon = sub.children('.fm-icon');
-                var list = sub.children('ul');
-                var buttonList = list.children();
-                var hit = null;
-                var nextButton = null;
-
-                var hitHtml = '<div class="fm-subhit"></div>';
-
-                var position = settings.subPosition[0];
-                var effect = settings.subEffect[0];
-                var side = right ? 'right' : 'left';
-                var total = buttonList.length;
-                var iw = getInt(icon.css('width'));
-                var ih = getInt(icon.css('height'));
-                var positions = [];
-                var status = null;
-                var start = {}, show = {};
-                var interval;
-                var showList, hideList;
-                var i;
-                var nextOffset = 0;
-                var prevOffset = 0;
-                var nextMargin;
-                var buttonMargin;
-                var barMargin;
-                var subOpen = false;
-
-                var showTime = settings.subAnimate.show[0];
-                var showEase = settings.subAnimate.show[1];
-                var hideTime = settings.subAnimate.hide[0];
-                var hideEase = settings.subAnimate.hide[1];
-
-                buildList(list);
-
-                if (position === 'side') sub.addClass('fm-side');
-                if (settings.subSpace) sub.addClass('fm-sub-space');
-
-                if (effect === 'linear-slide' || position === 'circular')
-                    sub.addClass('fm-posabs');
-
-                if ((position === 'under' && effect === 'linear-slide') ||
-                    (position === 'circular' && effect === 'slide') ||
-                    (position === 'circular' && effect === 'linear-slide')) {
-                    buttonList.each(function (i) {
-                        $(this).css('z-index', 100 - i);
-                    });
-                }
-
-                if (barList[ind + 1]) {
-                    nextButton = barList.eq(ind + 1);
-                    //nextMargin = getInt(nextButton.css("margin-top"));
-                }
-
-                if (position === 'circular') {
-                    sub.addClass('fm-circular');
-
-                    var r = settings.subPosition[1];
-                    var sa = settings.subPosition[2];
-                    var ea = settings.subPosition[3];
-
-                    var startRad = sa * Math.PI / 180;
-                    var endRad = ea * Math.PI / 180;
-                    var stepRad = (endRad - startRad) / (total - 1);
-                    var a, s, t, p;
-
-                    buttonList.each(function (i) {
-                        a = i * stepRad + startRad;
-                        s = Math.round(r * Math.cos(a));
-                        t = Math.round(r * Math.sin(a));
-
-                        p = {'top': t};
-                        p[side] = s;
-                        $(this).css(p);
-                        positions[i] = [s, t];
-                    });
-
-                    hit = $(hitHtml).appendTo(sub);
-                    hit.css({
-                        'width': r + iw,
-                        'height': 2 * r + iw,
-                        'border-radius': right ? r + 'px 0 0 ' + r + 'px' : '0 ' + r + 'px ' + r + 'px 0',
-                        'top': -r,
-                    });
-
-                    buttonMargin = getInt(barList.eq(0).css('margin-bottom'));
-
-                    if (ind !== 0) {
-                        prevOffset = r + buttonMargin;
-                        barMargin = getInt(bar.css('margin-top'));
-                        sub.css('margin-top', buttonMargin);
-                    }
-
-                    if (nextButton) {
-                        nextOffset = r + buttonMargin;
-                    }
-                } else {
-                    if (effect === 'linear-slide') {
-                        var c = 0;
-                        buttonList.each(function (i) {
-                            var btn = $(this);
-                            btn.css('top', c);
-                            positions[i] = c;
-                            c += getInt(btn.css('height')) + getInt(btn.css('margin-bottom'));
-                        });
-
-                        list.css({'width': iw, 'height': c});
-                    }
-
-                    hit = $(hitHtml).appendTo(sub);
-                    if (position === 'side')
-                        hit.css({'width': iw + getInt(list.css('margin-' + side)), 'height': ih});
-                    else
-                        hit.css({'width': iw, 'height': ih + getInt(list.css('margin-top'))});
-
-                    if (position === 'under' && nextButton) {
-                        nextOffset = list.outerHeight(true) + getInt(nextButton.css('margin-top')) + getInt(list.css('margin-top'));
-                    }
-                }
-
-                list.addClass('fm-hide');
-
-                switch (effect) {
-                    case 'fade':
-                        start = {'opacity': 0};
-                        show = {'opacity': 1};
-
-                        list.css(start);
-
-                        showList = function () {
-                            list.velocity('stop').removeClass('fm-hide').velocity(show, showTime, showEase);
-                        };
-                        hideList = function () {
-                            list.velocity('stop').velocity(start, hideTime, hideEase, function () {
-                                list.addClass('fm-hide');
-                            });
-                        };
-                        break;
-                    case 'slide':
-                        if (position === 'circular') {
-                            start = {'top': 0, 'opacity': 0};
-                            start[side] = 0;
-                            buttonList.css(start);
-
-                            showList = function () {
-                                list.removeClass('fm-hide');
-                                buttonList.each(function (i) {
-                                    show = {'top': positions[i][1], 'opacity': 1};
-                                    show[side] = positions[i][0];
-                                    $(this).velocity('stop').velocity(show, showTime, showEase);
-                                });
-                            };
-                            hideList = function () {
-                                buttonList.each(function (i) {
-                                    $(this).velocity('stop').velocity(start, hideTime, hideEase, function () {
-                                        if (i === total - 1) list.addClass('fm-hide');
-                                    });
-                                });
-                            };
-                        } else {
-                            if (position === 'side') {
-                                start[side] = 0;
-                                show[side] = iw;
-                            } else {
-                                start = {'top': 0};
-                                show = {'top': icon[0].clientHeight};
-                            }
-                            start['opacity'] = 0;
-                            show['opacity'] = 1;
-
-                            list.css(start);
-
-                            showList = function () {
-                                list.velocity('stop').removeClass('fm-hide').velocity(show, showTime, showEase);
-                            };
-                            hideList = function () {
-                                list.velocity('stop').velocity(start, hideTime, hideEase, function () {
-                                    list.addClass('fm-hide');
-                                });
-                            };
-                        }
-                        break;
-                    case 'linear-fade':
-                        start = {'opacity': 0};
-                        show = {'opacity': 1};
-
-                        buttonList.css(start);
-
-                        showList = function () {
-                            status = 'show';
-                            list.removeClass('fm-hide');
-                            stopInterval();
-                            i = 0;
-                            interval = setInterval(function () {
-                                buttonList.eq(i).velocity('stop').velocity(show, showTime, showEase);
-                                if (i === total - 1) stopInterval();
-                                else i++;
-                            }, settings.subEffect[1]);
-                        };
-                        hideList = function () {
-                            status = 'hide';
-                            stopInterval();
-                            i = total - 1;
-                            interval = setInterval(function () {
-                                var bi = i;
-                                buttonList.eq(i).velocity('stop').velocity(start, showTime, showEase, function () {
-                                    if (status === 'hide' && bi === 0) list.addClass('fm-hide');
-                                });
-                                if (i === 0) stopInterval();
-                                else i--;
-                            }, settings.subEffect[1]);
-                        };
-                        break;
-                    case 'linear-slide':
-                        var first, last, step;
-
-                        if (position === 'side') start[side] = -iw;
-                        else if (position === 'circular') {
-                            start = {'top': 0};
-                            start[side] = 0;
-                        } else start = {'top': -ih};
-                        start['opacity'] = 0;
-
-                        buttonList.css(start);
-
-                        showList = function () {
-                            status = 'show';
-                            list.removeClass('fm-hide');
-                            stopInterval();
-                            i = 0;
-                            interval = setInterval(function () {
-                                if (position === 'side') show[side] = 0;
-                                else if (position === 'circular') {
-                                    show = {'top': positions[i][1]};
-                                    show[side] = positions[i][0];
-                                } else show = {'top': positions[i]};
-                                show['opacity'] = 1;
-
-                                buttonList.eq(i).velocity('stop').velocity(show, showTime, showEase);
-                                if (i === total - 1) stopInterval();
-                                else i++;
-                            }, settings.subEffect[1]);
-                        };
-                        hideList = function () {
-                            status = 'hide';
-
-                            if (position === 'side' || position === 'circular') {
-                                first = 0;
-                                last = total - 1;
-                                step = 1;
-                            } else {
-                                first = total - 1;
-                                last = 0;
-                                step = -1;
-                            }
-
-                            stopInterval();
-                            i = first;
-                            interval = setInterval(function () {
-                                var bi = i;
-                                buttonList.eq(i).velocity('stop').velocity(start, showTime, showEase, function () {
-                                    if (status === 'hide' && bi === last) list.addClass('fm-hide');
-                                });
-                                if (i === last) stopInterval();
-                                else i += step;
-                            }, settings.subEffect[1]);
-                        };
-                        break;
-                    default:
-                        showList = function () {
-                            list.removeClass('fm-hide');
-                        };
-                        hideList = function () {
-                            list.addClass('fm-hide');
-                        };
-                        break;
-                }
-
-                function stopInterval() {
-                    clearInterval(interval);
-                }
-
-                function showSub() {
-                    showList();
-                    if (hit) hit.addClass('fm-show');
-
-                    if (prevOffset) {
-                        bar.velocity('stop').velocity({'margin-top': barMargin - prevOffset + buttonMargin}, showTime, showEase);
-                        sub.velocity('stop').velocity({'margin-top': prevOffset}, showTime, showEase);
-                    }
-
-                    if (nextOffset) {
-                        nextButton.velocity('stop').velocity({'margin-top': nextOffset}, showTime, showEase);
-                    }
-
-                    subOpen = true;
-                    csub = sub;
-                }
-
-                function hideSub() {
-                    hideList();
-                    if (hit) hit.removeClass('fm-show');
-
-                    if (prevOffset) {
-                        bar.velocity('stop').velocity({'margin-top': barMargin}, showTime, showEase);
-                        sub.velocity('stop').velocity({'margin-top': buttonMargin}, showTime, showEase);
-                    }
-
-                    if (nextOffset) {
-                        nextButton.velocity('stop').velocity({'margin-top': nextMargins[ind + 1]}, showTime, showEase);
-                    }
-
-                    subOpen = false;
-                    csub = null;
-                }
-
-                sub.show = showSub;
-                sub.hide = hideSub;
-
-                if (settings.subOpen === 'click') {
-                    icon.on('click', function (event) {
-                        if (subOpen) {
-                            hideSub();
-                        } else {
-                            if (csub) {
-                                csub.hide();
-                            }
-                            showSub();
-                        }
-                        event.stopPropagation();
-                    });
-
-                    $document.on('click', function (event) {
-                        if (subOpen && !cwindow && !$(event.target).closest(sub).length) {
-                            hideSub();
-                        }
-                    });
-                } else {
-                    sub.on('mouseenter touchstart', showSub);
-                    sub.on('mouseleave', hideSub);
-                }
-
-                function triggerClick() {
-                    $document.on('click', function (event) {
-                        if (subOpen && !cwindow && !$(event.target).closest(sub).length) {
-                            hideSub();
-                        }
-                    });
-                }
-
-                window.addEventListener('scroll', function () {
-                    if (subOpen) {
-                        hideSub();
-                    }
-                });
-            }
-
-            function buildPanel() {
-                var panel = $(this);
-                panel.find('.fm-close').on('click', function (event) {
-                    closeWindow();
+            if (open === 'click' || this._isMobile()) {
+                sub.addEventListener('click', (event) => {
                     event.stopPropagation();
-                });
 
-            }
+                    const link = sub.querySelector('.fm-link');
 
-            function openWindow(name) {
-                sbwindow.addClass('fm-show');
-                cwindow = $(name).addClass('fm-show');
-                posWindow(cwindow);
-            }
-
-            function closeWindow() {
-                sbwindow.removeClass('fm-show');
-                cwindow.removeClass('fm-show');
-                cwindow = null;
-            }
-
-            function position() {
-                posBar();
-                if (cwindow) posWindow(cwindow);
-            }
-
-            function resize() {
-                position();
-
-                if (settings.hideUnderWidth) {
-                    if ($window.width() < settings.hideUnderWidth) {
-                        sidebar.addClass('fm-vhide');
-                    } else {
-                        sidebar.removeClass('fm-vhide');
+                    if (activeSub && activeSub !== sub) {
+                        this.closeSubMenu(activeSub, position);
                     }
-                }
-            }
 
-            function posBar() {
-                posObject(bar, settings.position, settings.offset);
-            }
-
-            function posWindow(win) {
-                var pos, off;
-
-                if (win.data('position')) {
-                    pos = win.data('position').split('-');
-                    if (!pos[1]) pos[1] = defaults.windowPosition[1];
-                } else {
-                    pos = settings.windowPosition;
-                }
-
-                if (win.data('offset')) {
-                    off = splitOffset(win.data('offset'));
-                } else {
-                    off = settings.windowOffset;
-                }
-
-                posObject(win, pos, off);
-            }
-
-            function posObject(tar, pos, off) {
-                if (pos) {
-                    var ww = $window.width();
-                    var wh = $window.height();
-                    var tw = tar.outerWidth(true);
-                    var th = tar.outerHeight(true);
-                    var x, y;
-                    var p;
-
-                    if (typeof pos[0] === 'number') x = {'left': pos[0] + off[0]};
-                    else if (typeof pos[0] === 'string') {
-                        if (pos[0].indexOf('%') !== -1) {
-                            p = getInt(pos[0].split('%')[0]);
-                            x = {'left': p / 100 * ww + off[0]};
-                        } else {
-                            if (pos[0] === 'left') x = {'left': 0 + off[0]};
-                            else if (pos[0] === 'center') x = {'left': (ww - tw) / 2 + off[0]};
-                            else if (pos[0] === 'right') x = {'right': 0 + off[0]};
-
-                            else x = {'left': getInt(pos[0]) + off[0]};
+                    if (activeSub) {
+                        if (
+                            activeSub.contains(event.target) &&
+                            (event.target.matches('.fm-sub') || event.target.closest('.fm-link')) &&
+                            (link && !link.contains(event.target))
+                        ) {
+                            return;
                         }
                     }
 
-                    if (typeof pos[1] === 'number') y = {'top': pos[1] + off[1]};
-                    else if (typeof pos[1] === 'string') {
-                        if (pos[1].indexOf('%') !== -1) {
-                            p = getInt(pos[1].split('%')[0]);
-                            y = {'top': p / 100 * wh + off[1]};
-                        } else {
-                            if (pos[1] === 'top') y = {'top': 0 + off[1]};
-                            else if (pos[1] === 'center') y = {'top': (wh - th) / 2 + off[1]};
-                            else if (pos[1] === 'bottom') y = {'bottom': 0 + off[1]};
+                    sub.classList.toggle(`-active`);
+                    link.classList.toggle(`-active`);
+                    activeSub = sub.classList.contains(`-active`) ? sub : null;
 
-                            else y = {'top': getInt(pos[1]) + off[1]};
+                    if (position === 'circular') {
+                        link.classList.toggle(`-label-hidden`);
+                        if (previousElements.length > 0) {
+                            previousElements.forEach((item) => {
+                                item.classList.toggle(`-hidden`);
+                            });
                         }
                     }
-
-                    if (x.left) x.left = Math.round(x.left);
-                    if (x.right) x.right = Math.round(x.right);
-
-                    if (y.top) y.top = Math.round(y.top);
-                    if (y.bottom) y.bottom = Math.round(y.bottom);
-
-                    tar.css($.extend({}, x, y));
-                }
-            }
-
-            function pinterestShare(event) {
-                $('body').append('<script src="https://assets.pinterest.com/js/pinmarklet.js" type="text/javascript"></script>');
-                event.preventDefault();
-            }
-
-            function sharePopup(event) {
-                var url = event.data.url;
-                var params = event.data.params;
-                var winLeft;
-                var winParams;
-
-                if (params.left === 'center') {
-                    winLeft = ($window.width() - params.width) / 2;
-                } else {
-                    winLeft = params.left;
-                }
-
-                winParams = 'menubar=no,toolbar=no,location=no,scrollbars=no,status=no,resizable=yes,width=' + params.width +
-                    ',height=' + params.height + ',top=' + params.top + ',left=' + winLeft;
-
-                window.open(url, 'sbShareWindow', winParams);
-
-                event.preventDefault();
-            }
-
-            function showBar() {
-                bar.removeClass('fm-hide');
-                bar.velocity('stop').velocity({'opacity': 1}, settings.barAnimate.show[0], settings.barAnimate.show[1]);
-                barVisible = true;
-            }
-
-            function hideBar() {
-                bar.velocity('stop').velocity({'opacity': 0}, settings.barAnimate.show[0], settings.barAnimate.show[1], function () {
-                    bar.addClass('fm-hide');
                 });
-                barVisible = false;
-            }
-        });
-    }
-
-    function destroy() {
-        return $(this).each(function () {
-            var sidebar = $(this);
-            var bar, sbwindow;
-
-            if (sidebar.data('fm-built')) {
-                sidebar.data('fm-built', false);
-
-                bar = sidebar.children('.fm-bar');
-                sbwindow = sidebar.children('.fm-window');
-
-                bar.attr('class', 'fm-bar').removeAttr('style');
-                sbwindow.attr('class', 'fm-window');
-
-                destroyList(bar);
-
-                sbwindow.removeClass('fm-show');
-                sbwindow.children('.fm-shadow').off('click');
-                sbwindow.children('.fm-panel').removeClass('fm-show').removeAttr('style').each(destroyPanel);
-
-                $(window).off('resize.superSidebar scroll.superSidebar');
-
-                sidebar.removeClass('fm-ready');
-            }
-
-            function destroyList(list) {
-                list.children().each(function () {
-                    if ($(this).hasClass('fm-sub')) destroySub(this);
-                    else destroyButton(this);
-                });
-            }
-
-            function destroyButton(btn) {
-                var button = $(btn);
-                var link = button.find('a');
-                var label = link.children('.fm-label');
-
-                if (link.data('share')) link.removeAttr('href target');
-
-                link.children('.fm-hit').remove();
-
-                if (button.children('.fm-mask').length) link.unwrap();
-
-                label.removeAttr('style');
-
-                link.off('mouseenter mouseleave click');
-            }
-
-            function destroySub(sub) {
-                var sub = $(sub);
-                var list = sub.children('ul');
-
-                sub.removeClass('fm-side fm-circular fm-sub-space fm-posabs');
-
-                list.removeClass('fm-hide');
-                list.removeAttr('style');
-                list.children().removeAttr('style');
-
-                sub.children('.fm-subhit').remove();
-
-                sub.off('mouseenter mouseleave');
-            }
-
-            function destroyPanel() {
-                var panel = $(this);
-
-                panel.find('.fm-close').off('click');
-
-                var form = panel.find('form');
-                if (form.length) destroyForm(form);
-            }
-
-            function destroyForm(form) {
-                var fieldList = form.find('input, textarea');
-
-                form.find('.fm-submit').off('click');
-                form.off('submit');
-
-                fieldList.removeClass('fm-formerror').off('focus');
-                fieldList.each(function () {
-                    $(this).val('');
-                });
-
-                form.find('.fm-status').attr('class', 'fm-status');
-            }
-        });
-    }
-
-    function createSettings(options) {
-        var settings = $.extend({}, defaults, options);
-
-        if (typeof settings.position === 'string') {
-            settings.position = settings.position.split('-');
-        }
-        if (settings.position[0] === 'center') {
-            settings.position[0] = defaults.position[0];
-            warn('Bar horizontal position cannot be "center". Horizontal position reset to "left".');
-        }
-        if (!settings.position[1]) {
-            settings.position[1] = defaults.position[1];
-        }
-
-        if (settings.offset === 0 || settings.offset === false) {
-            settings.offset = [0, 0];
-        } else if (typeof settings.offset === 'string') {
-            settings.offset = splitOffset(settings.offset);
-        }
-
-        if (!options.buttonShape && options.shape) {
-            settings.buttonShape = settings.shape;
-        }
-        if (settings.buttonShape !== 'square') {
-            if (settings.buttonShape !== 'round' && settings.buttonShape !== 'rounded' && settings.buttonShape !==
-                'rounded-out') {
-                settings.buttonShape = 'square';
-            }
-        }
-
-        if (!options.buttonColor && options.color) {
-            settings.buttonColor = settings.color;
-        }
-        if (settings.buttonColor === 'default') {
-            settings.buttonColor = 'custom';
-        }
-
-        if (!options.buttonOverColor && options.overColor) {
-            settings.buttonOverColor = settings.overColor;
-        }
-        if (settings.buttonOverColor === 'default') {
-            settings.buttonOverColor = 'custom';
-        }
-
-        if (settings.labelColor === 'match') {
-            settings.labelColor = settings.buttonOverColor;
-        }
-        if (settings.labelTextColor === 'match') {
-            settings.labelTextColor = settings.iconOverColor;
-        }
-
-        if (settings.labelEffect === 'slide') settings.labelEffect = 'slide-out';
-        if (settings.labelEffect === 'slide-in-fade') settings.labelEffect = 'slide-in';
-
-        if (!options.labelAnimate && options.labelAnim) {
-            settings.labelAnimate = settings.labelAnim;
-        }
-        if (settings.labelAnimate === 'default') {
-            if (labelAnimateDefaults[settings.labelEffect]) {
-                settings.labelAnimate = labelAnimateDefaults[settings.labelEffect];
             } else {
-                settings.labelAnimate = labelAnimateDefaults[0];
+                sub.addEventListener('mouseenter', () => {
+                    const link = sub.querySelector('.fm-link');
+                    sub.classList.add(`-active`);
+                    link.classList.add(`-active`);
+                    if (position === 'circular') {
+                        link.classList.toggle(`-label-hidden`);
+                        if (previousElements.length > 0) {
+                            previousElements.forEach((item) => {
+                                item.classList.toggle(`-hidden`);
+                            });
+                        }
+                    }
+                });
+
+                sub.addEventListener('mouseleave', () => {
+                    this.closeSubMenu(sub, position);
+                });
+
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (activeSub && !activeSub.contains(event.target)) {
+                this.closeSubMenu(activeSub, position);
+                activeSub = null;
+            }
+        });
+    };
+
+    closeSubMenu(sub, position) {
+        const link = sub.querySelector('.fm-link');
+        sub.classList.remove(`-active`);
+        link.classList.remove(`-active`);
+
+        if (position === 'circular') {
+            link.classList.toggle(`-label-hidden`);
+            const previousElements = this.element.querySelectorAll('.fm-item.-hidden');
+
+            if (previousElements.length > 0) {
+                previousElements.forEach((item) => {
+                    item.classList.remove(`-hidden`);
+                });
             }
         }
-        settings.labelAnimate = extendAnimateSetting(settings.labelAnimate);
-
-        if (settings.labelConnected) {
-            if (settings.labelEffect === 'slide-in' || settings.labelEffect === 'slide-out-out' || settings.labelEffect ===
-                'slide-in-in') {
-                settings.labelConnected = false;
-                warn('"labelConnected: true" incompatible with "labelEffect: ' + settings.labelEffect +
-                    '". "labelConnected" reset to false.');
-            } else if (settings.labelSpace) {
-                settings.labelSpace = false;
-                warn('"labelSpace: true" incompatible with "labelConnected: true". "labelSpace" reset to false.');
-            }
-        }
-
-        if (typeof settings.subPosition === 'string') {
-            settings.subPosition = [settings.subPosition];
-        }
-        if (settings.subPosition[0] === 'circular') {
-            if (!settings.subPosition[1]) settings.subPosition[1] = defaults.subPosition[1];
-            if (typeof settings.subPosition[2] === 'undefined') settings.subPosition[2] = defaults.subPosition[2];
-            if (typeof settings.subPosition[3] === 'undefined') settings.subPosition[3] = defaults.subPosition[3];
-
-            if (settings.subSpace) settings.subSpace = false;
-        }
-
-        if (!options.subAnimate && options.subAnim) {
-            settings.subAnimate = settings.subAnim;
-        }
-        if (settings.subAnimate === 'default') settings.subAnimate = defaults.subAnimate;
-
-        if (typeof settings.subEffect === 'string') {
-            settings.subEffect = [settings.subEffect];
-        }
-        if ((settings.subEffect[0] === 'linear-fade' || settings.subEffect[0] === 'linear-slide') &&
-            !settings.subEffect[1]) {
-            settings.subEffect[1] = defaults.subEffect[1];
-        }
-
-        settings.subAnimate = extendAnimateSetting(settings.subAnimate);
-
-        if (typeof settings.windowPosition === 'string') {
-            settings.windowPosition = settings.windowPosition.split('-');
-        }
-        if (!settings.windowPosition[1]) {
-            settings.windowPosition[1] = defaults.windowPosition[1];
-        }
-
-        if (settings.windowOffset === 0 || settings.windowOffset === false) {
-            settings.windowOffset = [0, 0];
-        } else if (typeof settings.windowOffset === 'string') {
-            settings.windowOffset = splitOffset(settings.windowOffset);
-        }
-
-        if (settings.windowCorners === 'match') {
-            if (settings.buttonShape === 'round' || settings.buttonShape === 'rounded' || settings.buttonShape ===
-                'rounded-out') {
-                settings.windowCorners = 'round';
-            }
-        }
-
-        if (settings.windowColor === 'match') {
-            settings.windowColor = settings.buttonColor;
-        } else if (settings.windowColor === 'default') {
-            settings.windowColor = 'custom';
-        }
-
-        if (settings.barAnimate === 'default') {
-            settings.barAnimate = defaults.barAnimate;
-        }
-
-        settings.barAnimate = extendAnimateSetting(settings.barAnimate);
-
-        if (settings.hideUnder) {
-            settings.hideUnderWidth = settings.hideUnder;
-        }
-
-        return settings;
     }
 
-    function splitOffset(off) {
-        off = off.split('-');
-        off[0] = getInt(off[0]);
-        if (off[1]) off[1] = getInt(off[1]);
-        return off;
-    }
+    setSubProperties(sub, effect, position) {
+        const subMenu = sub.querySelector(`.fm-sub`);
+        const height = subMenu.offsetHeight;
 
-    function extendAnimateSetting(animate) {
-        if (Object.prototype.toString.call(animate) === '[object Array]') {
-            return {
-                show: animate,
-                hide: animate,
-            };
-        } else {
-            return animate;
+        if (position !== 'circular') {
+            sub.style.setProperty('--_offset', height);
         }
-    }
 
-    function warn(msg) {
-        if (window.console) {
-            console.log('(!) Float Menu: ' + msg);
-        }
-    }
+        const items = subMenu.querySelectorAll(`.fm-item`);
+        const speed = parseInt(this.config?.sub?.speed) || 0;
+        const count = items.length;
+        const step = speed / count;
+        let itemWidth = items[0].offsetWidth;
 
-    function getInt(val) {
-        return parseInt(val, 10);
-    }
-
-    $('[data-btn-type]').on('click', function (event) {
-        event.preventDefault();
-
-        let type = $(this).data('btn-type');
-        switch (type) {
-            case 'print':
-                window.print();
-                break;
-            case 'scroll':
-                let anchor = $(this).attr('href');
-                $('html, body').animate({scrollTop: $(anchor).offset().top}, 777);
-                break;
-            case 'totop':
-                $('body,html').animate({scrollTop: 0}, 777);
-                break;
-            case 'tobottom':
-                $('html, body').animate({scrollTop: jQuery(document).height()}, 777);
-                break;
-            case 'goback':
-                window.history.back();
-                break;
-            case 'goforward':
-                window.history.forward();
-                break;
-        }
-    });
-
-    $('[data-flm-track]').on('click', function (event) {
-        const attr = $(this).data('flm-track');
-        const lines = attr.split('|');
-
-        if (typeof window.gtag === 'function') {
-            gtag('event', 'click', {
-                'event_category': lines[0],
-                'event_label': lines[1],
-                'value': lines[2],
+        if ((effect === 'linear-fade') && items.length > 0) {
+            items.forEach((item, index) => {
+                const delay = index * step;
+                const closeDelay = (count - 1 - index) * step;
+                const duration = step;
+                item.style.setProperty('--_delay', `${delay}`);
+                item.style.setProperty('--_close_delay', `${closeDelay}`);
             });
         }
-    });
 
-    $('[data-flm-share]').on('click', function (event) {
-        event.preventDefault();
-        let network = $(this).data('flm-share');
-        let url = window.location.href;
-        let title = encodeURIComponent(document.title);
-        let shareUrl;
-
-        switch (network) {
-            case 'facebook':
-                shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
-                break;
-            case 'vk':
-                shareUrl = 'http://vk.com/share.php?url=' + url;
-                break;
-            case 'twitter':
-                shareUrl = 'https://twitter.com/share?url=' + url + '&text=' + title;
-                break;
-            case 'linkedin':
-                shareUrl = 'https://www.linkedin.com/shareArticle?url=' + url + '&title=' + title;
-                break;
-            case 'odnoklassniki':
-                shareUrl = 'http://ok.ru/dk?st.cmd=addShare&st._surl=' + url;
-                break;
-            case 'googleplus':
-                shareUrl = 'https://plus.google.com/share?url=' + url;
-                break;
-            case 'pinterest':
-                shareUrl = 'https://pinterest.com/pin/create/button/?url=' + url;
-                break;
-            case 'xing':
-                shareUrl = 'https://www.xing.com/spi/shares/new?url=' + url;
-                break;
-            case 'myspace':
-                shareUrl = 'https://myspace.com/post?u=' + url + '&t=' + title;
-                break;
-            case 'weibo':
-                shareUrl = 'http://service.weibo.com/share/share.php?url=' + url + '&title=' + title;
-                break;
-            case 'buffer':
-                shareUrl = 'https://buffer.com/add?text=' + title + '&url=' + url;
-                break;
-            case 'stumbleupon':
-                shareUrl = 'http://www.stumbleupon.com/submit?url=' + url + '&title=' + title;
-                break;
-            case 'reddit':
-                shareUrl = 'http://www.reddit.com/submit?url=' + url + '&title=' + title;
-                break;
-            case 'tumblr':
-                shareUrl = 'https://www.tumblr.com/widgets/share/tool?canonicalUrl=' + url + '&title=' + title;
-                break;
-            case 'blogger':
-                shareUrl = 'https://www.blogger.com/blog-this.g?u=' + url + '&n=' + title;
-                break;
-            case 'livejournal':
-                shareUrl = 'http://www.livejournal.com/update.bml?subject=' + title + '&event=' + url;
-                break;
-            case 'pocket':
-                shareUrl = 'https://getpocket.com/save?url=' + url;
-                break;
-            case 'telegram':
-                shareUrl = 'https://telegram.me/share/url?url=' + url + '&text=' + title;
-                break;
-            case 'skype':
-                shareUrl = 'https://web.skype.com/share?url=' + url;
-                break;
-            case 'email':
-                shareUrl = 'mailto:?subject=' + title + '&body=' + url;
-                break;
-            case 'draugiem':
-                shareUrl = 'https://www.draugiem.lv/say/ext/add.php?title=' + title + '&url=' + url;
-                break;
-            case 'whatsappsend':
-                shareUrl = 'whatsapp://send?text=' + title + '%20%0A' + url;
-                break;
-            case 'whatsapp':
-                shareUrl = 'https://api.whatsapp.com/send?text=' + title + '%20%0A' + url;
-                break;
-            case 'diaspora':
-                shareUrl = 'https://share.diasporafoundation.org/?title=' + title + '&url=' + url;
-                break;
-            case 'digg':
-                shareUrl = 'http://digg.com/submit?url=' + url;
-                break;
-            case 'douban':
-                shareUrl = 'http://www.douban.com/recommend/?url=' + url + '&title=' + title;
-                break;
-            case 'evernote':
-                shareUrl = 'http://www.evernote.com/clip.action?url=' + url + '&title=' + title;
-                break;
-            case 'flipboard':
-                shareUrl = 'https://share.flipboard.com/bookmarklet/popout?v=2&title=' + title + '&url=' + url;
-                break;
-            case 'google-bookmarks':
-                shareUrl = 'https://www.google.com/bookmarks/mark?op=edit&bkmk=' + url + '&title=' + title;
-                break;
-            case 'hacker-news':
-                shareUrl = 'https://news.ycombinator.com/submitlink?u=' + url + '&t=' + title;
-                break;
-            case 'instapaper':
-                shareUrl = 'http://www.instapaper.com/edit?url=' + url + '&title=' + title;
-                break;
-            case 'line':
-                shareUrl = 'https://lineit.line.me/share/ui?url=' + url;
-                break;
-            case 'qzone':
-                shareUrl = 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + url;
-                break;
-            case 'renren':
-                shareUrl = 'http://widget.renren.com/dialog/share?resourceUrl=' + url + '&srcUrl=' + url + '&title=' + title;
-                break;
-            default:
-                shareUrl = '';
+        if ((effect === 'linear-slide') && items.length > 0) {
+            items.forEach((item, index) => {
+                const top = ((index + 1) * itemWidth * -1);
+                item.style.setProperty('--_top', `${top}px`);
+            });
         }
 
-        let popupWidth = 550;
-        let popupHeight = 450;
-        let topPosition = (screen.height - popupHeight) / 2;
-        let leftPosition = (screen.width - popupWidth) / 2;
-        let popup = 'width=' + popupWidth + ', height=' + popupHeight + ', top=' + topPosition + ', left=' + leftPosition +
-            ', scrollbars=0, resizable=1, menubar=0, toolbar=0, status=0';
+        if (position === 'circular') {
+            this.subMenuCircular(subMenu, items, sub);
+        }
 
-        window.open(shareUrl, null, popup);
-
-        return true;
-
-    });
-
-
-}(jQuery));
-
-
-const flTranslate = document.querySelectorAll('[data-google-lang]');
-const flDefaultLang = document.documentElement.lang.substr(0, 2);
-
-function flTranslateInit() {
-
-    let code = flTranslateGetCode();
-
-    if (code == flDefaultLang) {
-        flTranslateClearCookie();
     }
 
-    new google.translate.TranslateElement({
-        pageLanguage: flDefaultLang,
-    });
+    subMenuCircular(subMenu, items, sub) {
+        const itemWidth = this.itemWidth;
+        const angleIncrement = this.calculateAngleIncrement(items.length);
+        let radius = this.calculateOptimalRadius(itemWidth, angleIncrement);
+        const minRadius = itemWidth * 1.5;
 
-    flTranslate.forEach((el) => {
-        el.addEventListener('click', (e) => {
-            e.preventDefault();
-            let lang = el.getAttribute('data-google-lang');
-            flTranslateSetCookie(lang);
-            window.location.reload();
+        if (radius < minRadius) {
+            radius = minRadius;
+        }
+
+        sub.style.setProperty('--_offset', radius);
+        sub.style.setProperty('--_box', radius);
+
+        this.setMenuProperties(items, angleIncrement, radius, subMenu, itemWidth);
+    }
+
+    setMenuProperties(items, angleIncrement, radius, subMenu, itemWidth) {
+        const offset = radius + 2;
+        if (subMenu.classList.contains(`-active`)) {
+            subMenu.style.setProperty('margin-bottom', `${offset}px`);
+        } else {
+            subMenu.style.setProperty('margin-bottom', `unset`);
+        }
+
+        const speed = parseInt(this.config?.sub?.speed) || 0;
+        const count = items.length;
+        const step = speed / count;
+
+        items.forEach((item, index) => {
+            const reverseIndex = items.length - 1 - index;
+            const angle = this.determineAngleForMenu(subMenu, angleIncrement, index, reverseIndex);
+            this.styleMenuItem(item, subMenu, radius, angle, index, step);
         });
-    });
+    }
+
+    determineAngleForMenu(menu, angleIncrement, index, reverseIndex) {
+
+        const position = this.config?.position[0] || 'left';
+
+        if (position === 'left') {
+            return angleIncrement * index - Math.PI / 2;
+        } else if (position === 'right') {
+            return angleIncrement * reverseIndex + Math.PI / 2;
+        }
+
+    }
+
+    styleMenuItem(item, menu, radius, angle, index, step) {
+        const delay = index * step;
+
+        const x = radius * Math.cos(angle);
+        const y = radius * Math.sin(angle);
+        item.style.setProperty('--x', `${x}px`);
+        item.style.setProperty('--y', `${y}px`);
+        item.style.setProperty('--_delay', `${delay}`);
+
+    }
+
+    calculateAngleIncrement(itemCount) {
+        const baseAngle = Math.PI;
+        return baseAngle / (itemCount - 1);
+    }
+
+    calculateOptimalRadius(itemWidth, angleIncrement) {
+        return (itemWidth / 2) / Math.sin(angleIncrement / 2);
+    }
+
+    #parseConfig() {
+        const options = this.element.getAttribute(`${FloatMenu.ATTR}`);
+        if (!options || options.trim() === '') {
+            return {};
+        }
+
+        try {
+            const parsedOptions = JSON.parse(options);
+            return parsedOptions;
+        } catch (error) {
+            return {};
+        }
+
+    }
+
+    _isMobile() {
+        return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+            window.innerWidth <= 768 ||
+            'ontouchstart' in window ||
+            navigator.maxTouchPoints > 0;
+    }
+
+    _isObjEmpty(obj) {
+        return obj && typeof obj === 'object' && Object.keys(obj).length === 0;
+    }
+
+    _showConfig() {
+        console.log(this.config);
+    }
 
 }
-
-function flTranslateGetCode() {
-    let keyValue = document['cookie'].match('(^|;) ?googtrans=([^;]*)(;|$)');
-    let cookieLang = keyValue ? keyValue[2].split('/')[2] : null;
-    let lang = (cookieLang != undefined && cookieLang != 'null') ? cookieLang : flDefaultLang;
-    return lang;
-
-}
-
-function flTranslateClearCookie() {
-    document.cookie = 'googtrans=null';
-    document.cookie = 'googtrans=null; domain=' + document.domain;
-}
-
-function flTranslateSetCookie(code) {
-    document.cookie = 'googtrans=/auto/' + code;
-    document.cookie = 'googtrans=/auto/' + code + '; domain=' + document.domain;
-}
-
 
 document.addEventListener('DOMContentLoaded', function () {
-    for (let key in window) {
-        if (key.indexOf('FloatMenu_') >= 0) {
-            const val = window[key];
-            jQuery(val.selector).floatingMenu(val);
-        }
-    }
+    FloatMenu.initialize();
 });
-

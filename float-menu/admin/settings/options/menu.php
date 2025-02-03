@@ -10,7 +10,6 @@ $args = [
 		'title' => __( 'Label Text', 'float-menu' ),
 	],
 
-
 	'item_type' => [
 		'type'  => 'select',
 		'title' => __( 'Type', 'float-menu' ),
@@ -30,15 +29,32 @@ $args = [
 		'class' => 'is-hidden',
 	],
 
-
-
 	// Icons
-	'item_icon'  => [
-		'type'  => 'select',
-		'title' => __( 'Icon', 'float-menu' ),
-		'atts'  => Settings_Helper::icons(),
+	'icon_type' => [
+		'type'    => 'select',
+		'title'   => __( 'Icon Type', 'float-menu' ),
+		'value'   => 'icon',
+		'options' => [
+			'icon'  => __( 'Icon', 'float-menu' ),
+			'text' => __( 'Text', 'float-menu' ),
+		]
 	],
 
+	'item_icon'  => [
+		'type'    => 'text',
+		'title'   => __( 'Icon', 'float-menu' ),
+		'value'   => 'fas fa-wand-magic-sparkles',
+		'options' => [
+			'class' => 'wpie-icon-box',
+		],
+	],
+	'item_custom_text' => [
+		'type'  => 'text',
+		'title' => __( 'Enter text', 'float-menu' ),
+		'atts'  => [
+			'placeholder' => __( 'Enter text', 'float-menu' )
+		],
+	],
 
 	// Style
 	'color'            => [
@@ -81,7 +97,6 @@ $args = [
 		'title' => __( 'Hover Background', 'float-menu' ),
 	],
 
-
 	// Attributes
 	'button_id'           => [
 		'type'  => 'text',
@@ -102,7 +117,6 @@ $args = [
 		'type'  => 'text',
 		'title' => __( 'Aria label', 'float-menu' ),
 	],
-
 
 ];
 

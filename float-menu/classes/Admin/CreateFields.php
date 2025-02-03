@@ -1,16 +1,5 @@
 <?php
 
-/**
- * Class CreateFields
- *
- * @package    WowPlugin
- * @subpackage Admin
- * @author     Dmytro Lobov <dev@wow-company.com>, Wow-Company
- * @copyright  2024 Dmytro Lobov
- * @license    GPL-2.0+
- *
- */
-
 namespace FloatMenuLite\Admin;
 
 class CreateFields {
@@ -40,12 +29,16 @@ class CreateFields {
 		$args       = $this->page_options[ $name ];
 		$key        = $this->get_key( $name );
 		$data_field = $name;
-		$default    = $args['val'] ?? '';
-		if ( empty( $this->options['tool_id'] ) ) {
-			$default = $args['val'] ?? '';
+
+		$opt_val = $args['val'] ?? $args['value'] ?? '';
+		$default = $opt_val;
+
+		if (empty($this->options['tool_id'])) {
+			$default = $opt_val;
 		}
-		$opt_key = $this->get_opt_key( $name );
-		$value   = $this->get_the_value( $name, $default );
+
+		$opt_key     = $this->get_opt_key( $name );
+		$value       = $this->get_the_value( $name, $default );
 		$class       = ! empty( $args['class'] ) ? ' ' . $args['class'] : '';
 		$type        = $args['type'] ?? 'text';
 		$label_class = isset( $args['label'] ) ? '' : 'screen-reader-text';
@@ -63,7 +56,6 @@ class CreateFields {
 		} else {
 			$template .= $this->get_template( $args );
 		}
-
 		$template .= '</div>';
 
 		$content = str_replace( [
@@ -82,7 +74,7 @@ class CreateFields {
 			$class,
 			esc_attr( $type ),
 			esc_attr( $key ),
-			esc_attr( $value ),
+			$value,
 			$atts,
 			esc_attr( $label_class ),
 			esc_html( $label ),
@@ -98,13 +90,8 @@ class CreateFields {
 	}
 
 	private function output( $content ): void {
-		$allowed_html = array(
-			'label'    => array(
-				'class' => [],
-			),
-			'span'     => array(
-				'class' => [],
-			),
+		$allowed_post_tags   = wp_kses_allowed_html( 'post' );
+		$allowed_html        = array(
 			'input'    => array(
 				'type'               => [],
 				'data-field'         => [],
@@ -121,15 +108,10 @@ class CreateFields {
 				'data-alpha-enabled' => [],
 			),
 			'textarea' => [
-				'name'        => [],
-				'value'       => [],
 				'placeholder' => [],
 				'data-field'  => [],
+				'name'        => [],
 				'class'       => [],
-			],
-			'div'      => [
-				'data-field-box' => [],
-				'class'          => []
 			],
 			'select'   => [
 				'name'       => [],
@@ -145,8 +127,10 @@ class CreateFields {
 			],
 
 		);
+		$allowed_post_tags[] = $allowed_html;
+		$merged_allowed_tags = array_merge( $allowed_post_tags, $allowed_html );
 
-		echo wp_kses( $content, $allowed_html );
+		echo wp_kses( $content, $merged_allowed_tags );
 	}
 
 	private function get_template( $args ): string {
@@ -162,6 +146,10 @@ class CreateFields {
 			return $this->textarea_template();
 		}
 
+		if ( $args['type'] === 'editor' ) {
+			return $this->editor_template();
+		}
+
 		return $this->text_template();
 	}
 
@@ -171,7 +159,14 @@ class CreateFields {
 		}
 
 		if ( is_string( $args['title'] ) ) {
-			return '<div class="wpie-field__title">' . esc_html( $args['title'] ) . '</div>';
+			$title = '<div class="wpie-field__title">';
+			$title .= esc_html( $args['title'] );
+			if ( isset( $args['tooltip'] ) ) {
+				$title .= '<sup class="has-tooltip wpie-color-dark" data-tooltip="' . esc_attr( $args['tooltip'] ) . '">ℹ</sup>';
+			}
+			$title .= '</div>';
+
+			return $title;
 		}
 
 		if ( is_array( $args['title'] ) ) {
@@ -185,21 +180,25 @@ class CreateFields {
 		$key        = $this->get_key( $args['name'] );
 		$data_field = $args['name'] ?? 'wpie-field';
 
-		$default = $args['val'] ?? '';
-		if ( empty( $this->options['id'] ) ) {
-			$default = $args['val'] ?? '';
+		$opt_val = $args['val'] ?? $args['value'] ?? '';
+		$default = $opt_val;
+
+		if (empty($this->options['tool_id'])) {
+			$default = $opt_val;
 		}
+
 //		$value       = $this->options[ $key ] ?? $default;
 		$value       = $this->get_the_value( $args['name'], $default );
 		$label_class = isset( $args['label'] ) ? '' : 'screen-reader-text';
 		$label       = ! empty( $args['label'] ) ? $args['label'] : '';
 		$checked     = checked( "1", $value, false );
 		$toogle      = isset( $args['toggle'] ) ? ' has-checked' : '';
+		$tooltip     = isset( $args['tooltip'] ) ? '<sup class="has-tooltip wpie-color-dark" data-tooltip="' . esc_attr( $args['tooltip'] ) . '">ℹ</sup>' : '';
 		$template    = '<div class="wpie-field__title' . esc_attr( $toogle ) . '">
 					<label class="wpie-field__title-label">
 					<input type="checkbox" data-field="{{data_field}}" {{checked}}>
 					<input type="hidden" name="{{name}}" value="' . esc_attr( $value ) . '"> 
-                    <span class="{{label_class}}">{{label}}</span></label></div>';
+                    <span class="{{label_class}}">{{label}} {{tooltip}}</span></label></div>';
 
 		return str_replace( [
 			'{{name}}',
@@ -207,13 +206,15 @@ class CreateFields {
 			'{{label_class}}',
 			'{{label}}',
 			'{{data_field}}',
+			'{{tooltip}}',
 
 		], [
 			esc_attr( $key ),
 			$checked,
 			esc_attr( $label_class ),
 			esc_html( $label ),
-			$data_field
+			$data_field,
+			$tooltip
 
 		], $template );
 	}
@@ -241,9 +242,9 @@ class CreateFields {
 		$key         = $this->get_key( $args['name'] );
 		$data_field  = $args['name'] ?? 'wpie-field';
 		$default     = $args['val'] ?? '';
-		$value    = $this->get_the_value( $args['name'], $default );
-		$atts     = $this->get_attributes( $args, $value );
-		$template = '<label class="wpie-field__label">
+		$value       = $this->get_the_value( $args['name'], $default );
+		$atts        = $this->get_attributes( $args, $value );
+		$template    = '<label class="wpie-field__label">
                     <span class="{{label_class}}">{{label}}</span>
                     <select name="{{name}}" data-field="{{data_field}}">
                        {{atts}}
@@ -269,20 +270,21 @@ class CreateFields {
 
 
 	private function get_attributes( $args, $value ) {
-		if ( empty( $args['atts'] ) || ! is_array( $args['atts'] ) ) {
+		$arr = $args['atts'] ?? $args['options'] ?? '';
+
+		if (empty($arr) || !is_array($arr)) {
 			return false;
 		}
 		$atts = '';
 
-		foreach ( $args['atts'] as $key => $val ) {
+		foreach ($arr as $key => $val) {
 			if ( $args['type'] === 'select' ) {
 				if ( strrpos( $key, '_start' ) ) {
 					$atts .= '<optgroup label="' . esc_attr( $val ) . '">';
 				} elseif ( strrpos( $key, '_end' ) ) {
 					$atts .= '</optgroup>';
 				} else {
-					$atts .= '<option value="' . esc_attr( $key ) . '"' . selected( $value, $key,
-							false ) . '>' . esc_html( $val ) . '</option>';
+					$atts .= '<option value="' . esc_attr( $key ) . '"' . selected( $value, $key,false ) . '>' . esc_html( $val ) . '</option>';
 				}
 			} else {
 				$atts .= ' ' . esc_attr( $key ) . '="' . esc_attr( $val ) . '"';
@@ -358,7 +360,7 @@ class CreateFields {
 			$arr_name = '';
 			foreach ( $parts as $partkey => $part ) {
 				if ( $partkey === 0 ) {
-					$arr_name .= $part;
+					$arr_name .= 'param[' . $part . ']';
 					continue;
 				}
 				$arr_name .= '[' . esc_attr( $part ) . ']';
@@ -368,14 +370,22 @@ class CreateFields {
 
 
 		if ( empty( $this->order ) ) {
-			return $name;
+			if ( strpos( $name, 'param[' ) !== false ) {
+				return $name;
+			}
+
+			return 'param[' . $name . ']';
 		}
 
 		if ( ! is_array( $this->order ) ) {
-			return $name;
+			if ( strpos( $name, 'param[' ) !== false ) {
+				return $name;
+			}
+
+			return 'param[' . $name . ']';
 		}
 
-		$key = $name;
+		$key = ( strpos( $name, 'param[' ) !== false ) ? $name : 'param[' . $name . ']';
 
 		foreach ( $this->order as $order ) {
 			if ( is_string( $order ) ) {
@@ -423,6 +433,15 @@ class CreateFields {
 			<textarea name="{{name}}" data-field="{{data_field}}" {{atts}}>{{value}}</textarea>
 			<span class="{{label_class}}">{{label}}</span>
 		</label>
+		';
+	}
+
+	private function editor_template(): string {
+		return '
+		<div class="wpie-field__label">
+			<textarea name="{{name}}" data-field="{{data_field}}" {{atts}}>{{value}}</textarea>
+			<span class="{{label_class}}">{{label}}</span>
+		</div>
 		';
 	}
 }

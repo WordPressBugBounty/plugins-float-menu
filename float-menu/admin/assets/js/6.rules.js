@@ -10,12 +10,16 @@ jQuery(document).ready(function ($) {
         add_schedule: '.wpie-add-schedule',
         dates: '[data-field="dates"]',
         remove: '.wpie-remove',
+        language_on: '[data-field="language_on"]',
+        language: '[data-field="language"]',
     };
 
     function set_up() {
         $(selectors.users).each(change_users);
         $(selectors.show).each(change_show);
         $(selectors.dates).each(change_dates);
+        $(selectors.language_on).each(language_on);
+        $(selectors.language).each(language);
     }
 
     function initialize_events() {
@@ -25,6 +29,8 @@ jQuery(document).ready(function ($) {
         $(selectors.settings).on('click', selectors.add_schedule, clone_schedule);
         $(selectors.settings).on('change', selectors.dates, change_dates);
         $(selectors.settings).on('click', selectors.remove, remove_item);
+        $(selectors.settings).on('change', selectors.language_on, language_on);
+        $(selectors.settings).on('change', selectors.language, language);
 
     }
 
@@ -67,6 +73,10 @@ jQuery(document).ready(function ($) {
                 break;
             case 'page_type':
                 selectorsToUnhide = ['operator', 'page_type'];
+                break;
+            case 'url_contains':
+            case 'url_referrer':
+                selectorsToUnhide = ['operator', 'custom_url'];
                 break;
             default:
                 // Do nothing
@@ -113,6 +123,23 @@ jQuery(document).ready(function ($) {
         if (userConfirmed) {
             const parent = get_parent_fields($(this));
             $(parent).remove();
+        }
+    }
+
+    function language_on() {
+        if($(this).is(':checked')) {
+            $(selectors.language).each(language);
+        } else {
+            const locale = $('[data-field-box="locale"]');
+            locale.addClass('is-hidden');
+        }
+    }
+    function language() {
+        const type = $(this).val();
+        const locale = $('[data-field-box="locale"]');
+        locale.addClass('is-hidden');
+        if (type === 'custom' && $('[data-field="language_on"]').is(':checked')) {
+            locale.removeClass('is-hidden');
         }
     }
 

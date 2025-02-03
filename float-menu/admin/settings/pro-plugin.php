@@ -4,16 +4,13 @@ use FloatMenuLite\WOWP_Plugin;
 
 defined( 'ABSPATH' ) || exit;
 
-$default = $options['item_order']['pro_feature'] ?? 1;
-$item_order = ! empty( $default ) ? 1 : 0;
-$open = ! empty( $item_order ) ? ' open' : '';
+
+$item_order = ! empty( $options['item_order']['pro_feature'] ) ? 1 : 0;
+$open       = ! empty( $item_order ) ? ' open' : '';
 ?>
 
 <div class="wpie-sidebar wpie-sidebar-features">
-    <details class="wpie-item"<?php
-	echo esc_attr( $open ); ?>>
-        <input type="hidden" name="param[item_order][pro_feature]" class="wpie-item__toggle" value="<?php
-		echo absint( $item_order ); ?>">
+    <details class="wpie-item" open>
         <summary class="wpie-item_heading">
             <span class="wpie-item_heading_icon"><span
                         class="wpie-icon wpie_icon-rocket wpie-color-danger"></span></span>
@@ -148,7 +145,8 @@ $open = ! empty( $item_order ) ? ' open' : '';
             <details class="wpie-details-sidebar">
                 <summary>Google Event Tracking</summary>
                 <div class="wpie-details-sidebar-box">
-                    Integrate Google Events Tracking to monitor user interactions with your menu items. You'll need to have Google Analytics tracking code installed on your site to use this feature.
+                    Integrate Google Events Tracking to monitor user interactions with your menu items. You'll need to
+                    have Google Analytics tracking code installed on your site to use this feature.
                 </div>
             </details>
 
@@ -164,7 +162,8 @@ $open = ! empty( $item_order ) ? ' open' : '';
             <details class="wpie-details-sidebar">
                 <summary>Devices Rules</summary>
                 <div class="wpie-details-sidebar-box">
-                    <p>Ensure optimal menu visibility across all devices with options to hide/remove on specific screen sizes. Remove on Mobile, Remove on Desktop</p>
+                    <p>Ensure optimal menu visibility across all devices with options to hide/remove on specific screen
+                        sizes. Remove on Mobile, Remove on Desktop</p>
                 </div>
 
             </details>

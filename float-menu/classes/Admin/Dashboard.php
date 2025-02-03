@@ -40,7 +40,8 @@ class Dashboard {
 	public static function footer_text( $footer_text ) {
 		global $pagenow;
 
-		if ( $pagenow === 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === WOWP_Plugin::SLUG ) ) {
+		// No nonce verification is required as this is a read-only operation to check the current admin page.
+		if ( $pagenow === 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === WOWP_Plugin::SLUG ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$text = sprintf(
 			/* translators: 1: Rating link (URL), 2: Plugin name */
 				__( 'Thank you for using <b>%2$s</b>! Please <a href="%1$s" target="_blank">rate us</a>', 'float-menu' ),
@@ -82,6 +83,13 @@ class Dashboard {
 				$name = $script['file'];
 				$file = $key . '.' . $name;
 				wp_enqueue_script( $slug . '-admin-' . $name, $assets_url . 'js/' . $file . '.js', [ 'jquery' ], $version, true );
+				if ( $name === 'general' ) {
+					wp_localize_script( $slug . '-admin-' . $name, 'wowp_ajax_object', array(
+						'url'   => admin_url( 'admin-ajax.php' ),
+						'security' => wp_create_nonce( WOWP_Plugin::PREFIX . '_settings' ),
+                        'action' => WOWP_Plugin::PREFIX . '_ajax_settings',
+					) );
+				}
 			}
 		}
 
@@ -107,6 +115,7 @@ class Dashboard {
 		echo '</div>';
 	}
 
+	// phpcs:disable PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage
 	public static function header(): void {
 		$logo_url = self::logo_url();
 		?>
@@ -120,19 +129,21 @@ class Dashboard {
                                  alt="<?php echo esc_attr( WOWP_Plugin::info( 'name' ) ); ?> logo">
                         </div>
 					<?php endif; ?>
-                    <h1><?php echo esc_html( WOWP_Plugin::info( 'name' ) ); ?> <sup
-                                class="wpie-version"><?php echo esc_html( WOWP_Plugin::info( 'version' ) ); ?></sup>
+                    <h1>
+						<?php echo esc_html( WOWP_Plugin::info( 'name' ) ); ?>
+                        <sup class="wpie-version"><?php echo esc_html( WOWP_Plugin::info( 'version' ) ); ?></sup>
                     </h1>
-                    <a href="<?php echo esc_url( Link::add_new_item() ); ?>"
-                       class="button button-primary"><?php esc_html_e( 'Add New', 'float-menu' ); ?>
+                    <a href="<?php echo esc_url( Link::add_new_item() ); ?>" class="button button-primary">
+						<?php esc_html_e( 'Add New', 'float-menu' ); ?>
                     </a>
 					<?php do_action( WOWP_Plugin::PREFIX . '_admin_header_links' ); ?>
                 </div>
             </div>
         </div>
 		<?php
-
 	}
+
+	// phpcs:enable
 
 
 	public static function logo_url(): string {
@@ -149,15 +160,16 @@ class Dashboard {
 
 		$current_page = self::get_current_page();
 
-		$action = ( isset( $_REQUEST["action"] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST["action"] ) ) : '';
+		//No nonce checking is required as this is just reading the parameters.
+		$action = ( isset( $_REQUEST["action"] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST["action"] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		echo '<h2 class="nav-tab-wrapper wpie-nav-tab-wrapper">';
 		foreach ( $pages as $key => $page ) {
 			$class = ( $page['file'] === $current_page ) ? ' nav-tab-active' : '';
 			$id    = '';
 
-			if ( $action === 'update' && $page['file'] === 'settings' ) {
-				$id           = ( isset( $_REQUEST["id"] ) ) ? absint( $_REQUEST["id"] ) : '';
+			if ( $action === 'update' && $page['file'] === 'settings' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$id           = ( isset( $_REQUEST["id"] ) ) ? absint( $_REQUEST["id"] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$page['name'] = __( 'Update', 'float-menu' ) . ' #' . $id;
 			} elseif ( $page['file'] === 'settings' && ( $action !== 'new' && $action !== 'duplicate' ) ) {
 				continue;
@@ -171,7 +183,8 @@ class Dashboard {
 	public static function get_current_page(): string {
 		$default = DashboardHelper::first_file( 'pages' );
 
-		return ( isset( $_REQUEST["tab"] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST["tab"] ) ) : $default;
+		// Nonce verification is not required as the “tab” parameter is read-only.
+		return ( isset( $_REQUEST["tab"] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST["tab"] ) ) : $default; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	public static function include_pages(): void {

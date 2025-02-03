@@ -26,6 +26,7 @@ class AdminActions {
 	}
 
 	public static function actions(): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$name = self::check_name( $_REQUEST );
 		if ( ! $name ) {
 			return false;
@@ -44,9 +45,8 @@ class AdminActions {
 			ImporterExporter::import_data();
 		} elseif ( strpos( $name, '_remove_item' ) !== false ) {
 			DBManager::remove_item();
-		} elseif ( strpos( $name, '_settings' ) !== false ) {
-			Settings::save_item();
-		} elseif ( strpos( $name, '_activate_item' ) !== false ) {
+		}
+		elseif ( strpos( $name, '_activate_item' ) !== false ) {
 			Settings::activate_item();
 		} elseif ( strpos( $name, '_deactivate_item' ) !== false ) {
 			Settings::deactivate_item();

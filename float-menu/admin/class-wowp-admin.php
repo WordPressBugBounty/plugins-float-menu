@@ -16,6 +16,7 @@ namespace FloatMenuLite;
 
 use FloatMenuLite\Admin\AdminActions;
 use FloatMenuLite\Admin\Dashboard;
+use FloatMenuLite\Admin\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,9 +26,11 @@ class WOWP_Admin {
 		AdminActions::init();
 		$this->includes();
 
+		add_action( 'wp_ajax_' . WOWP_Plugin::PREFIX . '_ajax_settings', [ Settings::class, 'save_item' ] );
 		add_action( WOWP_Plugin::PREFIX . '_admin_header_links', [ $this, 'plugin_links' ] );
 		add_filter( WOWP_Plugin::PREFIX . '_save_settings', [ $this, 'save_settings' ] );
 		add_action( WOWP_Plugin::PREFIX . '_admin_load_assets', [ $this, 'load_assets' ] );
+
 	}
 
 	public function includes(): void {
@@ -37,37 +40,33 @@ class WOWP_Admin {
 	public function plugin_links(): void {
 		?>
         <div class="wpie-links">
-            <a href="<?php echo esc_url(WOWP_Plugin::info('pro'));?>" target="_blank">PRO Plugin</a>
-            <a href="<?php echo esc_url(WOWP_Plugin::info('support'));?>" target="_blank">Support</a>
-            <a href="<?php echo esc_url(WOWP_Plugin::info('rating'));?>" target="_blank" class="wpie-color-orange">Rating</a>
-            <a href="https://www.wordfence.com/r/a0fe3fadb6e08d58/products/wordfence-free/" class="wpie-color-success" target="_blank">Secure your site</a>
+            <a href="<?php echo esc_url( WOWP_Plugin::info( 'pro' ) ); ?>" target="_blank">Plugin Page</a>
+            <a href="<?php echo esc_url( WOWP_Plugin::info( 'docs' ) ); ?>" target="_blank">Documentation</a>
+            <a href="<?php echo esc_url( WOWP_Plugin::info( 'rating' ) ); ?>" target="_blank" class="wpie-color-orange">Rating</a>
+            <a href="https://demo.wow-estore.com/float-menu-pro/" target="_blank" style="color: rgb(var(--wpie-rgb-blurple));">View Pro Demo</a>
         </div>
 		<?php
 	}
+
 	public function save_settings( $request ) {
 
-		$param = ! empty( $request ) ? map_deep( $request, 'sanitize_text_field' ) : [];
+		$param = ! empty( $request ) ? map_deep( wp_unslash( $request ), 'sanitize_text_field' ) : [];
 
-		if ( isset( $request['menu_1']['item_tooltip'] ) ) {
-			$param['menu_1']['item_tooltip'] = map_deep( $request['menu_1']['item_tooltip'], array(
+		if ( isset( $request['menu_1']['item_text'] ) ) {
+			$param['menu_1']['item_text'] = map_deep( wp_unslash( $request['menu_1']['item_text'] ), array(
 				$this,
-				'sanitize_tooltip'
+				'sanitize_text'
 			) );
 		}
 
-		if ( isset( $request['menu_1']['item_text'] ) ) {
-			$param['menu_1']['item_text'] = map_deep( $request['menu_1']['item_text'], [
+		if ( isset( $request['menu_1']['popupcontent'] ) ) {
+			$param['menu_1']['popupcontent'] = map_deep( wp_unslash( $request['menu_1']['popupcontent'] ), array(
 				$this,
 				'sanitize_text'
-			] );
-		}
-
-		if ( isset( $request['popupcontent'] ) ) {
-			$param['popupcontent'] = wp_kses_post( wp_unslash( $request['popupcontent'] ) );
+			) );
 		}
 
 		return $param;
-
 	}
 
 	public function sanitize_text( $text ): string {
@@ -89,19 +88,19 @@ class WOWP_Admin {
 
 		$handle     = WOWP_Plugin::SLUG;
 		$version    = WOWP_Plugin::info( 'version' );
-		$url_assets        = WOWP_Plugin::url() . 'vendors/';
-
-		$fonticonpicker_js = $url_assets . 'fonticonpicker/fonticonpicker.min.js';
-		wp_enqueue_script( $handle . '-fonticonpicker', $fonticonpicker_js, array( 'jquery' ), $version, true );
-
-		$fonticonpicker_css = $url_assets . 'fonticonpicker/css/fonticonpicker.min.css';
-		wp_enqueue_style( $handle . '-fonticonpicker', $fonticonpicker_css, null, $version );
-
-		$fonticonpicker_dark_css = $url_assets . 'fonticonpicker/fonticonpicker.darkgrey.min.css';
-		wp_enqueue_style( $handle . '-fonticonpicker-darkgrey', $fonticonpicker_dark_css, null, $version );
+		$url_assets = WOWP_Plugin::url() . 'vendors/';
 
 		$url_fontawesome = $url_assets . 'fontawesome/css/all.min.css';
-		wp_enqueue_style( 'wowp-fontawesome', $url_fontawesome, null, '6.6' );
+		wp_enqueue_style( $handle . '-fontawesome', $url_fontawesome, null, '6.7.1' );
+
+		$fonticonpicker_js = $url_assets . 'fonticonpicker/js/jquery.fonticonpicker.js';
+		wp_enqueue_script( $handle . '-fonticonpicker', $fonticonpicker_js, array( 'jquery' ), $version, true );
+
+		$fonticonpicker_css = $url_assets . 'fonticonpicker/css/base/jquery.fonticonpicker.css';
+		wp_enqueue_style( $handle . '-fonticonpicker', $fonticonpicker_css, null, $version );
+
+		$fonticonpicker_dark_css = $url_assets . 'fonticonpicker/css/themes/dark-grey-theme/jquery.fonticonpicker.darkgrey.css';
+		wp_enqueue_style( $handle . '-fonticonpicker-darkgrey', $fonticonpicker_dark_css, null, $version );
 
 	}
 

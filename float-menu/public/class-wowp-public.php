@@ -17,6 +17,8 @@ namespace FloatMenuLite;
 use FloatMenuLite\Admin\DBManager;
 use FloatMenuLite\Publish\Conditions;
 use FloatMenuLite\Publish\Display;
+use FloatMenuLite\Publish\Maker;
+use FloatMenuLite\Publish\Singleton;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,10 +27,11 @@ class WOWP_Public {
 	private string $pefix;
 
 	public function __construct() {
-		$this->includes();
 		// prefix for plugin assets
 		$this->pefix = '.min';
 		add_shortcode( WOWP_Plugin::SHORTCODE, [ $this, 'shortcode' ] );
+		add_shortcode( WOWP_Plugin::SHORTCODE . '-ready', [ $this, 'shortcode_ready' ] );
+
 		add_action( 'wp_footer', [ $this, 'footer' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'assets' ] );
 	}
@@ -37,49 +40,65 @@ class WOWP_Public {
 		$handle          = WOWP_Plugin::SLUG;
 		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
 		$version         = WOWP_Plugin::info( 'version' );
-		$args            = $this->check_display();
 		$url_fontawesome = WOWP_Plugin::url() . '/vendors/fontawesome/css/all.min.css';
 
+		$this->check_shortcode();
+		$this->check_display();
+
+		$singleton = Singleton::getInstance();
+		$args      = $singleton->getValue();
+
 		if ( ! empty( $args ) ) {
-			wp_enqueue_style( $handle, $assets . 'css/style'.$this->pefix.'.css', [], $version, $media = 'all' );
-			wp_enqueue_script( $handle, $assets . 'js/floatMenu'.$this->pefix.'.js', array( 'jquery' ), $version, true );
+			wp_enqueue_style( $handle, $assets . 'css/style' . $this->pefix . '.css', [], $version, $media = 'all' );
+			wp_enqueue_script( $handle, $assets . 'js/floatMenu' . $this->pefix . '.js', array( 'jquery' ), $version,
+				true );
 
 			foreach ( $args as $id => $param ) {
 				if ( empty( $param['fontawesome'] ) ) {
-					wp_enqueue_style( $handle . '-fontawesome', $url_fontawesome, null, '6.6' );
+					wp_enqueue_style( $handle . '-fontawesome', $url_fontawesome, null, '6.7.1' );
 				}
-
-				if ( empty( $param['velocity'] ) ) {
-					$url_velocity = $assets . 'js/velocity.min.js';
-					wp_enqueue_script( 'velocity', $url_velocity, array( 'jquery' ), $version, true );
-				}
-
-				$style        = new  Style_Maker( $id, $param );
-				$inline_style = $style->init();
-				wp_add_inline_style( $handle, $inline_style );
-
-				$script        = new  Script_Maker( $id, $param );
-				$inline_script = $script->init();
-				wp_add_inline_script( $handle, $inline_script, 'before' );
-
 			}
-
 		}
-
-	}
-
-
-
-	public function includes(): void {
-		require_once plugin_dir_path( __FILE__ ) . 'class-menu-maker.php';
-		require_once plugin_dir_path( __FILE__ ) . 'class-style-maker.php';
-		require_once plugin_dir_path( __FILE__ ) . 'class-script-maker.php';
 	}
 
 	public function shortcode( $atts ): string {
-
 		$atts = shortcode_atts(
-			[ 'id' => "", 'footer' => 'false' ],
+			[ 'id' => "" ],
+			$atts,
+			WOWP_Plugin::SHORTCODE
+		);
+
+		if ( empty( $atts['id'] ) ) {
+			return '';
+		}
+
+		$singleton = Singleton::getInstance();
+
+		if ( $singleton->hasKey( $atts['id'] ) ) {
+			return '';
+		}
+
+		$result = DBManager::get_data_by_id( $atts['id'] );
+
+		if ( empty( $result->param ) ) {
+			return '';
+		}
+
+		$conditions = Conditions::init( $result );
+
+		if ( $conditions === false ) {
+			return '';
+		}
+
+		$param = maybe_unserialize( $result->param );
+		$singleton->setValue( $atts['id'], $param );
+
+		return '';
+	}
+
+	public function shortcode_ready( $atts ): string {
+		$atts = shortcode_atts(
+			[ 'id' => "" ],
 			$atts,
 			WOWP_Plugin::SHORTCODE
 		);
@@ -98,88 +117,76 @@ class WOWP_Public {
 			return '';
 		}
 
-		$param  = maybe_unserialize( $result->param );
-		$walker = new Menu_Maker( $atts['id'], $param );
-		$out    = $walker->init();
+		$param = maybe_unserialize( $result->param );
 
-		if ( $atts['footer'] === 'false' ) {
-			$this->load_assets( $atts['id'], $param );
-		}
+		$maker = new Maker( $atts['id'], $param );
 
-
-		return $out;
-
-	}
-
-	public function load_assets( $id, $param ): void {
-
-		$handle          = WOWP_Plugin::SLUG;
-		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
-		$version         = WOWP_Plugin::info( 'version' );
-		$url_fontawesome = WOWP_Plugin::url() . '/vendors/fontawesome/css/all.min.css';
-
-		if ( empty( $param['fontawesome'] ) ) {
-			wp_enqueue_style( $handle . '-fontawesome', $url_fontawesome, null, '6.6' );
-		}
-
-		$style        = new  Style_Maker( $id, $param );
-		$inline_style = $style->init();
-
-		if ( wp_style_is( $handle, 'enqueued' ) ) {
-			echo '<style type="text/css">' . esc_html( $inline_style ) . '</style>';
-		} else {
-			wp_enqueue_style( $handle, $assets . 'css/style'.$this->pefix.'.css', [], $version, $media = 'all' );
-			wp_add_inline_style( $handle, $inline_style );
-		}
-
-
-		if ( empty( $param['velocity'] ) ) {
-			$url_velocity = $assets . 'js/velocity.min.js';
-			wp_enqueue_script( 'velocity', $url_velocity, array( 'jquery' ), $version, true );
-		}
-
-		$url_script = $assets . 'js/floatMenu'.$this->pefix.'.js';
-		wp_enqueue_script( $handle, $url_script, array( 'jquery' ), $version, true );
-
-		$script        = new  Script_Maker( $id, $param );
-		$inline_script = $script->init();
-		wp_add_inline_script( $handle, $inline_script, 'before' );
-
-
+		return $maker->init();
 	}
 
 
 	public function footer(): void {
-
-		$args = $this->check_display();
+		$singleton = Singleton::getInstance();
+		$args      = $singleton->getValue();
 
 		if ( empty( $args ) ) {
 			return;
 		}
 		$shortcodes = '';
-		foreach ( $args as $id => $param ) {
-			$shortcodes .= '[' . WOWP_Plugin::SHORTCODE . ' id="' . absint( $id ) . '" footer="true"]';
-		}
+		$check      = 0;
 
+		foreach ( $args as $id => $param ) {
+			if ( $check === absint( $id ) ) {
+				continue;
+			}
+			if ( str_contains( $id, 'shortcode_' ) ) {
+				$check = $param;
+				continue;
+			}
+			$shortcodes .= '[' . WOWP_Plugin::SHORTCODE . '-ready id="' . absint( $id ) . '" footer="true"]';
+		}
 		echo do_shortcode( $shortcodes );
 	}
 
-	private function check_display(): array {
-		$args    = [];
+	private function check_display(): void {
 		$results = DBManager::get_all_data();
-
-		if ( $results === false ) {
-			return $args;
-		}
-
-		foreach ( $results as $result ) {
-			$param = maybe_unserialize( $result->param );
-			if ( Display::init( $result->id, $param ) === true && Conditions::init( $result ) === true ) {
-				$args[ $result->id ] = $param;
+		if ( $results !== false ) {
+			$singleton = Singleton::getInstance();
+			foreach ( $results as $result ) {
+				$param = maybe_unserialize( $result->param );
+				if ( Display::init( $result->id, $param ) === true && Conditions::init( $result ) === true ) {
+					$singleton->setValue( $result->id, $param );
+				}
 			}
 		}
+	}
 
-		return $args;
+	private function check_shortcode(): void {
+		global $post;
+		$shortcode = WOWP_Plugin::SHORTCODE;
+		$singleton = Singleton::getInstance();
+
+		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, $shortcode ) ) {
+			$pattern = get_shortcode_regex( [ $shortcode ] );
+			if ( preg_match_all( '/' . $pattern . '/s', $post->post_content, $matches )
+			     && array_key_exists( 2, $matches )
+			     && in_array( $shortcode, $matches[2] )
+			) {
+				foreach ( $matches[3] as $attrs ) {
+					$attrs = shortcode_parse_atts( $attrs );
+					if ( $attrs && is_array( $attrs ) && array_key_exists( 'id', $attrs ) ) {
+						$result = DBManager::get_data_by_id( $attrs['id'] );
+
+						if ( ! empty( $result->param ) ) {
+							$param = maybe_unserialize( $result->param );
+							if ( Conditions::init( $result ) === true ) {
+								$singleton->setValue( $attrs['id'], $param );
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

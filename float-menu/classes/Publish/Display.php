@@ -26,6 +26,10 @@ class Display {
 			return false;
 		}
 
+		if ( ! isset( $param['show'] ) ) {
+			return false;
+		}
+
 		return self::check_shows( $param['show'], $param );
 	}
 
@@ -36,6 +40,9 @@ class Display {
 	private static function check_shows( $showParams, $param ): bool {
 
 		foreach ( $showParams as $i => $show ) {
+			if ( str_contains( $show, self::POST_PREFIX ) && self::custom_post( $i, $param ) ) {
+				return true;
+			}
 
 			if ( self::is_match( $show, $i, $param ) ) {
 				return true;
@@ -64,5 +71,4 @@ class Display {
 	private static function check_everywhere(): bool {
 		return true;
 	}
-
 }

@@ -13,6 +13,21 @@ return [
 		],
 	],
 
+	'top_offset' => [
+		'type'  => 'number',
+		'title' => __( 'Top offset', 'float-menu' ),
+		'val'   => '0',
+		'addon' => __( 'px', 'float-menu' ),
+	],
+
+	'side_offset' => [
+		'type'  => 'number',
+		'title' => __( 'Side offset', 'float-menu' ),
+		'val'   => '0',
+		'addon' => __( 'px', 'float-menu' ),
+	],
+
+
 	'shape' => [
 		'type'  => 'select',
 		'title' => __( 'Shape', 'float-menu' ),
@@ -75,6 +90,16 @@ return [
 		],
 	],
 
+	'labelEffect' => [
+		'type'  => 'select',
+		'title' => __( 'Label Effect', 'float-menu' ),
+		'val'   => 'true',
+		'atts'  => [
+			'none'           => __( 'None', 'float-menu' ),
+			'fade'           => __( 'Fade', 'float-menu' ),
+		],
+	],
+
 	'labelSpeed' => [
 		'type'  => 'number',
 		'title' => __( 'Label Speed', 'float-menu' ),
@@ -116,7 +141,6 @@ return [
 		'val'   => '15',
 		'addon' => __( 'px', 'float-menu' ),
 	],
-
 
 	'zindex' => [
 		'type'  => 'number',

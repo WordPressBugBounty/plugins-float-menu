@@ -5,14 +5,20 @@
         this.each(function (index, element) {
             const labelText = $(this).find('[data-field="menu_1-item_tooltip"]').val();
             const typeText = $(this).find('[data-field="menu_1-item_type"] option:selected').text();
-            const subItem = $(this).find('[data-field="menu_1-item_sub"]');
             const iconValue = getIcon(this);
+
+            const sub = $(element).find('.wpie-item__parent');
+
+            if ($(element).hasClass('shifted-right')) {
+                sub.val(1);
+            }  else {
+                sub.val(0);
+            }
 
 
             const icon = $(this).find('.wpie-item_heading_icon');
             const label = $(this).find('.wpie-item_heading_label');
             const type = $(this).find('.wpie-item_heading_type');
-            const sub = $(this).find('.wpie-item_heading_sub');
 
             const color = $(this).find('[data-field="menu_1-color"]').val();
             const hcolor = $(this).find('[data-field="menu_1-hcolor"]').val();
@@ -45,34 +51,65 @@
 
             label.text(labelText);
             type.text(typeText);
-            if (subItem.is(':checked')) {
-                sub.html('<em>sub item</em>');
-            } else {
-                sub.html('');
-            }
             icon.html(iconValue);
-
-
         });
 
         function getIcon(element) {
+            const iconRotate = $(element).find('[data-field|="menu_1-icon_rotate"]').val();
+            const iconFlip = $(element).find('[data-field|="menu_1-icon_flip"]').val();
 
-            const custom_text = $(element).find('[data-field="menu_1-item_custom_text_check"]');
-            const item_custom = $(element).find('[data-field="menu_1-item_custom"]');
-            if ($(custom_text).is(':checked')) {
-                return $(element).find('[data-field="menu_1-item_custom_text"]').val();
+            let style = ' style="';
+            if (iconRotate !== '' || iconRotate !== '0') {
+                style += `rotate: ${iconRotate}deg;`;
             }
 
-            if ($(item_custom).is(':checked')) {
-                const icon_custom = $(element).find('[data-field="menu_1-item_custom_link"]').val();
-                if (isValidURL(icon_custom)) {
-                    return `<img src="${icon_custom}">`;
-                } else {
-                    return `<span class="dashicons dashicons-camera-alt"></span>`;
+            if (iconFlip !== '') {
+                if (iconFlip === '-flip-horizontal') {
+                    style += `scale: -1 1;`;
+                }
+                if (iconFlip === '-flip-vertical') {
+                    style += `scale: 1 -1;`;
+                }
+                if (iconFlip === '-flip-both') {
+                    style += `scale: -1 -1;`;
                 }
             }
-            let icon = $(element).find('[data-field="menu_1-item_icon"]').val();
-            return `<span class="${icon}"></span>`;
+
+            style += '"';
+
+            const type = $(element).find('[data-field|="menu_1-icon_type"]').val();
+
+            if (type === 'icon') {
+                let icon = $(element).find('.selected-icon').html();
+                if (icon === undefined || $.trim(icon) === '<i class="fip-icon-block"></i>') {
+                    icon = $(element).find('[data-field|="menu_1-item_icon"]').val();
+                    icon = `<i class="${icon}"></i>`;
+                }
+                icon = icon.replace('class=', style + ' class=');
+                return icon;
+            }
+
+            if (type === 'image') {
+                let icon = $(element).find('[data-field|="menu_1-item_custom_link"]').val();
+                return `<img src="${icon}" ${style}>`;
+            }
+
+            if (type === 'class') {
+                let icon = $(element).find('[data-field|="menu_1-icon_class"]').val();
+                return `<i class="dashicons dashicons-camera-alt" ${style}></i>`;
+            }
+
+            if (type === 'emoji') {
+                let icon = $(element).find('[data-field|="menu_1-icon_emoji"]').val();
+                return `<span ${style}>${icon}</span>`;
+            }
+
+            if (type === 'text') {
+                let icon = $(element).find('[data-field|="menu_1-item_custom_text"]').val();
+                return `<span ${style}>${icon}</span>`;
+            }
+
+            return '';
 
         }
 

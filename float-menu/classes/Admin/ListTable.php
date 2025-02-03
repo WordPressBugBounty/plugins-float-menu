@@ -35,12 +35,14 @@ class ListTable extends WP_List_Table {
 		return $item[ $column_name ];
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	public function search_box( $text, $input_id ): void {
 		$input_id .= '-search-input';
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 			$orderby = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );
 			echo '<input type="hidden" name="orderby" value="' . esc_attr( $orderby ) . '" />';
 		}
+
 		if ( ! empty( $_REQUEST['order'] ) ) {
 			$order = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );
 			echo '<input type="hidden" name="order" value="' . esc_attr( $order ) . '" />';
@@ -56,6 +58,8 @@ class ListTable extends WP_List_Table {
         </p>
 		<?php
 	}
+
+	// phpcs:enable
 
 	public function column_title( $item ): string {
 		$title   = ! empty( $item['title'] ) ? $item['title'] : __( 'Untitled', 'float-menu' );
@@ -193,7 +197,7 @@ class ListTable extends WP_List_Table {
 	}
 
 	public function get_paged(): int {
-		return isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
+		return isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	public function get_search() {
@@ -203,7 +207,9 @@ class ListTable extends WP_List_Table {
 			return false;
 		}
 
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification is handled elsewhere.
 		return ! empty( $_POST['s'] ) ? urldecode( trim( sanitize_text_field( wp_unslash( $_POST['s'] ) ) ) ) : false;
+		// phpcs:enable
 	}
 
 	public function list_count(): int {
@@ -222,31 +228,39 @@ class ListTable extends WP_List_Table {
 
 		$search = $this->get_search();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$tag_search = ( ! empty( $_REQUEST['tag'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST  ['tag'] ) ) : '';
 		$tag_search = ( $tag_search === 'all' ) ? '' : $tag_search;
 
 
 		$result = '';
 
-		$table = $wpdb->prefix . WOWP_Plugin::PREFIX;
+		$table = esc_sql($wpdb->prefix . WOWP_Plugin::PREFIX);
 
+        // Table name is sanitized elsewhere.
 		if ( empty( $search ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$result = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY id DESC" );
 			if ( ! empty( $tag_search ) ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE tag=%s ORDER BY id DESC",
 					$tag_search ) );
 			}
 		} elseif ( trim( $search ) === 'UnTitle' ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$result = $wpdb->get_results( "SELECT * FROM {$table} WHERE title='' ORDER BY id DESC" );
 			if ( ! empty( $tag_search ) ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE title='' AND tag=%s ORDER BY id DESC",
 					$tag_search ) );
 			}
 		} elseif ( is_numeric( $search ) ) {
 			if ( ! empty( $tag_search ) ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE id=%d AND tag=%s ORDER BY id DESC",
 					absint( $search ), $tag_search ) );
 			} else {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE id=%d ORDER BY id DESC",
 					absint( $search ) ) );
 			}
@@ -255,9 +269,11 @@ class ListTable extends WP_List_Table {
 			$find = sanitize_text_field( $search );
 			$like = $wild . $wpdb->esc_like( $find ) . $wild;
 			if ( ! empty( $tag_search ) ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE title LIKE %s AND tag=%s ORDER BY id DESC",
 					$like, $tag_search ) );
 			} else {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE title LIKE %s ORDER BY id DESC",
 					$like ) );
 			}
@@ -280,18 +296,18 @@ class ListTable extends WP_List_Table {
 	}
 
 	public function process_bulk_action() {
+		$verify = AdminActions::verify( WOWP_Plugin::PREFIX . '_list_action' );
+
+		if ( ! $verify ) {
+			return false;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$ids    = isset( $_POST['ID'] ) ? ( map_deep( $_POST['ID'], 'absint' ) ) : false;
 		$action = $this->current_action();
 		if ( ! is_array( $ids ) ) {
 			$ids = [ $ids ];
 		}
 		if ( empty( $action ) ) {
-			return false;
-		}
-
-		$verify = $this->verify();
-
-		if ( ! $verify ) {
 			return false;
 		}
 
@@ -318,7 +334,8 @@ class ListTable extends WP_List_Table {
 		if ( 'top' === $which ) {
 			$tags = DBManager::get_tags_from_table();
 
-			$tag_search = ( ! empty( $_REQUEST['tag'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST  ['tag'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$tag_search = ( ! empty( $_REQUEST['tag'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['tag'] ) ) : '';
 			$tag_search = ( $tag_search === 'all' ) ? '' : $tag_search;
 
 			echo '<div class="alignleft actions"><label for="filter-by-tag" class="screen-reader-text">' . esc_html__( 'Filter by tag',
@@ -344,22 +361,16 @@ class ListTable extends WP_List_Table {
 
 	private function sort_data( $a, $b ): int {
 		// If no sort, default to title
-		$orderby = ( ! empty( $_GET['orderby'] ) ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'ID';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$orderby = ( ! empty( $_GET['orderby'] ) ) ? sanitize_text_field( wp_unslash($_GET['orderby']) ) : 'ID';
 		// If no order, default to asc
-		$order = ( ! empty( $_GET['order'] ) ) ? sanitize_text_field( wp_unslash( $_GET['order'] ) ) : 'desc';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$order = ( ! empty( $_GET['order'] ) ) ? sanitize_text_field( wp_unslash($_GET['order']) ) : 'desc';
 		// Determine sort order
 		$result = strnatcmp( $a[ $orderby ], $b[ $orderby ] );
 
 		// Send final sort direction to usort
 		return ( $order === 'asc' ) ? $result : - $result;
-	}
-
-	private function verify(): bool {
-		$name         = WOWP_Plugin::PREFIX . '_list_action';
-		$nonce_action = WOWP_Plugin::PREFIX . '_nonce';
-
-		return ! ( ! isset( $_POST[ $name ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ $name ] ) ),
-				$nonce_action ) || ! current_user_can( 'manage_options' ) );
 	}
 
 }
