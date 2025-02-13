@@ -5,7 +5,7 @@ Tags: sidebar menu, floating menu, side menu, sticky menu, float menu
 Requires at least: 4.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 7.0
+Stable tag: 7.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,9 @@ Search for answers and ask your questions at [support center](https://wordpress.
 1. Menu
 
 == Changelog ==
+= 7.0.1 =
+* Fixed: custom icon size
+
 = 7.0 =
 * Added: Сategories for FontAwesome icons
 * Added: Introduced Icon Text option

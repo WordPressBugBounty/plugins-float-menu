@@ -65,11 +65,11 @@ class Maker {
 			$properties['--fm-z-index'] = $param['zindex'];
 		}
 
-		if ( isset( $param['iconSize'] ) && $param['iconSize'] !== '24' ) {
+		if ( isset( $param['iconSize'] ) ) {
 			$properties['--fm-icon-size'] = $param['iconSize'];
 		}
 
-		if ( isset( $param['labelSize'] ) && $param['labelSize'] !== '15' ) {
+		if ( isset( $param['labelSize'] ) ) {
 			$properties['--fm-label-size'] = $param['labelSize'];
 		}
 

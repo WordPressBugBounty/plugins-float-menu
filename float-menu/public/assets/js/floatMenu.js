@@ -268,6 +268,8 @@ class FloatMenu {
             return;
         }
 
+
+
         const screenWidth = window.innerWidth;
         const screen = parseInt(this.config?.mobile[0]) || 0;
         const iconSize = parseInt(this.config?.mobile[1]) || 24;
@@ -276,11 +278,7 @@ class FloatMenu {
         if (screenWidth < screen) {
             this.element.style.setProperty('--fm-icon-size', iconSize);
             this.element.style.setProperty('--fm-label-size', labelSize);
-        } else {
-            this.element.style.removeProperty('--fm-icon-size');
-            this.element.style.removeProperty('--fm-label-size');
         }
-
     }
 
     mobileClick() {
