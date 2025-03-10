@@ -89,11 +89,13 @@
     padding: 0;
     margin: 0;
     width: var(--fm-link-width);
+    max-width: none;
     border-radius: var(--fm-border-radius);
     overflow: hidden;
     position: relative;
     z-index: 3;
     cursor: pointer;
+
 
     &.-label-hidden {
       .fm-label {
