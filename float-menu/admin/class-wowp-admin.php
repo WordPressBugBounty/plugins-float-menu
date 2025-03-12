@@ -41,7 +41,6 @@ class WOWP_Admin {
 		?>
         <div class="wpie-links">
             <a href="<?php echo esc_url( WOWP_Plugin::info( 'pro' ) ); ?>" target="_blank">Plugin Page</a>
-            <a href="<?php echo esc_url( WOWP_Plugin::info( 'docs' ) ); ?>" target="_blank">Documentation</a>
             <a href="<?php echo esc_url( WOWP_Plugin::info( 'rating' ) ); ?>" target="_blank" class="wpie-color-orange">Rating</a>
             <a href="https://demo.wow-estore.com/float-menu-pro/" target="_blank" style="color: rgb(var(--wpie-rgb-blurple));">View Pro Demo</a>
         </div>

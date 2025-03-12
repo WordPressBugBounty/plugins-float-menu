@@ -40,7 +40,7 @@ class WOWP_Public {
 		$handle          = WOWP_Plugin::SLUG;
 		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
 		$version         = WOWP_Plugin::info( 'version' );
-		$url_fontawesome = WOWP_Plugin::url() . '/vendors/fontawesome/css/all.min.css';
+		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
 
 		$this->check_shortcode();
 		$this->check_display();
@@ -132,10 +132,24 @@ class WOWP_Public {
 		if ( empty( $args ) ) {
 			return;
 		}
+
+		$handle          = WOWP_Plugin::SLUG;
+		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
+		$version         = WOWP_Plugin::info( 'version' );
+		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
+
+		wp_enqueue_style( $handle, $assets . 'css/style' . $this->pefix . '.css', [], $version, $media = 'all' );
+		wp_enqueue_script( $handle, $assets . 'js/floatMenu' . $this->pefix . '.js', array( 'jquery' ), $version,
+			true );
+
 		$shortcodes = '';
 		$check      = 0;
 
 		foreach ( $args as $id => $param ) {
+			if ( empty( $param['fontawesome'] ) ) {
+				wp_enqueue_style( $handle . '-fontawesome', $url_fontawesome, null, '6.7.1' );
+			}
+
 			if ( $check === absint( $id ) ) {
 				continue;
 			}
