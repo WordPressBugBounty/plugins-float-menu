@@ -5,290 +5,374 @@ Tags: sidebar menu, floating menu, side menu, sticky menu, float menu
 Requires at least: 4.3
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 7.0.3
+Stable tag: 7.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Easily create floating menus of varying complexity. Use its capabilities to place unique navigation on the site.
 
 == Description ==
-Float Menu is a free WordPress plugin to create and place a unique floating menu on your website. The extension allows users to get access to the functions of the panel regardless of its position on the resource. The menu moves along with the scrolling of the page and always remains in visibility.
 
-The Float Menu extension will create the convenient floating menu for your site. The panel does not take up much of the screen space and is always available to the user. Connecting the tool to a web resource will provide an opportunity to increase its usability and attractiveness. The menu is easily customizable for different site themes.
+[Try Free Demo](https://lite.wow-estore.com/float-menu/) | [🚀 Try Pro Demo](https://demo.wow-estore.com/float-menu-pro/) | [Documentation](https://wow-estore.com/documentations/float-menu-lite/)
 
-[Look Demo PRO](https://demo.wow-estore.com/float-menu-pro/)
+Float Menu is a **free WordPress plugin** to create and place a unique floating menu on your website. The extension allows users to get access to the functions of the panel regardless of its position on the resource. The menu moves along with the scrolling of the page and always remains in visibility.
+
+### 🌟 Features:
+- Floating menu that stays on the screen.
+- **Lightweight & fast** – does not slow down your site.
+- **Easy customization** – change colors, icons, and position.
+- Works with **any WordPress theme**.
+
+✅ **Enhance usability and user experience with Float Menu!**
+
+--
 
 = Main features =
 
 The Float Menu makes user interaction with the site more comfortable. It can increase the conversion by improving the functionality of the web resource. Among the capabilities of the tool:
 
-* create unlimited menu;
-* 2 positions to display the panel: left or right on the page;
-* add and customize labels of the buttons;
-* edit indents between the menu items;
-* square shape of the buttons;
-* more than 2000+ Font Awesome 6 icons;
-* select the color for each icon;
-* insert any links;
-* open a link in a new window;
-* set the background color for the button.
+### 🎨 **Customization & Design**
+- Create **unlimited menus**.
+- Position menu **left or right**.
+- Choose from **4 button shapes**: Square, Round, Rounded, Rounded-out.
+- Adjust **spacing between menu items**.
+- Set **custom colors** for buttons and icons.
+- Use **2000+ Font Awesome 6 icons**.
+- **Test Mode** – show the menu only to administrators while configuring settings.
 
+### 🔗 **Link & Accessibility Options**
+- Open links in a **new window**.
+- Set **custom attributes**: `ID`, `Class`, `rel`, `aria-label`.
+- **Hide the menu** on small or large devices.
+
+### ⚡ **Performance & SEO**
+- **Lightweight and fast** – does not slow down your site.
+- **SEO-friendly structure** for better indexing.
+
+--
 
 = Float Menu can be used for: =
-* site navigation;
-* main menu;
-* contact block;
-* additional menu;
-* user profile navigation and other.
+* Site navigation
+* Main menu
+* Contact block
+* Additional menu
+* User profile navigation and more
 
-= Pro version =
+--
 
-Open access to all the extension features with the Pro-version of the plugin. It helps the administrator of the web resource to get the opportunity to:
+= Pro Version =
 
-* create an unlimited amount of menus on the site;
-* add submenu items;
-* create search menu item;
-* create items with function page translate
-* align the menu layout vertically;
-* change the form of the button display;
-* add 7 animation effects to display the labels and edit the speed of it output;
-* set detailed adjustment of submenu elements;
-* add 4 animation options to display the submenu;
-* set the position of the elements: under the main button, on the side or round;
-* connect and edit the built-in modal window, align it, change the color and style of the corners;
-* use custom image;
-* connect the built-in user menu, print function and social buttons;
-* display elements according to the ID or class;
-* edit the title and content of the built-in pop-up block;
-* display various forms, counters, calculators, social buttons and much more via the modal window;
-* change the display of the menu depending on the status and role of the user;
-* set panel output limits for oversized and small screens;
-* customize the menu display for sites with different languages;
-* set the display of navigation on all pages of the resource or in individual posts, use to output the category, IDs and exclusions, insert the panel via the shortcode;
-* And more...
+Unlock **advanced features** and take your floating menus to the next level with Float Menu Pro!
 
-[Preview of Pro version](https://demo.wow-estore.com/float-menu-pro/)
+### 🎨 **More Customization**
+- **Create submenus** – supports a single submenu level.
+- **Hold label open** – keep menu labels visible.
+- **Vertical alignment** – align menus precisely.
+- **Extra text & label fonts** – display detailed descriptions with custom fonts.
+- **Custom icons** – upload your own icons.
+- **Icon settings** – rotate, flip, and customize icons.
 
-Try our new [WordPress popup plugin](https://wordpress.org/plugins/popup-box/)
+### 🔗 **More Functional Links**
+- **Translate page** – one-click website translation.
+- **Social sharing** – share content via Facebook, Twitter, etc.
+- **Next/Previous Post** – quick navigation between posts.
+- **Forced download** – enable direct file downloads.
+- **Smooth scrolling** – scroll to sections effortlessly.
+- **Scroll to top/bottom** – quick page navigation.
+- **Print page** – allow users to print the current page.
+- **Search integration** – add search functionality to the menu.
+
+### 🎯 **More Display Rules**
+- **Show/hide based on scroll** – smart visibility control.
+- **User role permissions** – restrict menu by user role.
+- **Multilingual support** – adjust menus per language.
+- **Schedule menu display** – control when menus appear.
+- **Activate by URL** – display menus only on specific pages based on URL parameters.
+- **Activate by referrer URL** – show menus based on where users came from.
+
+### 📊 **Analytics & Performance**
+- **Google Analytics tracking** – track menu interactions and clicks.
+- **Browser compatibility control** – hide menus for outdated browsers.
+
+### 🔥 **Bonus Feature: Built-in Popup System**
+- **Create popups** – trigger popups when clicking menu items.
+
+👉 **[Upgrade to Pro](https://wow-estore.com/item/float-menu-pro/) and unlock all premium features!**
+
+--
 
 = Use with other plugins to maximize your results =
-* [Popup Box – new WordPress popup plugin](https://wordpress.org/plugins/popup-box/)
-* [Counter Box – powerful creator of counters, timers and countdowns](https://wordpress.org/plugins/counter-box/)
-* [Button Generator – easily Button Builder](https://wordpress.org/plugins/button-generation/)
-* [Herd Effects – fake notifications and social proof plugin](https://wordpress.org/plugins/mwp-herd-effect/)
-* [Floating Button](https://wordpress.org/plugins/floating-button/)
-* [Side Menu Lite – add sticky fixed buttons](https://wordpress.org/plugins/side-menu-lite/)
-* [Sticky Buttons – floating buttons builder](https://wordpress.org/plugins/sticky-buttons/)
-* [Bubble Menu – circle floating menu](https://wordpress.org/plugins/bubble-menu/)
-* [Float menu – awesome floating side menu](https://wordpress.org/plugins/float-menu/)
-* [Modal Window – create modal window](https://wordpress.org/plugins/modal-window/)
+* [Popup Box – create stunning popups triggered by Float Menu](https://wordpress.org/plugins/popup-box/)
+* [Side Menu Lite – alternative floating navigation panel](https://wordpress.org/plugins/side-menu-lite/)
+* [Floating Button – add floating action buttons](https://wordpress.org/plugins/floating-button/)
+* [Sticky Buttons – floating buttons with advanced triggers](https://wordpress.org/plugins/sticky-buttons/)
+* [Bubble Menu – circular floating menu with icons](https://wordpress.org/plugins/bubble-menu/)
+* [WP Coder – customize menu with custom HTML, CSS, and JS](https://wordpress.org/plugins/wp-coder/)
+* [Flexi Menu – advanced floating and sticky menus](https://wordpress.org/plugins/flexi-menu/)
 
 = Support =
 Search for answers and ask your questions at [support center](https://wordpress.org/support/plugin/float-menu)
 
+== Frequently Asked Questions ==
+
+= The menu does not appear on the website. How can I fix it? =
+If the menu does not appear, it may be due to **caching**. Try the following steps to resolve the issue:
+
+1. **Clear your browser cache** – press `Ctrl + Shift + R` (Windows) or `Cmd + Shift + R` (Mac) to refresh the page without cache.
+2. **Clear your WordPress cache** – if you're using a caching plugin (e.g., WP Rocket, W3 Total Cache, LiteSpeed Cache), clear the cache in the plugin settings.
+3. **Purge server cache** – if your hosting provider uses caching (e.g., Cloudflare, SiteGround, or Nginx cache), clear the cache from your hosting panel.
+4. **Disable caching temporarily** – if the issue persists, try disabling the caching plugin and check if the menu appears.
+
+= The menu is visible to the site administrator but not to users? =
+Check if the **"Test Mode"** option is enabled. If **Test Mode** is activated, the menu will be visible **only to the site administrator** but not to regular users.
+
+= Can I change the menu position? =
+Yes, you can set the menu to appear on the **left or right side** of the screen in the plugin settings.
+
+= Can I display the menu only on specific pages? =
+Yes! In the **Lite version**, you can:
+- **Show the menu on all pages** of your website.
+- **Insert the menu manually** using a **shortcode** `[Float-Menu id="1"]` to display it only where needed.
+
+In the **Pro version**, you can set **advanced display rules** to show the menu only on specific pages, categories, post types, or based on user roles.
+
+= Can I use multiple menus on the same page? =
+Yes, you can create and display **multiple menus** on a single page. Each menu has its own settings and can be controlled separately.
+
+= How do I use the plugin on a multisite? =
+If you're using a Multisite WordPress installation, **do not activate** the plugin for the entire network. Instead, activate it **individually on each site** where you need it.
+
+= Does Float Menu affect website performance? =
+No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impact on your website's performance.
+
 == Installation ==
-* Installation option 1: Find and install this plugin in the `Plugins` -> `Add new` section of your `wp-admin`
-* Installation option 2: Download the zip file, then upload the plugin via the wp-admin in the `Plugins` -> `Add new` section. Or unzip the archive and upload the folder to the plugins directory `/wp-content/plugins/` via ftp
-* Press `Activate` when you have installed the plugin via dashboard or press `Activate` in the in the `Plugins` list
-* Go to `Float Menu` section that will appear in your main menu on the left
-* Click `Add new` to create your first menu
-* Setup your menu
-* Click Save
+
+### 📌 Option 1: Install via WordPress Admin
+1. Go to **`Plugins` → `Add New`** in your WordPress admin panel.
+2. Search for **"Float Menu"** and click **Install Now**.
+3. Click **Activate** after installation.
+
+### 📌 Option 2: Install Manually
+1. **Download** the plugin ZIP file.
+2. In WordPress admin, go to **`Plugins` → `Add New`** → **Upload Plugin**.
+3. Click **Choose File**, select the downloaded ZIP file, then click **Install Now**.
+4. After installation, click **Activate**.
+
+### 📌 Option 3: Install via FTP
+1. **Download and unzip** the plugin ZIP file.
+2. Upload the extracted **`float-menu`** folder to `/wp-content/plugins/` via FTP.
+3. Go to **`Plugins`** in WordPress admin and click **Activate**.
+
+### 🚀 Getting Started
+1. Go to the **`Float Menu`** section in the WordPress admin panel.
+2. Click **`Add New`** to create your first menu.
+3. Configure the menu settings.
+4. Click **Save** to apply changes.
 
 == Screenshots ==
 1. Menu
 
 == Changelog ==
+
+= 7.0.4 =
+* Updated: Helpful links in the settings page.
+* Updated: `wp-color-picker-alpha` to version **3.0.4**.
+
 = 7.0.3 =
-* Fixed: shortcode not work correctly with some page builders
+* Fixed: Shortcode did not work correctly with some page builders.
 
 = 7.0.2 =
-* Fixed: link width. Add the property max-width to the menu item
+* Fixed: Link width issue – added `max-width` property to the menu item.
 
 = 7.0.1 =
-* Fixed: custom icon size
+* Fixed: Custom icon size issue.
 
 = 7.0 =
-* Added: Сategories for FontAwesome icons
-* Added: Introduced Icon Text option
-* Added: Added an option to duplicate menu items
-* Upgraded: FontAwesome to version 6.7.1
-* Changed: Updated Icon Picker with improved functionality
-* Changed: Rewritten script from jQuery to Vanilla JS for better performance
-* Removed: Velocity.js to optimize script size
-* Fixed: minor bugs and improved overall stability
+### 🚀 Major Update
+* **Added:** Categories for FontAwesome icons.
+* **Added:** New "Icon Text" option.
+* **Added:** Option to duplicate menu items.
+* **Updated:** FontAwesome to version **6.7.1**.
+* **Updated:** Icon Picker with improved functionality.
+* **Changed:** Rewritten script from jQuery to Vanilla JS for better performance.
+* **Removed:** Velocity.js to reduce script size.
+* **Fixed:** Minor bugs and improved overall stability.
 
 = 6.1.4 =
-* Fixed: updated database
+* Fixed: Database update process.
 
 = 6.1.3 =
 * Fixed: Nonce verification logic for improved security.
 
 = 6.1.2 =
-* Fixed: structure of columns for creating a database table
+* Fixed: Structure of database table columns.
 
 = 6.1.1 =
-Fixed: minor bug with save the link
+* Fixed: Minor issue with saving links.
 
 = 6.1 =
-* Added: Attribute 'aria-label'
-* Fixed: save link
+* Added: `aria-label` attribute for accessibility.
+* Fixed: Link saving issue.
 
 = 6.0.6 =
-* Updated: FontAwesome Icon.
+* Updated: FontAwesome icon library.
 
 = 6.0.5 =
-* Fixed: main icon in the admin menu.
-* Fixed: minor bugs
-* Update: translate file
+* Fixed: Main icon in the admin menu.
+* Fixed: Minor bugs.
+* Updated: Translation files.
 
 = 6.0.4 =
-* Fixed: re-write the function 'Mobile Rules'
+* Fixed: Rewritten "Mobile Rules" function.
 
 = 6.0.3 =
-* Updated: FontAwesome Icon to version 6.6
+* Updated: FontAwesome to version **6.6**.
 
 = 6.0.2 =
-* Improved: plugin interface
+* Improved: Plugin interface.
 
 = 6.0.1 =
-* Fixed: minor bug
+* Fixed: Minor bug.
 
 = 6.0 =
-* Added: Option 'Menu Size' for control Icon and Label size
-* Added: Item Type: Login, Logout, Lost Password, Register
-* Added: Ability to change menu status and mode from the list of all menus.
-* Added: The ability to change the menu status and mode for several selected menus from the list.
-* Changed: We think that it will be more convenient for you to use and create floating menus.
+### 🚀 Major Update
+* **Added:** "Menu Size" option for controlling icon and label size.
+* **Added:** New item types – Login, Logout, Lost Password, Register.
+* **Added:** Ability to change menu status and mode from the menu list.
+* **Added:** Bulk actions for changing menu status and mode.
+* **Changed:** Improved user experience for managing floating menus.
 
 = 5.1.1 =
-* Fixed: dynamic property for PHP 8.2
+* Fixed: Dynamic property issue for PHP 8.2.
 
 = 5.1 =
-* Updated: FontAwesome to version 6.4.2
+* Updated: FontAwesome to version **6.4.2**.
 
 = 5.0.3 =
-* Fixed: sanitize saving Link
+* Fixed: Sanitization issue when saving links.
 
 = 5.0.2 =
-* Fixed: minor bugs in page-list
+* Fixed: Minor bugs in the page-list.
 
 = 5.0.1 =
-* Fixed: minor bugs
+* Fixed: Minor bugs.
 
 = 5.0 =
-* Added: hover colors for menu items
-* Added: support emoji in item label
-* Improved: styles and scripts
+### 🚀 Major Update
+* **Added:** Hover colors for menu items.
+* **Added:** Emoji support in item labels.
+* **Improved:** Styles and scripts for better performance.
 
 = 4.3.2 =
-* Fixed: insert the special link
+* Fixed: Issue with inserting special links.
 
 = 4.3.1 =
-* Fixed: security update
+* Fixed: Security update.
 
 = 4.3 =
-* Added: added the ability to add a shortcode to pages
+* Added: Ability to add shortcodes to pages.
 
 = 4.2 =
-* Added: function 'Export/Import'
+* Added: Export/Import functionality.
 
 = 4.1.1 =
-* Fixed: Attribute 'ID' for menu item
+* Fixed: `ID` attribute handling for menu items.
 
 = 4.1 =
-* Added: option 'Attribute: rel' to link
-* Fixed: options 'Test Mode' and 'Activated'
+* Added: `rel` attribute support for links.
+* Fixed: Issues with "Test Mode" and "Activated" options.
 
 = 4.0 =
-* Added: option 'Activate/Deactivate'
-* Added: option 'Test mode'
-* Changed: admin style
+### 🚀 Major Update
+* **Added:** Activate/Deactivate menu option.
+* **Added:** Test Mode for previewing menus before publishing.
+* **Changed:** Redesigned admin panel styles.
 
 = 3.5.3 =
-* Fixed: minor bugs
+* Fixed: Minor bugs.
 
 = 3.5.2 =
-* Fixed: minor bugs
+* Fixed: Minor bugs.
 
 = 3.5.1 =
-* Fixed: conflict with old font awesome icons library
+* Fixed: Conflict with old FontAwesome library.
 
 = 3.5 =
-- Updated: FontAwesome icons to version 5.15.3
-- Fixed: minor bugs
+* Updated: FontAwesome icons to version **5.15.3**.
+* Fixed: Minor bugs.
 
 = 3.4 =
-* Fixed: link with URL which contains #
-* Updated: Font Awesome Icons to version 5.14
+* Fixed: Issue with links containing `#`.
+* Updated: FontAwesome icons to version **5.14**.
 
 = 3.3.1 =
-* Fixed: FontAwesome conflict with old version
+* Fixed: FontAwesome conflict with older versions.
 
 = 3.3 =
-* Changed: ajax update
-* Fixed: minor bugs
-* Fixed: FontAwesome conflict with old version
-* Optimized: code for cache plugin
+* Changed: AJAX update mechanism.
+* Fixed: Minor bugs.
+* Fixed: FontAwesome compatibility issue.
+* Optimized: Code for cache plugins.
 
 = 3.2.2 =
-* Fixed: Conflict with old version of the icon font
+* Fixed: Conflict with old versions of the icon font.
 
 = 3.2.1 =
-* Fixed: minor bug with translate
+* Fixed: Minor translation bug.
 
 = 3.2 =
-* Updated: Font Awesome Icon to version 5.11.2
+* Updated: FontAwesome to version **5.11.2**.
 
 = 3.1 =
-* Added: mobile rules
+* Added: Mobile rules support.
 
 = 3.0.1 =
-* Fixed: minifying the scripts
+* Fixed: Script minification issue.
 
 = 3.0 =
-* Added: option for disabling FontAwesome 5 from front-end
-* Added: custom atributtes CLASS and ID to the menu item
-* Updated: Font Awesome to version 5.6
-* Changed: admin style
-* Fixed: minor bugs
+### 🚀 Major Update
+* **Added:** Option to disable FontAwesome 5 on the front-end.
+* **Added:** Custom attributes (`CLASS` and `ID`) for menu items.
+* **Updated:** FontAwesome to version **5.6**.
+* **Changed:** Redesigned admin panel.
+* **Fixed:** Minor bugs.
 
 = 2.2 =
-* Fixed: color picker alpha for Wordpress 4.9
+* Fixed: Color picker alpha issue in WordPress 4.9.
 
 = 2.1.1 =
-* Fixed: Main Class
-* Fixed: Updating
-* Fixed: Support page
+* Fixed: Main Class structure.
+* Fixed: Update mechanism.
+* Fixed: Support page issue.
 
 = 2.1 =
-* Fixed: minor bugs
-* Added: Support page
-* Added: Discount page
+* Fixed: Minor bugs.
+* Added: Support page.
+* Added: Discount page.
 
 = 2.0 =
-* Added: function hiding menu on mobile
-* Changed: admin style
+### 🚀 Major Update
+* **Added:** Option to hide menu on mobile.
+* **Changed:** Redesigned admin panel.
 
 = 1.2.1 =
-* Fixed: admin style
-* Fixed: toogle and sortible of menu items
+* Fixed: Admin panel styling.
+* Fixed: Toggle and sortable menu items.
 
 = 1.2 =
-* Fixed: minor bug
+* Fixed: Minor bug.
 
 = 1.1 =
-* Added: sort function;
-* Fixed: minor bug
+* Added: Sort function.
+* Fixed: Minor bug.
 
 = 1.0.1 =
-* Fixed: font icon
-
+* Fixed: Font icon issue.
 
 = 1.0 =
-* Initial release
+* Initial release.
 
 == Upgrade Notice ==
 
 = 3.0 =
-In connection with the upgrade of Font Awesome to version 5, we ask you to edit and update all previously created menus.
+With the upgrade to **FontAwesome 5**, please review and update all previously created menus.

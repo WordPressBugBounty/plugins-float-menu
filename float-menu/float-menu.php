@@ -3,7 +3,7 @@
  * Plugin Name:       Float Menu Lite
  * Plugin URI:        https://wow-estore.com/item/float-menu-pro/
  * Description:       Easily create floating menus of varying complexity
- * Version:           7.0.3
+ * Version:           7.0.4
  * Author:            Wow-Company
  * Author URI:        https://wow-estore.com
  * License:           GPL-2.0+
@@ -17,7 +17,9 @@
  * Rating URI:        https://wordpress.org/support/plugin/float-menu/reviews/?filter=5#new-post
  * Support URI:       https://wordpress.org/support/plugin/float-menu/
  * Item URI:          https://wow-estore.com/item/float-menu-pro/
- * Change URI:        https://wow-estore.com/float-menu-lite-changelog/#version-6.0
+ * Documentation:     https://wow-estore.com/documentations/float-menu-lite/
+ * Change URI:        https://wordpress.org/plugins/float-menu/#developers
+ * Demo URI:          https://demo.wow-estore.com/float-menu-pro/
  *
  * PHP version        7.4
  *
@@ -108,7 +110,9 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 				'rating'     => 'Rating URI',
 				'support'    => 'Support URI',
 				'pro'        => 'Item URI',
+				'docs'       => 'Documentation',
 				'change'     => 'Change URI',
+				'demo'       => 'Demo URI',
 
 			];
 			$plugin_data = get_file_data( __FILE__, $data, false );
