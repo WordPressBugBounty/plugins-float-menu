@@ -88,7 +88,7 @@ class Maker {
 		$data             = [];
 		$data['position'] = [
 			$param['menu'],
-			!empty($param['align'])? $param['align'] : 'center',
+			! empty( $param['align'] ) ? $param['align'] : 'center',
 		];
 
 		$data['appearance'] = [
@@ -113,7 +113,7 @@ class Maker {
 			$data['offset'] = [ $sideOffset, $topOffset ];
 		}
 
-		if ( ( $param['iconSize'] !== $param['mobiliconSize'] ) || ( $param['labelSize'] !== $param['mobillabelSize'] ) ) {
+		if ( ! empty( $param['iconSize'] ) && ( ( $param['iconSize'] !== $param['mobiliconSize'] ) || ( $param['labelSize'] !== $param['mobillabelSize'] ) ) ) {
 			$data['mobile'] = [
 				$param['mobilieScreen'],
 				$param['mobiliconSize'],
@@ -133,7 +133,7 @@ class Maker {
 
 		$data['label'] = [];
 
-		$data['label']['effect'] = !empty($param['labelEffect']) ? $param['labelEffect'] : 'none';
+		$data['label']['effect'] = ! empty( $param['labelEffect'] ) ? $param['labelEffect'] : 'none';
 
 		if ( $param['labelSpace'] === 'true' ) {
 			$data['label']['space'] = 2;
@@ -250,25 +250,26 @@ class Maker {
 
 		switch ( $type ) {
 			case 'link':
-				$link        = ! empty( $menu['item_link'][ $i ] ) ? $menu['item_link'][ $i ] : '#';
-				$out         .= 'href="' . esc_attr( $link ) . '" target="' . esc_attr( $target ) . '"';
+				$link = ! empty( $menu['item_link'][ $i ] ) ? $menu['item_link'][ $i ] : '#';
+				$out  .= 'href="' . esc_attr( $link ) . '" target="' . esc_attr( $target ) . '"';
 				break;
 			case 'login':
 			case 'logout':
 			case 'lostpassword':
-				$redirect    = ! empty( $menu['item_link'][ $i ] ) ? $menu['item_link'][ $i ] : '#';
-				$link        = call_user_func( 'wp_' . $type . '_url', $redirect );
-				$out         .= 'href="' . esc_url( $link ) . '" target="' . esc_attr( $target ) . '"';
+				$redirect = ! empty( $menu['item_link'][ $i ] ) ? $menu['item_link'][ $i ] : '#';
+				$link     = call_user_func( 'wp_' . $type . '_url', $redirect );
+				$out      .= 'href="' . esc_url( $link ) . '" target="' . esc_attr( $target ) . '"';
 				break;
 			case 'register':
-				$link        = wp_registration_url();
-				$out         .= 'href="' . esc_url( $link ) . '" target="' . esc_attr( $target ) . '"';
+				$link = wp_registration_url();
+				$out  .= 'href="' . esc_url( $link ) . '" target="' . esc_attr( $target ) . '"';
 				break;
 		}
 
 
 		return $out;
 	}
+
 	private function create_icon( $i ): string {
 		$menu = $this->menu;
 
@@ -328,13 +329,13 @@ class Maker {
 
 	private function create_label( $i ): string {
 		$style = '';
-		if (!empty($this->menu['item_tooltip_font'][ $i ]) && $this->menu['item_tooltip_font'][ $i ] !== 'inherit' ) {
+		if ( ! empty( $this->menu['item_tooltip_font'][ $i ] ) && $this->menu['item_tooltip_font'][ $i ] !== 'inherit' ) {
 			$style .= '--fm-label-font:' . esc_attr( $this->menu['item_tooltip_font'][ $i ] ) . ';';
 		}
-		if ( !empty($this->menu['item_tooltip_style'][ $i ]) && $this->menu['item_tooltip_style'][ $i ] !== 'normal' ) {
+		if ( ! empty( $this->menu['item_tooltip_style'][ $i ] ) && $this->menu['item_tooltip_style'][ $i ] !== 'normal' ) {
 			$style .= '--fm-label-font-style:' . esc_attr( $this->menu['item_tooltip_style'][ $i ] ) . ';';
 		}
-		if ( !empty($this->menu['item_tooltip_weight'][ $i ]) && $this->menu['item_tooltip_weight'][ $i ] !== 'normal' ) {
+		if ( ! empty( $this->menu['item_tooltip_weight'][ $i ] ) && $this->menu['item_tooltip_weight'][ $i ] !== 'normal' ) {
 			$style .= '--fm-label-weight:' . esc_attr( $this->menu['item_tooltip_weight'][ $i ] ) . ';';
 		}
 
