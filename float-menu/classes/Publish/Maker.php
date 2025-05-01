@@ -43,7 +43,7 @@ class Maker {
 		$style   = $this->create_properties();
 		$options = $this->create_options();
 
-		$out = '<div class="' . esc_attr( $classes ) . '" style="' . esc_attr( $style ) . '" data-float-menu="' . esc_attr( $options ) . '">';
+		$out = '<div dir="ltr" class="' . esc_attr( $classes ) . '" style="' . esc_attr( $style ) . '" data-float-menu="' . esc_attr( $options ) . '">';
 		$out .= '<ul class="fm-bar">';
 		$out .= $this->create_items();
 		$out .= '</ul>';

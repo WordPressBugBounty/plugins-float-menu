@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Float Menu Lite\n"
-"POT-Creation-Date: 2025-02-03 10:32+0200\n"
+"POT-Creation-Date: 2025-05-01 10:46+0300\n"
 "PO-Revision-Date: 2025-02-03 10:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,8 +16,8 @@ msgstr ""
 "X-Poedit-WPHeader: float-menu.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: admin/pages/1.list.php:57
+#: admin/pages/1.list.php:57 admin/settings/5.pro.php:101
 msgid "Search"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: admin/settings/4.rules.php:26
+#: admin/settings/4.rules.php:26 admin/settings/5.pro.php:133
 msgid "Display Rules"
 msgstr ""
 
@@ -145,6 +145,258 @@ msgstr ""
 
 #: admin/settings/4.rules.php:89
 msgid "Other"
+msgstr ""
+
+#: admin/settings/5.pro.php:12
+msgid "Submenus"
+msgstr ""
+
+#: admin/settings/5.pro.php:13
+msgid ""
+"By grouping related items under submenu, you can improve user experience by "
+"making navigation more intuitive and organized. Users can easily find the "
+"specific information they need without feeling overwhelmed by a long list "
+"of top-level menu items. "
+msgstr ""
+
+#: admin/settings/5.pro.php:19
+msgid "Custom Icons"
+msgstr ""
+
+#: admin/settings/5.pro.php:20
+msgid ""
+"Break free from the limitations of pre-defined icon libraries. Custom icons "
+"allow you to utilize any image or icon that complements your website's "
+"design. "
+msgstr ""
+
+#: admin/settings/5.pro.php:25
+msgid "Icon Settings"
+msgstr ""
+
+#: admin/settings/5.pro.php:26
+msgid "Rotate and flip icons to enhance visual appeal."
+msgstr ""
+
+#: admin/settings/5.pro.php:33
+msgid "Beautiful Animations"
+msgstr ""
+
+#: admin/settings/5.pro.php:34
+msgid "Choose from 7 elegant animations to showcase your menu items."
+msgstr ""
+
+#: admin/settings/5.pro.php:39
+msgid "Multiple Shapes & Sizes"
+msgstr ""
+
+#: admin/settings/5.pro.php:40
+msgid ""
+"elect from various shapes (Square, Round, Rounded, Rounded-out) and adjust "
+"text and icon sizes to perfectly match your website's design."
+msgstr ""
+
+#: admin/settings/5.pro.php:45
+msgid "Vertical Alignment"
+msgstr ""
+
+#: admin/settings/5.pro.php:46
+msgid ""
+"Align your menu vertically wherever you position it on the screen (left or "
+"right side)."
+msgstr ""
+
+#: admin/settings/5.pro.php:51
+msgid "Extra Text & Label Fonts"
+msgstr ""
+
+#: admin/settings/5.pro.php:52
+msgid ""
+"Display extended text descriptions and customize font styles for labels to "
+"provide detailed menu information."
+msgstr ""
+
+#: admin/settings/5.pro.php:59
+msgid "Translate"
+msgstr ""
+
+#: admin/settings/5.pro.php:60
+msgid ""
+"Empower your visitors to translate your website content in real-time. "
+"Integrate this link type to break down language barriers and cater to a "
+"global audience."
+msgstr ""
+
+#: admin/settings/5.pro.php:65
+msgid "Social Sharing"
+msgstr ""
+
+#: admin/settings/5.pro.php:66
+msgid ""
+"Boost your website's reach by incorporating a \"Share\" link. Choose from a "
+"staggering 29 different social media services, allowing users to "
+"effortlessly share your content across their preferred platforms"
+msgstr ""
+
+#: admin/settings/5.pro.php:71
+msgid "Next/Previous Post"
+msgstr ""
+
+#: admin/settings/5.pro.php:72
+msgid ""
+"Simplify post navigation for readers. These link types automatically direct "
+"users to the next or previous post within the current category, keeping "
+"them engaged and exploring related content."
+msgstr ""
+
+#: admin/settings/5.pro.php:77
+msgid "Forced Download"
+msgstr ""
+
+#: admin/settings/5.pro.php:78
+msgid ""
+"Offer downloadable resources like brochures, ebooks, or software directly "
+"through your floating menus. This eliminates the need for users to navigate "
+"to separate download pages."
+msgstr ""
+
+#: admin/settings/5.pro.php:83
+msgid "Scroll To Top/Bottom"
+msgstr ""
+
+#: admin/settings/5.pro.php:84
+msgid ""
+"Provide users with convenient links to instantly scroll to the top or "
+"bottom of your webpage. This is particularly helpful for long pages or "
+"content-heavy sections."
+msgstr ""
+
+#: admin/settings/5.pro.php:89
+msgid "Smooth Scroll"
+msgstr ""
+
+#: admin/settings/5.pro.php:90
+msgid ""
+"Enhance user experience with smooth scrolling animations. This link type "
+"ensures a visually pleasing and seamless transition when users navigate to "
+"different sections of your webpage."
+msgstr ""
+
+#: admin/settings/5.pro.php:95
+msgid "Print"
+msgstr ""
+
+#: admin/settings/5.pro.php:96
+msgid ""
+"With a single click on the Print link, users can initiate the built-in "
+"printing function of their web browser. No more cumbersome text selection "
+"or manual copying."
+msgstr ""
+
+#: admin/settings/5.pro.php:102
+msgid ""
+"Integrate a search function directly into your floating menu. This empowers "
+"users to quickly find specific information on your website, improving "
+"overall user experience."
+msgstr ""
+
+#: admin/settings/5.pro.php:108
+msgid "Multilingual Support"
+msgstr ""
+
+#: admin/settings/5.pro.php:109
+msgid ""
+"For websites catering to a global audience, Float Menu Pro allows you to "
+"restrict menu visibility to specific languages. This ensures users only see "
+"menus relevant to their chosen language setting."
+msgstr ""
+
+#: admin/settings/5.pro.php:115
+msgid "Hiding/Showing"
+msgstr ""
+
+#: admin/settings/5.pro.php:116
+msgid ""
+"Allows you to control the visibility of your floating menus based on the "
+"user's scroll position on the webpage."
+msgstr ""
+
+#: admin/settings/5.pro.php:121
+msgid "Activate by URL"
+msgstr ""
+
+#: admin/settings/5.pro.php:122
+msgid ""
+"Target specific pages based on URL parameters (e.g., show a floating menu "
+"only on a page with URL parameter)"
+msgstr ""
+
+#: admin/settings/5.pro.php:127
+msgid "Activate by Referrer URL"
+msgstr ""
+
+#: admin/settings/5.pro.php:128
+msgid ""
+"To display different floating menus for visitors arriving from specific "
+"websites."
+msgstr ""
+
+#: admin/settings/5.pro.php:134
+msgid ""
+"Control exactly where your popup appear using page types, post categories/"
+"tags, author pages, taxonomies and date archives."
+msgstr ""
+
+#: admin/settings/5.pro.php:139
+msgid "Devices Rules"
+msgstr ""
+
+#: admin/settings/5.pro.php:140
+msgid ""
+"Ensure optimal menu visibility across all devices with options to hide/"
+"remove on specific screen sizes."
+msgstr ""
+
+#: admin/settings/5.pro.php:145
+msgid "User Role Permissions"
+msgstr ""
+
+#: admin/settings/5.pro.php:146
+msgid ""
+"Define which user roles (e.g., Administrator, Editor, Author) have the "
+"ability to see the menu items. This can be helpful for displaying internal "
+"menus relevant only to website administrators or managing menus for "
+"specific user groups."
+msgstr ""
+
+#: admin/settings/5.pro.php:151
+msgid "Scheduling"
+msgstr ""
+
+#: admin/settings/5.pro.php:152
+msgid ""
+"Schedule menu appearances based on specific days, times, and dates. This "
+"allows you to promote temporary events or campaigns without cluttering your "
+"website permanently."
+msgstr ""
+
+#: admin/settings/5.pro.php:157
+msgid "Deeper Analytics"
+msgstr ""
+
+#: admin/settings/5.pro.php:158
+msgid ""
+"Empower with a deeper understanding of how users interact with your menu! "
+"This powerful feature allows you to track user clicks on specific menu "
+"items within Google Analytics."
+msgstr ""
+
+#: admin/settings/5.pro.php:163
+msgid "Create Popup"
+msgstr ""
+
+#: admin/settings/5.pro.php:164
+msgid "Configure popups that open upon clicking on menu items."
 msgstr ""
 
 #: admin/settings/options/menu.php:10
@@ -369,8 +621,8 @@ msgstr ""
 msgid "Z-index"
 msgstr ""
 
-#: admin/settings/pro-plugin.php:18
-msgid "PRO FEATURES"
+#: admin/settings/pro-plugin.php:16
+msgid "PRO VERSION"
 msgstr ""
 
 #: admin/settings/sidebar.php:24
@@ -417,11 +669,11 @@ msgid ""
 "target=\"_blank\">rate us</a>"
 msgstr ""
 
-#: classes/Admin/Dashboard.php:137
+#: classes/Admin/Dashboard.php:138
 msgid "Add New"
 msgstr ""
 
-#: classes/Admin/Dashboard.php:173
+#: classes/Admin/Dashboard.php:174
 msgid "Update"
 msgstr ""
 
@@ -590,7 +842,7 @@ msgstr ""
 msgid "Please fill in all the form fields below."
 msgstr ""
 
-#: float-menu.php:145 float-menu.php:156
+#: float-menu.php:149 float-menu.php:160
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 

@@ -74,6 +74,7 @@ class Dashboard {
 				$name = $style['file'];
 				$file = $key . '.' . $name;
 				wp_enqueue_style( $slug . '-admin-' . $name, $assets_url . 'css/' . $file . '.css', null, $version );
+				wp_style_add_data($slug . '-admin-' . $name, 'rtl', 'replace');
 			}
 		}
 
