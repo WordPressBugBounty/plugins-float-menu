@@ -55,23 +55,6 @@ jQuery(document).ready(function ($) {
             },
 
             sort: function (event, ui) {
-                const offset = ui.position.left - ui.originalPosition.left;
-
-                // Знаходимо попередній елемент
-                const previousItem = ui.item.prev();
-                const previousMarginLeft = previousItem.length ? parseInt(previousItem.css("margin-left"), 10) || 0 : 0;
-
-                // Забороняємо зміщення для першого елемента
-                if (ui.item.is(':first-child')) {
-                    ui.helper.css("margin-left", "0").removeClass("shifted-right");
-                    return;
-                }
-
-                // Логіка для інших елементів
-                if (offset > 30) {
-                    ui.helper.addClass("shifted-right");
-                }
-
                 // Викликаємо liveBuilder
                 if (typeof $(selectors.item).wowFloatMenuLiveBuilder === "function") {
                     $(selectors.item).wowFloatMenuLiveBuilder();
@@ -79,25 +62,6 @@ jQuery(document).ready(function ($) {
             },
 
             stop: function (event, ui) {
-                const offset = ui.position.left - ui.originalPosition.left;
-
-                // Знаходимо попередній елемент
-                const previousItem = ui.item.prev();
-                const previousMarginLeft = previousItem.length ? parseInt(previousItem.css("margin-left"), 10) || 0 : 0;
-
-                // Скидаємо зміщення, якщо елемент стає першим
-                if (ui.item.is(':first-child')) {
-                    ui.item.css("margin-left", "0").removeClass("shifted-right");
-                    return;
-                }
-
-                // Логіка для інших елементів
-                if (offset > 30) {
-                    ui.item.css("margin-left", "30px").addClass("shifted-right");
-                } else {
-                    ui.item.css("margin-left", "0").removeClass("shifted-right");
-                }
-
                 // Викликаємо liveBuilder
                 if (typeof $(selectors.item).wowFloatMenuLiveBuilder === "function") {
                     $(selectors.item).wowFloatMenuLiveBuilder();
