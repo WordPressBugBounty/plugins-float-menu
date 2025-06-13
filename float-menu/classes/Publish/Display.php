@@ -15,6 +15,8 @@
 
 namespace FloatMenuLite\Publish;
 
+use FloatMenuLite\WOWP_Plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 class Display {
@@ -39,6 +41,7 @@ class Display {
 
 	private static function check_shows( $showParams, $param ): bool {
 
+
 		foreach ( $showParams as $i => $show ) {
 			if ( str_contains( $show, self::POST_PREFIX ) && self::custom_post( $i, $param ) ) {
 				return true;
@@ -58,17 +61,26 @@ class Display {
 			'everywhere'    => 'check_everywhere',
 		];
 
+		$cases = apply_filters( WOWP_Plugin::PREFIX . '_pro_match_cases', $cases );
+
+
 		if ( ! isset( $cases[ $show ] ) ) {
 			return false;
 		}
 
 		$function = $cases[ $show ];
 
-		return self::$function( $i, $param );
+		if ( method_exists( __CLASS__, $function ) ) {
+			return self::$function( $i, $param );
+		}
+
+		return apply_filters( WOWP_Plugin::PREFIX . "_pro_match_callback_{$function}", false, $i, $param );
 
 	}
 
 	private static function check_everywhere(): bool {
 		return true;
 	}
+
+
 }

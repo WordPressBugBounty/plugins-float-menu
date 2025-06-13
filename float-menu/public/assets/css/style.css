@@ -18,6 +18,7 @@
   --fm-icon-size: 24;
   --fm-icon-box: calc(var(--fm-icon-size) * 2);
   --fm-icon-radius: 0;
+  --fm-icon-text: 12;
   --fm-label-radius: 0;
   --fm-text-radius: 0;
   position: fixed;
@@ -97,6 +98,9 @@
   flex-direction: column;
   gap: calc(var(--fm-button-space) * 1px);
 }
+.floating-menu ul.fm-bar.is-horizontal {
+  flex-direction: row;
+}
 
 .floating-menu .fm-item {
   --item_width: calc(var(--fm-icon-box) * 1px);
@@ -116,6 +120,14 @@
   --fm-link-width: calc(var(--fm-icon-box) * 1px);
   --_width: 0;
   --fm-margin-inline: 0 var(--fm-link-width);
+}
+.floating-menu.-label-connect form.fm-link.-active,
+.floating-menu.-label-connect form.fm-link:focus-visible,
+.floating-menu.-label-connect form.fm-link:hover,
+.floating-menu.-label-connect a.fm-link.-active,
+.floating-menu.-label-connect a.fm-link:focus-visible,
+.floating-menu.-label-connect a.fm-link:hover {
+  z-index: 4;
 }
 .floating-menu.-label-connect form.fm-link.-active .fm-label,
 .floating-menu.-label-connect form.fm-link:focus-visible .fm-label,
@@ -152,6 +164,19 @@
 .floating-menu.-right a.fm-link .fm-label {
   right: auto;
   left: 0;
+}
+.floating-menu.-right form.fm-link .fm-label.fm-empty-icon,
+.floating-menu.-right a.fm-link .fm-label.fm-empty-icon {
+  right: unset !important;
+  left: calc(var(--fm-link-width) + 12px );
+  z-index: 2;
+  color: var(--fm-color);
+  background-color: var(--fm-background);
+}
+.floating-menu.-right form.fm-link .fm-label.fm-empty-icon:hover,
+.floating-menu.-right a.fm-link .fm-label.fm-empty-icon:hover {
+  color: var(--fm-hover-color);
+  background-color: var(--fm-hover-background);
 }
 .floating-menu.-right form.fm-link.-slide-out .fm-label, .floating-menu.-right form.fm-link.-slide-out-fade .fm-label,
 .floating-menu.-right a.fm-link.-slide-out .fm-label,
@@ -222,6 +247,22 @@
 .floating-menu a.fm-link:hover .fm-label,
 .floating-menu a.fm-link:focus-visible .fm-label {
   opacity: 1;
+}
+.floating-menu form.fm-link.-active .fm-label.fm-empty-icon, .floating-menu form.fm-link:hover .fm-label.fm-empty-icon, .floating-menu form.fm-link:focus-visible .fm-label.fm-empty-icon,
+.floating-menu a.fm-link.-active .fm-label.fm-empty-icon,
+.floating-menu a.fm-link:hover .fm-label.fm-empty-icon,
+.floating-menu a.fm-link:focus-visible .fm-label.fm-empty-icon {
+  right: calc(var(--fm-link-width) * 2 - 12px);
+  z-index: 2;
+  color: var(--fm-color);
+  background-color: var(--fm-background);
+}
+.floating-menu form.fm-link.-active .fm-label.fm-empty-icon:hover, .floating-menu form.fm-link:hover .fm-label.fm-empty-icon:hover, .floating-menu form.fm-link:focus-visible .fm-label.fm-empty-icon:hover,
+.floating-menu a.fm-link.-active .fm-label.fm-empty-icon:hover,
+.floating-menu a.fm-link:hover .fm-label.fm-empty-icon:hover,
+.floating-menu a.fm-link:focus-visible .fm-label.fm-empty-icon:hover {
+  color: var(--fm-hover-color);
+  background-color: var(--fm-hover-background);
 }
 .floating-menu form.fm-link.-active .fm-icon img,
 .floating-menu form.fm-link.-active .fm-icon span, .floating-menu form.fm-link:hover .fm-icon img,
@@ -366,6 +407,9 @@
 .floating-menu a.fm-link.-slide-in-in:hover .fm-label {
   animation: fmSlideInSecond var(--fm-link-transition-duration) var(--fm-link-function) forwards;
 }
+.floating-menu:hover a.fm-link.fm-hovering-hide:not(:hover) .fm-label {
+  visibility: hidden;
+}
 
 @keyframes fmSlideOutSecond {
   0% {
@@ -410,7 +454,10 @@
 .floating-menu .fm-icon {
   --_flip: 1;
   --_rotate: 0;
+  --fm-icon-text-weight: normal;
   display: flex;
+  flex-direction: column;
+  row-gap: 5px;
   align-items: center;
   justify-content: center;
   width: calc(var(--fm-icon-box) * 1px);
@@ -423,6 +470,12 @@
   background-color: var(--fm-background);
   border-radius: var(--fm-icon-radius);
   transform-origin: center;
+}
+.floating-menu .fm-icon .icon-text {
+  font-size: calc(var(--fm-icon-text) * 1px);
+  font-weight: var(--fm-icon-text-weight);
+  line-height: 1;
+  text-align: center;
 }
 .floating-menu .fm-icon.-full img {
   width: calc(var(--fm-icon-box) * 1px);
@@ -768,6 +821,20 @@
   visibility: visible;
   opacity: 1;
 }
+.floating-menu .fm-has-sub.fm-sub-above {
+  --_offset: 0;
+}
+.floating-menu .fm-has-sub.fm-sub-above.-active {
+  margin: 0;
+}
+.floating-menu .fm-has-sub.fm-sub-above.-active .fm-sub {
+  position: absolute;
+  top: calc(var(--fm-sub-space) * -1);
+  left: 0;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(-100%);
+}
 .floating-menu .fm-has-sub.-sub-fade {
   --_duration: var(--fm-sub-transition-duration);
   --_function: var(--fm-sub-function);
@@ -778,6 +845,9 @@
 }
 .floating-menu .fm-has-sub.-sub-fade.-active .fm-sub {
   transition: opacity var(--_duration) var(--_function), visibility 0s linear 0s, left 0s linear 0s, top 0s linear 0s;
+}
+.floating-menu .fm-has-sub.-sub-fade.fm-sub-above .fm-sub {
+  transition: opacity var(--_duration) var(--_function), transform 0s linear 0s, visibility 0s linear 0s, left 0s linear 0s, top 0s linear 0s;
 }
 .floating-menu .fm-has-sub.-sub-slide {
   --_duration: calc(var(--fm-sub-transition-duration) / 2);
@@ -799,6 +869,12 @@
 .floating-menu .fm-has-sub.-sub-slide.fm-sub-under.-active .fm-sub {
   transform: translateY(0);
 }
+.floating-menu .fm-has-sub.-sub-slide.fm-sub-above .fm-sub {
+  transform: translateY(0);
+}
+.floating-menu .fm-has-sub.-sub-slide.fm-sub-above.-active .fm-sub {
+  transform: translateY(-100%);
+}
 .floating-menu .fm-has-sub.-sub-linear-fade {
   --_duration: var(--fm-sub-transition-duration);
   --_function: var(--fm-sub-function);
@@ -819,6 +895,12 @@
 .floating-menu .fm-has-sub.-sub-linear-fade.-active .fm-sub .fm-item {
   transition: opacity var(--_duration) var(--_function) calc(var(--_delay) * 1ms);
   opacity: 1;
+}
+.floating-menu .fm-has-sub.-sub-linear-fade.fm-sub-above .fm-sub {
+  transition: opacity 0s linear var(--_duration), visibility 0s linear var(--_duration), left 0s linear var(--_duration), transform 0s linear var(--_duration), top 0s linear var(--_duration);
+}
+.floating-menu .fm-has-sub.-sub-linear-fade.fm-sub-above.-active .fm-sub {
+  transition: opacity 0s linear 0s, visibility 0s linear 0s, left 0s linear 0s, transform 0s linear 0s, top 0s linear 0s;
 }
 .floating-menu .fm-has-sub.-sub-linear-slide {
   --_duration: var(--fm-sub-transition-duration);
@@ -848,6 +930,12 @@
   transition-property: top, opacity, left;
   transition-duration: var(--_duration);
   transition-timing-function: var(--_function);
+}
+.floating-menu .fm-has-sub.fm-sub-above .fm-sub {
+  transition: opacity 0s linear var(--_duration), visibility 0s linear var(--_duration), left 0s linear var(--_duration), transform 0s linear var(--_duration), top 0s linear var(--_duration);
+}
+.floating-menu .fm-has-sub.fm-sub-above.-active .fm-sub {
+  transition: opacity 0s linear 0s, visibility 0s linear 0s, left 0s linear 0s, transform 0s linear 0s, top 0s linear 0s;
 }
 
 @keyframes fmItemSub {

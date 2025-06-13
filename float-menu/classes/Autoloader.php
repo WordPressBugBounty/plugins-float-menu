@@ -31,7 +31,6 @@ class Autoloader {
 	}
 
 	public function autoload( $class ): void {
-
 		if ( strpos( $class, $this->namespace ) === 0 ) {
 			$file = $this->get_file_path( $class );
 

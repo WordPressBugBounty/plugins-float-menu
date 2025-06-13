@@ -39,6 +39,7 @@ class WOWP_Public {
 	public function assets(): void {
 		$handle          = WOWP_Plugin::SLUG;
 		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
+		$assets          = apply_filters( WOWP_Plugin::PREFIX . '_frontend_assets', $assets );
 		$version         = WOWP_Plugin::info( 'version' );
 		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
 
@@ -47,6 +48,7 @@ class WOWP_Public {
 
 		$singleton = Singleton::getInstance();
 		$args      = $singleton->getValue();
+
 
 		if ( ! empty( $args ) ) {
 			wp_enqueue_style( $handle, $assets . 'css/style' . $this->pefix . '.css', [], $version, $media = 'all' );
@@ -135,6 +137,7 @@ class WOWP_Public {
 
 		$handle          = WOWP_Plugin::SLUG;
 		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
+		$assets          = apply_filters( WOWP_Plugin::PREFIX . '_frontend_assets', $assets );
 		$version         = WOWP_Plugin::info( 'version' );
 		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
 
@@ -146,6 +149,7 @@ class WOWP_Public {
 		$check      = 0;
 
 		foreach ( $args as $id => $param ) {
+
 			if ( empty( $param['fontawesome'] ) ) {
 				wp_enqueue_style( $handle . '-fontawesome', $url_fontawesome, null, '6.7.1' );
 			}

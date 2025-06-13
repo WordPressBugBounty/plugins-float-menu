@@ -1,3 +1,13 @@
+/**
+ * FloatMenu
+ * A JavaScript class for creating customizable side menus.
+ *
+ * @version 7.1
+ * @license MIT License
+ * @author Dmytro Lobov
+ * @url https://wow-estore.com/item/float-menu-pro/
+ */
+
 'use strict';
 
 class FloatMenu {
@@ -65,6 +75,7 @@ class FloatMenu {
         this.visibleMenu();
         this.closePopup();
     }
+
 
     appearance() {
         if (!this.config?.appearance) {
@@ -179,7 +190,7 @@ class FloatMenu {
                 link.classList.toggle('-active');
             });
             item.addEventListener('mouseleave', () => {
-                link.classList.toggle('-active');
+                link.classList.remove('-active');
             });
 
         });
@@ -268,17 +279,20 @@ class FloatMenu {
             return;
         }
 
-
-
         const screenWidth = window.innerWidth;
         const screen = parseInt(this.config?.mobile[0]) || 0;
         const iconSize = parseInt(this.config?.mobile[1]) || 24;
         const labelSize = parseInt(this.config?.mobile[2]) || 15;
+        const boxSize = parseInt(this.config?.mobile[3]) || 0;
+        const textSize = parseInt(this.config?.mobile[4]) || 12;
 
         if (screenWidth < screen) {
             this.element.style.setProperty('--fm-icon-size', iconSize);
             this.element.style.setProperty('--fm-label-size', labelSize);
+            this.element.style.setProperty('--fm-icon-box', boxSize);
+            this.element.style.setProperty('--fm-icon-text', textSize);
         }
+
     }
 
     mobileClick() {
@@ -344,13 +358,21 @@ class FloatMenu {
             this.element.style.setProperty('--fm-offset', `${offsetSide}px`);
         }
 
-        let top = style.top + offsetTop;
-        if (align !== 'center') {
+
+
+        if (align === 'top') {
+            let top = style.top + offsetTop;
             this.element.style.top = `${top}px`;
-        } else {
+        }
+        else if (align === 'center') {
+            let top = style.top + offsetTop;
             const menuHeight = this.element.offsetHeight;
             top = top - menuHeight / 2;
             this.element.style.top = `${top}px`;
+        }
+        else if(align === 'bottom') {
+            let bottom = offsetTop * (-1);
+            this.element.style.bottom = `${bottom}px`;
         }
 
     }
@@ -361,9 +383,12 @@ class FloatMenu {
 
         this.links.forEach((link) => {
             const label = link.querySelector('.fm-label');
-            const labelWidth = label.offsetWidth + space;
+            let labelWidth = label.offsetWidth + space;
             const iconWidth = link.offsetWidth;
             const width = iconWidth + labelWidth;
+            if (link.classList.contains('fm-hold-open')) {
+                labelWidth = labelWidth - iconWidth + 12;
+            }
             link.style.setProperty('--_width', labelWidth);
             link.classList.add(`-${labelEffect}`);
         });
@@ -401,11 +426,16 @@ class FloatMenu {
 
             this.setSubProperties(sub, effect, position);
 
+            const link = sub.querySelector('.fm-link');
+
             if (open === 'click' || this._isMobile()) {
+
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                })
+
                 sub.addEventListener('click', (event) => {
                     event.stopPropagation();
-
-                    const link = sub.querySelector('.fm-link');
 
                     if (activeSub && activeSub !== sub) {
                         this.closeSubMenu(activeSub, position);
@@ -422,7 +452,7 @@ class FloatMenu {
                     }
 
                     sub.classList.toggle(`-active`);
-                    link.classList.toggle(`-active`);
+                    // link.classList.toggle(`-active`);
                     activeSub = sub.classList.contains(`-active`) ? sub : null;
 
                     if (position === 'circular') {
@@ -438,7 +468,10 @@ class FloatMenu {
                 sub.addEventListener('mouseenter', () => {
                     const link = sub.querySelector('.fm-link');
                     sub.classList.add(`-active`);
-                    link.classList.add(`-active`);
+                    if (!link.classList.contains('-active')) {
+                        link.classList.add(`-active`);
+                    }
+
                     if (position === 'circular') {
                         link.classList.toggle(`-label-hidden`);
                         if (previousElements.length > 0) {
@@ -467,7 +500,12 @@ class FloatMenu {
     closeSubMenu(sub, position) {
         const link = sub.querySelector('.fm-link');
         sub.classList.remove(`-active`);
-        link.classList.remove(`-active`);
+
+        if (!link.classList.contains('fm-hold-open')) {
+            link.classList.remove(`-active`);
+        } else {
+            link.classList.add(`-active`);
+        }
 
         if (position === 'circular') {
             link.classList.toggle(`-label-hidden`);

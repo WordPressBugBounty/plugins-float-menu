@@ -127,7 +127,7 @@ jQuery(document).ready(function ($) {
         this.each(function (index, element) {
             $(element).fontIconPicker({
                 source: icons,
-                emptyIcon: false,
+                emptyIcon: true,
                 allCategoryText: 'Show all',
                 theme: 'fip-darkgrey',
             });

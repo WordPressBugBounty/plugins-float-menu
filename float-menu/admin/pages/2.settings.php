@@ -40,5 +40,5 @@ $id    = $options['id'] ?? '';
 </form>
 <?php
 
-$text = __( 'Item Saving', 'float-menu' );
+$text = __( 'Item Savied', 'float-menu' );
 echo '<div class="wpie-notice notice notice-success">' . esc_html( $text ) . '</div>';

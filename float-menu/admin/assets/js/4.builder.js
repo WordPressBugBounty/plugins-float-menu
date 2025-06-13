@@ -4,7 +4,24 @@
     $.fn.wowFloatMenuLiveBuilder = function () {
         this.each(function (index, element) {
             const labelText = $(this).find('[data-field="menu_1-item_tooltip"]').val();
-            const typeText = $(this).find('[data-field="menu_1-item_type"] option:selected').text();
+            const linkType = $(this).find('[data-field="menu_1-item_type"]').val();
+            let typeText = $(this).find('[data-field="menu_1-item_type"] option:selected').text();
+
+            if(linkType === 'share') {
+                const text = $(this).find('[data-field="menu_1-item_share"] option:selected').text();
+                typeText = typeText + ': '+text;
+            }
+
+            if(linkType === 'translate') {
+                const text = $(this).find('[data-field="menu_1-gtranslate"] option:selected').text();
+                typeText = typeText + ': '+text;
+            }
+
+            if(linkType === 'smoothscroll') {
+                const text = $(this).find('[data-field="menu_1-item_link"]').val();
+                typeText = typeText + ': '+text;
+            }
+
             const iconValue = getIcon(this);
 
             const sub = $(element).find('.wpie-item__parent');

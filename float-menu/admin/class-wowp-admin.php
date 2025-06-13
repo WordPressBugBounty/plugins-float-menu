@@ -16,6 +16,7 @@ namespace FloatMenuLite;
 
 use FloatMenuLite\Admin\AdminActions;
 use FloatMenuLite\Admin\Dashboard;
+use FloatMenuLite\Admin\Demo;
 use FloatMenuLite\Admin\Settings;
 
 defined( 'ABSPATH' ) || exit;
@@ -24,29 +25,43 @@ class WOWP_Admin {
 	public function __construct() {
 		Dashboard::init();
 		AdminActions::init();
-		$this->includes();
+		Demo::init();
 
 		add_action( 'wp_ajax_' . WOWP_Plugin::PREFIX . '_ajax_settings', [ Settings::class, 'save_item' ] );
 		add_action( WOWP_Plugin::PREFIX . '_admin_header_links', [ $this, 'plugin_links' ] );
 		add_filter( WOWP_Plugin::PREFIX . '_save_settings', [ $this, 'save_settings' ] );
 		add_action( WOWP_Plugin::PREFIX . '_admin_load_assets', [ $this, 'load_assets' ] );
-
-	}
-
-	public function includes(): void {
-		require_once plugin_dir_path( __FILE__ ) . 'class-settings-helper.php';
 	}
 
 	public function plugin_links(): void {
-		?>
-        <div class="wpie-links">
-            <a href="<?php echo esc_url( WOWP_Plugin::info( 'change' ) ); ?>" target="_blank">Check for Updates</a>
-            <a href="<?php echo esc_url( WOWP_Plugin::info( 'rating' ) ); ?>" target="_blank" class="wpie-color-orange">Rate Us</a>
-            <span class="wpie-links-divider">|</span>
-            <a href="<?php echo esc_url( WOWP_Plugin::info( 'pro' ) ); ?>" target="_blank" class="wpie-color-danger">Upgrade to Pro</a>
-            <a href="<?php echo esc_url( WOWP_Plugin::info( 'demo' ) ); ?>" target="_blank">Live Pro Demo</a>
-        </div>
-		<?php
+		$links = [
+			'change' => __( 'Check for Updates', 'float-menu' ),
+			'rating' => __( 'Rate Us', 'float-menu',  ),
+			'pro'    => __( 'Pro Plugin', 'float-menu' ),
+			'docs'   => __( 'Documentation', 'float-menu' ),
+			'demo'   => __( 'Pro Demo', 'float-menu' ),
+		];
+
+		echo '<div class="wpie-links">';
+
+		$i = 1;
+		foreach ( $links as $slug => $title ) {
+
+			$link = WOWP_Plugin::info( $slug );
+			if ( empty( $link ) ) {
+				continue;
+			}
+
+			if ( $i % 3 === 0 ) {
+				echo '<span class="wpie-links-divider">|</span>';
+			}
+
+			echo '<a href="' . esc_url( $link ) . '" class="wowp-link-' . esc_attr( $slug ) . '" target="_blank">' . esc_html( $title ) . '</a>';
+
+			$i ++;
+		}
+
+		echo '</div>';
 	}
 
 	public function save_settings( $request ) {

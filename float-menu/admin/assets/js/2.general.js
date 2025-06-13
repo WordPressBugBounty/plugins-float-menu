@@ -100,9 +100,6 @@ jQuery(document).ready(function ($) {
             const spinner = document.querySelector('.wpie-action__btn .spinner');
             spinner.classList.add('is-active');
 
-            const notice = $('.wpie-notice');
-            $(notice).addClass('is-active');
-
             fetch(wowp_ajax_object.url + '?action=' + wowp_ajax_object.action, {
                 method: 'POST',
                 headers: {
@@ -119,21 +116,27 @@ jQuery(document).ready(function ($) {
 
                     if (data.success) {
 
+                        submit.removeAttribute('disabled');
+                        spinner.classList.remove('is-active');
+                        const url = new URL(window.location);
+                        const params = url.searchParams;
+
+                        if (params.get('action') === 'new') {
+                            params.set('action', 'update');
+                            params.set('id', data.data.id);
+                            $('#tool_id').val(data.data.id);
+                            const newUrl = `${window.location.pathname}?${params.toString()}`;
+                            history.pushState(null, '', newUrl);
+                        }
+
+                        const notice = $('.wpie-notice');
+                        $(notice).addClass('is-active');
+
                         setTimeout(function () {
                             $(notice).removeClass('is-active');
-                            submit.removeAttribute('disabled');
-                            spinner.classList.remove('is-active');
-                            const url = new URL(window.location);
-                            const params = url.searchParams;
-
-                            if (params.get('action') === 'new') {
-                                params.set('action', 'update');
-                                params.set('id', data.data.id);
-                                const newUrl = `${window.location.pathname}?${params.toString()}`;
-                                history.pushState(null, '', newUrl);
-                            }
-
                         }, 2000);
+
+
                     }
                 });
 
@@ -152,4 +155,24 @@ jQuery(document).ready(function ($) {
             }
         });
     }
+
+    $('#demoUpload button[data-menu]').on('click', function () {
+        const menu = $(this).data('menu');
+
+        fetch(wowp_ajax_object.url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                action: wowp_ajax_object.prefix + '_upload_demo',
+                security: wowp_ajax_object.security,
+                menu: menu
+            })
+        }).then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+    });
+
 });

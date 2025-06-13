@@ -34,6 +34,7 @@ class DashboardHelper {
 	public static function get_files( $folder ): array {
 		$scan_files = scandir( self::get_folder_path( $folder ) );
 		$files      = [];
+		$license    = false;
 		foreach ( $scan_files as $file ) {
 			if ( $file === '.' || $file === '..' || $file === 'index.php' ) {
 				continue;
@@ -49,6 +50,7 @@ class DashboardHelper {
 			$file_name = self::get_file_name( $file, $folder );
 
 			$files[ $matches[0] ] = [ 'file' => $matches[1], 'name' => $file_name ];
+
 		}
 
 		return $files;

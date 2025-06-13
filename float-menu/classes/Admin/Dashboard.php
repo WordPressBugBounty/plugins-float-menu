@@ -89,6 +89,7 @@ class Dashboard {
 						'url'   => admin_url( 'admin-ajax.php' ),
 						'security' => wp_create_nonce( WOWP_Plugin::PREFIX . '_settings' ),
                         'action' => WOWP_Plugin::PREFIX . '_ajax_settings',
+                        'prefix' => WOWP_Plugin::PREFIX,
 					) );
 				}
 			}
@@ -137,6 +138,7 @@ class Dashboard {
                     <a href="<?php echo esc_url( Link::add_new_item() ); ?>" class="button button-primary">
 						<?php esc_html_e( 'Add New', 'float-menu' ); ?>
                     </a>
+	                <?php do_action( WOWP_Plugin::PREFIX . '_admin_after_button' ); ?>
 					<?php do_action( WOWP_Plugin::PREFIX . '_admin_header_links' ); ?>
                 </div>
             </div>
@@ -159,6 +161,8 @@ class Dashboard {
 	public static function menu(): void {
 		$pages = DashboardHelper::get_files( 'pages' );
 
+		$pages = apply_filters(WOWP_Plugin::PREFIX. '_admin_pages_menu', $pages);
+
 		$current_page = self::get_current_page();
 
 		//No nonce checking is required as this is just reading the parameters.
@@ -166,7 +170,7 @@ class Dashboard {
 
 		echo '<h2 class="nav-tab-wrapper wpie-nav-tab-wrapper">';
 		foreach ( $pages as $key => $page ) {
-			$class = ( $page['file'] === $current_page ) ? ' nav-tab-active' : '';
+			$class = ( $page['file'] === $current_page ) ? ' nav-tab-active wowp-page-' .$page['file'] : ' wowp-page-' . $page['file'];
 			$id    = '';
 
 			if ( $action === 'update' && $page['file'] === 'settings' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -175,8 +179,12 @@ class Dashboard {
 			} elseif ( $page['file'] === 'settings' && ( $action !== 'new' && $action !== 'duplicate' ) ) {
 				continue;
 			}
+            if($page['file'] === 'pro') {
+	            echo '<a class="nav-tab' . esc_attr( $class ) . '" href="' . esc_url( Link::menu( $page['file'], $action, $id ) ) . '"><span class="wpie-icon wpie_icon-rocket"></span>' . esc_html( $page['name'] ) . '</a>';
+            } else {
+	            echo '<a class="nav-tab' . esc_attr( $class ) . '" href="' . esc_url( Link::menu( $page['file'], $action, $id ) ) . '">' . esc_html( $page['name'] ) . '</a>';
+            }
 
-			echo '<a class="nav-tab' . esc_attr( $class ) . '" href="' . esc_url( Link::menu( $page['file'], $action, $id ) ) . '">' . esc_html( $page['name'] ) . '</a>';
 		}
 		echo '</h2>';
 	}
@@ -197,7 +205,6 @@ class Dashboard {
 		$current = DashboardHelper::search_value( $pages, $current_page ) ? $current_page : $default;
 
 		$file = DashboardHelper::get_file( $current, 'pages' );
-
 
 		if ( $file !== false ) {
 			$file = apply_filters( WOWP_Plugin::PREFIX . '_admin_filter_file', $file, $current );

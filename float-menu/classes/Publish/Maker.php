@@ -14,6 +14,8 @@
 namespace FloatMenuLite\Publish;
 
 
+use FloatMenuLite\WOWP_Plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 class Maker {
@@ -44,7 +46,12 @@ class Maker {
 		$options = $this->create_options();
 
 		$out = '<div dir="ltr" class="' . esc_attr( $classes ) . '" style="' . esc_attr( $style ) . '" data-float-menu="' . esc_attr( $options ) . '">';
-		$out .= '<ul class="fm-bar">';
+
+		if ( ! empty( $this->param['horizontal'] ) ) {
+			$out .= '<ul class="fm-bar is-horizontal">';
+		} else {
+			$out .= '<ul class="fm-bar">';
+		}
 		$out .= $this->create_items();
 		$out .= '</ul>';
 		$out .= '</div>';
@@ -65,13 +72,24 @@ class Maker {
 			$properties['--fm-z-index'] = $param['zindex'];
 		}
 
-		if ( isset( $param['iconSize'] ) ) {
+		if ( isset( $param['iconSize'] ) && $param['iconSize'] !== '24' ) {
 			$properties['--fm-icon-size'] = $param['iconSize'];
 		}
 
-		if ( isset( $param['labelSize'] ) ) {
+		if ( ! empty( $param['boxSize_on'] ) && ! empty( $param['boxSize'] ) ) {
+			$properties['--fm-icon-box'] = $param['boxSize'];
+		}
+
+		if ( isset( $param['textSize'] ) && $param['textSize'] !== '12' ) {
+			$properties['--fm-icon-text'] = $param['textSize'];
+		}
+
+		if ( isset( $param['labelSize'] ) && $param['labelSize'] !== '15' ) {
 			$properties['--fm-label-size'] = $param['labelSize'];
 		}
+
+		$properties = apply_filters( WOWP_Plugin::PREFIX . '_maker_properties', $properties, $param );
+
 
 		if ( ! empty( $properties ) ) {
 			foreach ( $properties as $property => $value ) {
@@ -107,19 +125,24 @@ class Maker {
 			$data['appearance']['labelConnected'] = true;
 		}
 
+		if ( isset( $param['subSpace'] ) && $param['subSpace'] === 'true' ) {
+			$data['appearance']['subSpace'] = true;
+		}
+
+
 		if ( ! empty( $param['side_offset'] ) || ! empty( $param['top_offset'] ) ) {
 			$sideOffset     = ! empty( $param['side_offset'] ) ? esc_attr( $param['side_offset'] ) : 0;
 			$topOffset      = ! empty( $param['top_offset'] ) ? esc_attr( $param['top_offset'] ) : 0;
 			$data['offset'] = [ $sideOffset, $topOffset ];
 		}
 
-		if ( ! empty( $param['iconSize'] ) && ( ( $param['iconSize'] !== $param['mobiliconSize'] ) || ( $param['labelSize'] !== $param['mobillabelSize'] ) ) ) {
-			$data['mobile'] = [
-				$param['mobilieScreen'],
-				$param['mobiliconSize'],
-				$param['mobillabelSize'],
-			];
-		}
+		$data['mobile']   = [
+			$param['mobilieScreen'],
+			$param['mobiliconSize'],
+			$param['mobillabelSize'],
+		];
+		$data['mobile'][] = isset( $param['boxSizeMobile'] ) && ! empty( $param['boxSizeMobile_on'] ) ? $param['boxSizeMobile'] : 0;
+		$data['mobile'][] = isset( $param['textSizeMobile'] ) ? $param['textSizeMobile'] : 12;
 
 		if ( ! empty( $param['mobile_on'] ) || ! empty( $param['desktop_on'] ) ) {
 			$data['screen'] = [];
@@ -132,8 +155,6 @@ class Maker {
 		}
 
 		$data['label'] = [];
-
-		$data['label']['effect'] = ! empty( $param['labelEffect'] ) ? $param['labelEffect'] : 'none';
 
 		if ( $param['labelSpace'] === 'true' ) {
 			$data['label']['space'] = 2;
@@ -148,6 +169,9 @@ class Maker {
 		}
 
 		$data['remove'] = true;
+
+		$data = apply_filters( WOWP_Plugin::PREFIX . '_maker_options', $data, $param );
+
 
 		return wp_json_encode( $data );
 	}
@@ -190,6 +214,17 @@ class Maker {
 		$item       = $this->create_link( $i );
 		$properties = $this->create_link_properties( $i );
 
+		if ( $sub === 0 && $next_sub === 1 ) {
+			return "<li class='fm-item fm-has-sub' style='" . esc_attr( $properties ) . "'>
+                    {$item}
+                    <ul class='fm-bar fm-sub'>";
+		}
+
+		if ( $sub === 1 && $next_sub === 0 ) {
+			return "<li class='fm-item' style='" . esc_attr( $properties ) . "'>{$item}</li>
+                </ul></li>";
+		}
+
 		return "<li class='fm-item' style='" . esc_attr( $properties ) . "'>{$item}</li>";
 	}
 
@@ -201,7 +236,11 @@ class Maker {
 		$aria  = ! empty( $this->menu['aria_label'][ $i ] ) ? $this->menu['aria_label'][ $i ] : '';
 
 		if ( ! empty( $this->menu['hold_open'][ $i ] ) ) {
-			$class .= ' -active';
+			$class .= ' -active fm-hold-open';
+		}
+
+		if ( ! empty( $this->menu['hold_open'][ $i ] ) && ! empty( $this->menu['hover_hide'][ $i ] ) ) {
+			$class .= ' fm-hovering-hide';
 		}
 
 		if ( empty( $this->menu['item_tooltip'][ $i ] ) ) {
@@ -209,6 +248,9 @@ class Maker {
 		}
 
 		$out = '<a';
+		if ( $this->menu['item_type'][ $i ] === 'search' ) {
+			$out = '<form';
+		}
 		$out .= ! empty( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
 		$out .= ' class="fm-link' . esc_attr( $class ) . '"';
 		$out .= ! empty( $rel ) ? ' rel="' . esc_attr( $rel ) . '"' : '';
@@ -217,7 +259,14 @@ class Maker {
 		$out .= '>';
 		$out .= $this->create_icon( $i );
 		$out .= $this->create_label( $i );
-		$out .= '</a>';
+
+		if ( $this->menu['item_type'][ $i ] === 'search' ) {
+			$out .= '</form>';
+		} else {
+			$out .= '</a>';
+		}
+
+		$out = apply_filters( WOWP_Plugin::PREFIX . '_maker_link', $out, $this->menu, $this->param, $i, $this->id );
 
 		return $out;
 	}
@@ -227,11 +276,12 @@ class Maker {
 		$out  = '';
 
 		$data = [
-			'--fm-color'            => $menu['color'][ $i ],
-			'--fm-background'       => $menu['bcolor'][ $i ],
-			'--fm-hover-color'      => $menu['hcolor'][ $i ],
-			'--fm-hover-background' => $menu['hbcolor'][ $i ],
+			'--fm-color'            => $menu['color'][ $i ] ?? '#ffffff',
+			'--fm-background'       => $menu['bcolor'][ $i ] ?? '#184c72',
+			'--fm-hover-color'      => $menu['hcolor'][ $i ] ?? '#ffffff',
+			'--fm-hover-background' => $menu['hbcolor'][ $i ] ?? '#184c72',
 		];
+
 
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $property => $value ) {
@@ -264,8 +314,13 @@ class Maker {
 				$link = wp_registration_url();
 				$out  .= 'href="' . esc_url( $link ) . '" target="' . esc_attr( $target ) . '"';
 				break;
+			default:
+				$link = ! empty( $menu['item_link'][ $i ] ) ? $menu['item_link'][ $i ] : '#';
+				$out  .= 'href="' . esc_attr( $link ) . '" target="' . esc_attr( $target ) . '"';
+				break;
 		}
 
+		$out = apply_filters( WOWP_Plugin::PREFIX . '_maker_action', $out, $menu, $i, $type, $target );
 
 		return $out;
 	}
@@ -292,6 +347,17 @@ class Maker {
 		$style = '';
 		if ( ! empty( $rotate ) ) {
 			$style .= '--_rotate:' . $rotate . ';';
+		}
+
+		if ( ! empty( $this->menu['icon_text_weight'][ $i ] ) && $this->menu['icon_text_weight'][ $i ] !== 'normal' ) {
+			$style .= '--fm-icon-text-weight:' . esc_attr( $this->menu['icon_text_weight'][ $i ] ) . ';';
+		}
+
+		if ( ! empty( $menu['radius_icon'][ $i ] ) ) {
+			$style .= '--fm-icon-radius: ' . $menu['icon_radius_top_left'][ $i ] . 'px ';
+			$style .= $menu['icon_radius_top_right'][ $i ] . 'px ';
+			$style .= $menu['icon_radius_bottom_right'][ $i ] . 'px ';
+			$style .= $menu['icon_radius_bottom_left'][ $i ] . 'px;';
 		}
 
 		$out = '<span class="fm-icon' . esc_attr( $class ) . '"';
@@ -321,6 +387,7 @@ class Maker {
 				$out  .= '<span>' . wp_kses_post( $icon ) . '</span>';
 				break;
 		}
+		$out .= ! empty( $menu['icon_text'][ $i ] ) ? '<span class="icon-text">' . esc_html( $menu['icon_text'][ $i ] ) . '</span>' : '';
 
 		$out .= '</span>';
 
@@ -328,6 +395,7 @@ class Maker {
 	}
 
 	private function create_label( $i ): string {
+		$menu = $this->menu;
 		$style = '';
 		if ( ! empty( $this->menu['item_tooltip_font'][ $i ] ) && $this->menu['item_tooltip_font'][ $i ] !== 'inherit' ) {
 			$style .= '--fm-label-font:' . esc_attr( $this->menu['item_tooltip_font'][ $i ] ) . ';';
@@ -339,7 +407,23 @@ class Maker {
 			$style .= '--fm-label-weight:' . esc_attr( $this->menu['item_tooltip_weight'][ $i ] ) . ';';
 		}
 
-		$out = '<span class="fm-label"';
+		if ( ! empty( $menu['radius_label'][ $i ] ) ) {
+			$style .= '--fm-label-radius: ' . $menu['icon_radius_top_left'][ $i ] . 'px ';
+			$style .= $menu['label_radius_top_right'][ $i ] . 'px ';
+			$style .= $menu['label_radius_bottom_right'][ $i ] . 'px ';
+			$style .= $menu['label_radius_bottom_left'][ $i ] . 'px;';
+		}
+
+		$icon_type = ! empty( $this->menu['icon_type'][ $i ] ) ? $this->menu['icon_type'][ $i ] : 'icon';
+		$icon      = ! empty( $this->menu['item_icon'][ $i ] ) ? $this->menu['item_icon'][ $i ] : '';
+
+		$class = '';
+		if ( $icon_type === 'icon' && empty( $icon ) ) {
+			$class = ' fm-empty-icon';
+		}
+
+
+		$out = '<span class="fm-label' . esc_attr( $class ) . '"';
 		$out .= ! empty( $style ) ? ' style="' . esc_attr( $style ) . '"' : '';
 		$out .= '>';
 
@@ -359,6 +443,5 @@ class Maker {
 
 		return $out;
 	}
-
 
 }

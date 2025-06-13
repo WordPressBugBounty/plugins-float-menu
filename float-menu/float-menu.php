@@ -3,7 +3,7 @@
  * Plugin Name:       Float Menu Lite
  * Plugin URI:        https://wow-estore.com/item/float-menu-pro/
  * Description:       Easily create floating menus of varying complexity
- * Version:           7.0.7
+ * Version:           7.1
  * Author:            Wow-Company
  * Author URI:        https://wow-estore.com
  * License:           GPL-2.0+
@@ -56,7 +56,6 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 		private WOWP_Admin $admin;
 		private Autoloader $autoloader;
 		private WOWP_Public $public;
-		private WOWP_Plugin_Checker $check;
 
 		public static function instance(): WOWP_Plugin {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof self ) ) {
@@ -110,10 +109,9 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 				'rating'     => 'Rating URI',
 				'support'    => 'Support URI',
 				'pro'        => 'Item URI',
-				'docs'       => 'Documentation',
-				'change'     => 'Change URI',
 				'demo'       => 'Demo URI',
-
+				'change'     => 'Change URI',
+				'docs'       => 'Documentation',
 			];
 			$plugin_data = get_file_data( __FILE__, $data, false );
 
@@ -130,7 +128,7 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 			if ( ! class_exists( 'Wow_Company' ) ) {
 				require_once self::dir() . 'includes/class-wow-company.php';
 			}
-
+			
 			require_once self::dir() . 'classes/Autoloader.php';
 			require_once self::dir() . 'admin/class-wowp-admin.php';
 			require_once self::dir() . 'public/class-wowp-public.php';
@@ -161,6 +159,7 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 		}
 
 		public function plugin_activate(): void {
+
 			if ( is_plugin_active( 'float-menu-pro/float-menu-pro.php' ) ) {
 				deactivate_plugins( 'float-menu-pro/float-menu-pro.php' );
 			}
@@ -177,7 +176,7 @@ if ( ! class_exists( 'WOWP_Plugin' ) ) :
 
 			DBManager::create( $columns );
 
-			update_site_option( self::PREFIX . '_db_version', '6.0' );
+			update_site_option( self::PREFIX . '_db_version', '7.0' );
 		}
 
 		/**
@@ -200,3 +199,4 @@ function wp_plugin_run(): WOWP_Plugin {
 }
 
 wp_plugin_run();
+
