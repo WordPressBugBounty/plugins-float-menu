@@ -74,8 +74,6 @@ class FloatMenu {
         this.extraText();
         this.visibleMenu();
         this.closePopup();
-        FMInteraction.initialize();
-        FMTranslate.init();
     }
 
 
