@@ -5,7 +5,7 @@ Tags: sidebar menu, floating menu, side menu, sticky menu, float menu
 Requires at least: 4.3
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 7.1
+Stable tag: 7.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,9 @@ No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impa
 1. Menu
 
 == Changelog ==
+= 7.1.1 =
+* Fixed: minor bug with mobile devices
+
 = 7.1 =
 * Added: Option to set box size for menu items
 * Added: Ability to load example/demo configuration

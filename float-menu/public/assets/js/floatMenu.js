@@ -74,6 +74,8 @@ class FloatMenu {
         this.extraText();
         this.visibleMenu();
         this.closePopup();
+        FMInteraction.initialize();
+        FMTranslate.init();
     }
 
 
@@ -289,8 +291,10 @@ class FloatMenu {
         if (screenWidth < screen) {
             this.element.style.setProperty('--fm-icon-size', iconSize);
             this.element.style.setProperty('--fm-label-size', labelSize);
-            this.element.style.setProperty('--fm-icon-box', boxSize);
             this.element.style.setProperty('--fm-icon-text', textSize);
+            if(boxSize !== 0 ) {
+                this.element.style.setProperty('--fm-icon-box', boxSize);
+            }
         }
 
     }
