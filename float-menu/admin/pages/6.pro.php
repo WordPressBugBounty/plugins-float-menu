@@ -4,6 +4,8 @@
  *
  */
 
+use FloatMenuLite\WOWP_Plugin;
+
 $features = [
 	'core'             => [
 		[
@@ -171,8 +173,12 @@ $features = [
             <div>
                 <h3>Unlock PRO Features</h3>
                 <p>Upgrade to Float Menu Pro and get advanced features like</p>
-                <a href="https://wow-estore.com/item/float-menu-pro/" target="_blank" class="button button-primary">Get
-                    Float Menu Pro </a>
+                <div class="buttons">
+                    <a href="<?php echo esc_url( WOWP_Plugin::info( 'pro' ) ); ?>" target="_blank"
+                       class="button button-primary">Get Float Menu Pro </a>
+                    <a href="<?php echo esc_url( WOWP_Plugin::info( 'demo' ) ); ?>" target="_blank" class="button-link">Try
+                        Demo <span>→</span></a>
+                </div>
             </div>
             <dl class="wowp-pro__profits">
                 <div class="wowp-pro__profit">

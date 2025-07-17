@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Float Menu Lite\n"
-"POT-Creation-Date: 2025-06-13 13:54+0300\n"
+"POT-Creation-Date: 2025-07-17 10:37+0300\n"
 "PO-Revision-Date: 2025-06-13 13:53+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Pro Demo"
 msgstr ""
 
-#: admin/pages/1.list.php:57 admin/pages/6.pro.php:82
+#: admin/pages/1.list.php:57 admin/pages/6.pro.php:84
 msgid "Search"
 msgstr ""
 
@@ -96,11 +96,11 @@ msgid ""
 "Also, you can send us your ideas and suggestions for improving the plugin."
 msgstr ""
 
-#: admin/pages/6.pro.php:10
+#: admin/pages/6.pro.php:12
 msgid "Submenus"
 msgstr ""
 
-#: admin/pages/6.pro.php:11
+#: admin/pages/6.pro.php:13
 msgid ""
 "By grouping related items under submenu, you can improve user experience by "
 "making navigation more intuitive and organized. Users can easily find the "
@@ -108,153 +108,153 @@ msgid ""
 "top-level menu items. "
 msgstr ""
 
-#: admin/pages/6.pro.php:15
+#: admin/pages/6.pro.php:17
 msgid "Beautiful Animations"
 msgstr ""
 
-#: admin/pages/6.pro.php:16
+#: admin/pages/6.pro.php:18
 msgid "Choose from 7 elegant animations to showcase your menu items. "
 msgstr ""
 
-#: admin/pages/6.pro.php:20
+#: admin/pages/6.pro.php:22
 msgid "Deeper Analytics"
 msgstr ""
 
-#: admin/pages/6.pro.php:21
+#: admin/pages/6.pro.php:23
 msgid ""
 " Empower with a deeper understanding of how users interact with your menu! "
 "This powerful feature allows you to track user clicks on specific menu items "
 "within Google Analytics. "
 msgstr ""
 
-#: admin/pages/6.pro.php:24 classes/Admin/Demo.php:56
+#: admin/pages/6.pro.php:26 classes/Admin/Demo.php:56
 msgid "Icon with Text"
 msgstr ""
 
-#: admin/pages/6.pro.php:25
+#: admin/pages/6.pro.php:27
 msgid ""
 "Combine an icon with a short text label inside a single button. This clear "
 "and intuitive visual cue improves menu clarity and enhances user experience."
 msgstr ""
 
-#: admin/pages/6.pro.php:29
+#: admin/pages/6.pro.php:31
 msgid "Custom Border Radius"
 msgstr ""
 
-#: admin/pages/6.pro.php:30
+#: admin/pages/6.pro.php:32
 msgid ""
 "Independently customize the border radius for each menu item’s icon and "
 "label. This allows for unique shapes, better design flexibility, and "
 "seamless integration with your site’s style."
 msgstr ""
 
-#: admin/pages/6.pro.php:34
+#: admin/pages/6.pro.php:36
 msgid "Extra Text & Label Fonts"
 msgstr ""
 
-#: admin/pages/6.pro.php:35
+#: admin/pages/6.pro.php:37
 msgid ""
 "Display extended text descriptions and customize font styles for labels to "
 "provide detailed menu information."
 msgstr ""
 
-#: admin/pages/6.pro.php:39
+#: admin/pages/6.pro.php:41
 msgid "Create Popup"
 msgstr ""
 
-#: admin/pages/6.pro.php:40
+#: admin/pages/6.pro.php:42
 msgid "Configure popups that open upon clicking on menu items."
 msgstr ""
 
-#: admin/pages/6.pro.php:47 classes/Admin/Demo.php:51
+#: admin/pages/6.pro.php:49 classes/Admin/Demo.php:51
 msgid "Translate"
 msgstr ""
 
-#: admin/pages/6.pro.php:48
+#: admin/pages/6.pro.php:50
 msgid ""
 "Empower your visitors to translate your website content in real-time. "
 "Integrate this link type to break down language barriers and cater to a "
 "global audience."
 msgstr ""
 
-#: admin/pages/6.pro.php:52
+#: admin/pages/6.pro.php:54
 msgid "Social Sharing"
 msgstr ""
 
-#: admin/pages/6.pro.php:53
+#: admin/pages/6.pro.php:55
 msgid ""
 "Boost your website's reach by incorporating a \"Share\" link. Choose from a "
 "staggering 29 different social media services, allowing users to "
 "effortlessly share your content across their preferred platforms."
 msgstr ""
 
-#: admin/pages/6.pro.php:57
+#: admin/pages/6.pro.php:59
 msgid "Next/Previous Post"
 msgstr ""
 
-#: admin/pages/6.pro.php:58
+#: admin/pages/6.pro.php:60
 msgid ""
 "Simplify post navigation for readers. These link types automatically direct "
 "users to the next or previous post within the current category, keeping them "
 "engaged and exploring related content. "
 msgstr ""
 
-#: admin/pages/6.pro.php:62
+#: admin/pages/6.pro.php:64
 msgid "Forced Download"
 msgstr ""
 
-#: admin/pages/6.pro.php:63
+#: admin/pages/6.pro.php:65
 msgid ""
 "Offer downloadable resources like brochures, ebooks, or software directly "
 "through your floating menus. This eliminates the need for users to navigate "
 "to separate download pages. "
 msgstr ""
 
-#: admin/pages/6.pro.php:67
+#: admin/pages/6.pro.php:69
 msgid "Scroll To Top/Bottom"
 msgstr ""
 
-#: admin/pages/6.pro.php:68
+#: admin/pages/6.pro.php:70
 msgid ""
 "Provide users with convenient links to instantly scroll to the top or bottom "
 "of your webpage. This is particularly helpful for long pages or content-"
 "heavy sections."
 msgstr ""
 
-#: admin/pages/6.pro.php:72
+#: admin/pages/6.pro.php:74
 msgid "Smooth Scroll"
 msgstr ""
 
-#: admin/pages/6.pro.php:73
+#: admin/pages/6.pro.php:75
 msgid ""
 "Enhance user experience with smooth scrolling animations. This link type "
 "ensures a visually pleasing and seamless transition when users navigate to "
 "different sections of your webpage."
 msgstr ""
 
-#: admin/pages/6.pro.php:77
+#: admin/pages/6.pro.php:79
 msgid "Print"
 msgstr ""
 
-#: admin/pages/6.pro.php:78
+#: admin/pages/6.pro.php:80
 msgid ""
 "With a single click on the Print link, users can initiate the built-in "
 "printing function of their web browser. No more cumbersome text selection or "
 "manual copying."
 msgstr ""
 
-#: admin/pages/6.pro.php:83
+#: admin/pages/6.pro.php:85
 msgid ""
 "Integrate a search function directly into your floating menu. This empowers "
 "users to quickly find specific information on your website, improving "
 "overall user experience."
 msgstr ""
 
-#: admin/pages/6.pro.php:87
+#: admin/pages/6.pro.php:89
 msgid "Email"
 msgstr ""
 
-#: admin/pages/6.pro.php:88
+#: admin/pages/6.pro.php:90
 msgid ""
 "Integrate an Email link into your floating menu, allowing users to "
 "effortlessly initiate email communication. This streamlines the process for "
@@ -262,11 +262,11 @@ msgid ""
 "express feedback."
 msgstr ""
 
-#: admin/pages/6.pro.php:92
+#: admin/pages/6.pro.php:94
 msgid "One-Click Calling"
 msgstr ""
 
-#: admin/pages/6.pro.php:93
+#: admin/pages/6.pro.php:95
 msgid ""
 "Provide a Telephone link within your floating menu, enabling users to "
 "directly initiate a phone call to your business with a single click. This is "
@@ -274,11 +274,11 @@ msgid ""
 "or those offering phone consultations."
 msgstr ""
 
-#: admin/pages/6.pro.php:97
+#: admin/pages/6.pro.php:99
 msgid "User Links"
 msgstr ""
 
-#: admin/pages/6.pro.php:98
+#: admin/pages/6.pro.php:100
 msgid ""
 "This includes Login links for effortless account access, Logout links for "
 "secure sign-outs, Registration links for simplified account creation, and "
@@ -287,30 +287,30 @@ msgid ""
 "interact with your website seamlessly. "
 msgstr ""
 
-#: admin/pages/6.pro.php:104
+#: admin/pages/6.pro.php:106
 msgid "Custom Icons"
 msgstr ""
 
-#: admin/pages/6.pro.php:105
+#: admin/pages/6.pro.php:107
 msgid ""
 "Break free from the limitations of pre-defined icon libraries. Custom icons "
 "allow you to utilize any image or icon that complements your website's "
 "design."
 msgstr ""
 
-#: admin/pages/6.pro.php:109
+#: admin/pages/6.pro.php:111
 msgid "Icon Settings"
 msgstr ""
 
-#: admin/pages/6.pro.php:110
+#: admin/pages/6.pro.php:112
 msgid "Rotate and flip icons to enhance visual appeal."
 msgstr ""
 
-#: admin/pages/6.pro.php:114
+#: admin/pages/6.pro.php:116
 msgid "Emoji and Letter"
 msgstr ""
 
-#: admin/pages/6.pro.php:115
+#: admin/pages/6.pro.php:117
 msgid ""
 " Sometimes, a simple emoji or letter can be the most effective way to "
 "represent a menu item. Float Menu Pro allows you to utilize emojis or "
@@ -318,61 +318,61 @@ msgid ""
 "menus."
 msgstr ""
 
-#: admin/pages/6.pro.php:120
+#: admin/pages/6.pro.php:122
 msgid "Hiding/Showing"
 msgstr ""
 
-#: admin/pages/6.pro.php:121
+#: admin/pages/6.pro.php:123
 msgid ""
 "Allows you to control the visibility of your floating menus based on the "
 "user's scroll position on the webpage."
 msgstr ""
 
-#: admin/pages/6.pro.php:125
+#: admin/pages/6.pro.php:127
 msgid "Activate by URL"
 msgstr ""
 
-#: admin/pages/6.pro.php:126
+#: admin/pages/6.pro.php:128
 msgid ""
 "Target specific pages based on URL parameters (e.g., show a floating menu "
 "only on a page with URL parameter)"
 msgstr ""
 
-#: admin/pages/6.pro.php:130
+#: admin/pages/6.pro.php:132
 msgid "Activate by Referrer URL"
 msgstr ""
 
-#: admin/pages/6.pro.php:131
+#: admin/pages/6.pro.php:133
 msgid ""
 "To display different floating menus for visitors arriving from specific "
 "websites."
 msgstr ""
 
-#: admin/pages/6.pro.php:135 admin/settings/options/rules.php:9
+#: admin/pages/6.pro.php:137 admin/settings/options/rules.php:9
 msgid "Display Rules"
 msgstr ""
 
-#: admin/pages/6.pro.php:136
+#: admin/pages/6.pro.php:138
 msgid ""
 "Control exactly where your popup appear using page types, post categories/"
 "tags, author pages, taxonomies and date archives."
 msgstr ""
 
-#: admin/pages/6.pro.php:140
+#: admin/pages/6.pro.php:142
 msgid "Devices Rules"
 msgstr ""
 
-#: admin/pages/6.pro.php:141
+#: admin/pages/6.pro.php:143
 msgid ""
 "Ensure optimal menu visibility across all devices with options to hide/"
 "remove on specific screen sizes."
 msgstr ""
 
-#: admin/pages/6.pro.php:145
+#: admin/pages/6.pro.php:147
 msgid "User Role Permissions"
 msgstr ""
 
-#: admin/pages/6.pro.php:146
+#: admin/pages/6.pro.php:148
 msgid ""
 "Define which user roles (e.g., Administrator, Editor, Author) have the "
 "ability to see the menu items. This can be helpful for displaying internal "
@@ -380,33 +380,33 @@ msgid ""
 "user groups."
 msgstr ""
 
-#: admin/pages/6.pro.php:150
+#: admin/pages/6.pro.php:152
 msgid "Multilingual Support"
 msgstr ""
 
-#: admin/pages/6.pro.php:151
+#: admin/pages/6.pro.php:153
 msgid ""
 "For websites catering to a global audience, Float Menu Pro allows you to "
 "restrict menu visibility to specific languages. This ensures users only see "
 "menus relevant to their chosen language setting. "
 msgstr ""
 
-#: admin/pages/6.pro.php:155
+#: admin/pages/6.pro.php:157
 msgid "Scheduling"
 msgstr ""
 
-#: admin/pages/6.pro.php:156
+#: admin/pages/6.pro.php:158
 msgid ""
 "Schedule menu appearances based on specific days, times, and dates. This "
 "allows you to promote temporary events or campaigns without cluttering your "
 "website permanently. "
 msgstr ""
 
-#: admin/pages/6.pro.php:159
+#: admin/pages/6.pro.php:161
 msgid "Browser Compatibility"
 msgstr ""
 
-#: admin/pages/6.pro.php:160
+#: admin/pages/6.pro.php:162
 msgid ""
 "Ensure your menus display correctly across a wide range of browsers. If "
 "necessary, you can choose to hide menus for specific browsers to address "
