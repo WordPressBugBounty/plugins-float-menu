@@ -43,10 +43,7 @@ class Display {
 
 
 		foreach ( $showParams as $i => $show ) {
-			if ( str_contains( $show, self::POST_PREFIX ) && self::custom_post( $i, $param ) ) {
-				return true;
-			}
-
+			
 			if ( self::is_match( $show, $i, $param ) ) {
 				return true;
 			}
