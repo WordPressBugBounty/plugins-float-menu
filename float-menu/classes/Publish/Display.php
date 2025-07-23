@@ -43,7 +43,7 @@ class Display {
 
 
 		foreach ( $showParams as $i => $show ) {
-			
+
 			if ( self::is_match( $show, $i, $param ) ) {
 				return true;
 			}

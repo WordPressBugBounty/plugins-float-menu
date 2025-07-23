@@ -1,14 +1,21 @@
 <?php
 /**
- * Class Maker
+ * Class Maker — create floating menu items.
  *
- * Create the item
+ * @package FloatMenuLite\Publish
  *
- * @package    WowPlugin
- * @subpackage Publish
- * @author     Dmytro Lobov <dev@wow-company.com>, Wow-Company
- * @copyright  2024 Dmytro Lobov
- * @license    GPL-2.0+
+ * Methods:
+ *  - __construct($id, $param)           — Constructor. Initializes menu ID, parameters, menu items.
+ *  - init()                             — Renders the main menu container and returns HTML output.
+ *  - create_properties()                — Generates CSS properties for the menu.
+ *  - create_options()                   — Returns JSON-encoded data attributes for frontend JS.
+ *  - create_items()                     — Renders all menu items (buttons) in a loop.
+ *  - create_item($i, $sub, $next_sub)   — Renders a single menu item (with/without sub-menu).
+ *  - create_link($i)                    — Builds the <a> or <form> for the menu item.
+ *  - create_link_properties($i)         — Builds inline CSS properties for a menu item.
+ *  - create_action($i)                  — Builds href/action/target attributes for a menu link.
+ *  - create_icon($i)                    — Renders icon/image/text/emoji for a menu item.
+ *  - create_label($i)                   — Renders label/tooltip or search field for a menu item.
  */
 
 namespace FloatMenuLite\Publish;
@@ -46,15 +53,9 @@ class Maker {
 		$options = $this->create_options();
 
 		$out = '<div dir="ltr" class="' . esc_attr( $classes ) . '" style="' . esc_attr( $style ) . '" data-float-menu="' . esc_attr( $options ) . '">';
-
-		if ( ! empty( $this->param['horizontal'] ) ) {
-			$out .= '<ul class="fm-bar is-horizontal">';
-		} else {
-			$out .= '<ul class="fm-bar">';
-		}
+		$out .= ! empty( $this->param['horizontal'] ) ? '<ul class="fm-bar is-horizontal">' : '<ul class="fm-bar">';
 		$out .= $this->create_items();
-		$out .= '</ul>';
-		$out .= '</div>';
+		$out .= '</ul></div>';
 
 		return $out;
 	}
@@ -105,7 +106,7 @@ class Maker {
 		$param            = $this->param;
 		$data             = [];
 		$data['position'] = [
-			$param['menu'],
+			$param['menu'] ?? 'left',
 			! empty( $param['align'] ) ? $param['align'] : 'center',
 		];
 
@@ -113,19 +114,19 @@ class Maker {
 			'shape' => '-' . ( $param['shape'] ?? 'square' ),
 		];
 
-		if ( isset( $param['sideSpace'] ) && $param['sideSpace'] === 'true' ) {
+		if ( ! isset( $param['sideSpace'] ) || $param['sideSpace'] === 'true' ) {
 			$data['appearance']['sideSpace'] = true;
 		}
 
-		if ( isset( $param['buttonSpace'] ) && $param['buttonSpace'] === 'true' ) {
+		if ( ! isset( $param['buttonSpace'] ) || $param['buttonSpace'] === 'true' ) {
 			$data['appearance']['buttonSpace'] = true;
 		}
 
-		if ( isset( $param['labelConnected'] ) && $param['labelConnected'] === 'true' ) {
+		if ( ! isset( $param['labelConnected'] ) || $param['labelConnected'] === 'true' ) {
 			$data['appearance']['labelConnected'] = true;
 		}
 
-		if ( isset( $param['subSpace'] ) && $param['subSpace'] === 'true' ) {
+		if ( ! isset( $param['subSpace'] ) || $param['subSpace'] === 'true' ) {
 			$data['appearance']['subSpace'] = true;
 		}
 
@@ -137,9 +138,9 @@ class Maker {
 		}
 
 		$data['mobile']   = [
-			$param['mobilieScreen'],
-			$param['mobiliconSize'],
-			$param['mobillabelSize'],
+			$param['mobilieScreen'] ?? 480,
+			$param['mobiliconSize'] ?? 24,
+			$param['mobillabelSize'] ?? 15,
 		];
 		$data['mobile'][] = isset( $param['boxSizeMobile'] ) && ! empty( $param['boxSizeMobile_on'] ) ? $param['boxSizeMobile'] : 0;
 		$data['mobile'][] = isset( $param['textSizeMobile'] ) ? $param['textSizeMobile'] : 12;
@@ -156,11 +157,11 @@ class Maker {
 
 		$data['label'] = [];
 
-		if ( $param['labelSpace'] === 'true' ) {
+		if ( empty( $param['labelSpace'] ) || $param['labelSpace'] === 'true' ) {
 			$data['label']['space'] = 2;
 		}
 
-		if ( $param['labelsOn'] === 'false' ) {
+		if ( ! empty( $param['labelsOn'] ) && $param['labelsOn'] === 'false' ) {
 			$data['label']['off'] = true;
 		}
 
@@ -171,7 +172,6 @@ class Maker {
 		$data['remove'] = true;
 
 		$data = apply_filters( WOWP_Plugin::PREFIX . '_maker_options', $data, $param );
-
 
 		return wp_json_encode( $data );
 	}
@@ -395,7 +395,7 @@ class Maker {
 	}
 
 	private function create_label( $i ): string {
-		$menu = $this->menu;
+		$menu  = $this->menu;
 		$style = '';
 		if ( ! empty( $this->menu['item_tooltip_font'][ $i ] ) && $this->menu['item_tooltip_font'][ $i ] !== 'inherit' ) {
 			$style .= '--fm-label-font:' . esc_attr( $this->menu['item_tooltip_font'][ $i ] ) . ';';
