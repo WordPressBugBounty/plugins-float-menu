@@ -1,11 +1,11 @@
 === Float menu - awesome floating side menu ===
 Contributors: Wpcalc, lobov
 Donate link: https://wow-estore.com/item/float-menu-pro/
-Tags: sidebar menu, floating menu, side menu, sticky menu, float menu
+Tags: menu,  sidebar menu, floating menu, fixed menu, nav menu
 Requires at least: 4.3
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 7.2
+Stable tag: 7.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,9 @@ No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impa
 1. Menu
 
 == Changelog ==
+= 7.2.1 =
+* Fixed: save the links
+
 = 7.2 =
 * Updated: Font Awesome library upgraded to version **7.0.0**.
 

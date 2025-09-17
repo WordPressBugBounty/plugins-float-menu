@@ -82,6 +82,10 @@ class WOWP_Admin {
 			) );
 		}
 
+		if ( isset( $request['menu_1']['item_link'] ) ) {
+			$param['menu_1']['item_link'] = map_deep( wp_unslash( $request['menu_1']['item_link'] ), array($this, 'sanitize_link') );
+		}
+
 		return $param;
 	}
 
@@ -91,6 +95,13 @@ class WOWP_Admin {
 
 	public function sanitize_tooltip( $text ): string {
 		return sanitize_text_field( wp_unslash( $text ) );
+	}
+
+	public function sanitize_link( $link ) {
+		if ( wp_http_validate_url( $link ) ) {
+			return esc_url_raw( $link );
+		}
+		return sanitize_text_field(  $link  );
 	}
 
 
