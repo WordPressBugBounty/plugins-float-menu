@@ -3,9 +3,9 @@ Contributors: Wpcalc, lobov
 Donate link: https://wow-estore.com/item/float-menu-pro/
 Tags: menu,  sidebar menu, floating menu, fixed menu, nav menu
 Requires at least: 4.3
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 7.2.1
+Stable tag: 7.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,10 @@ No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impa
 1. Menu
 
 == Changelog ==
+= 7.2.2 =
+* Updated: Font Awesome library upgraded to version **7.1**.
+* Updated: Style for the items list
+
 = 7.2.1 =
 * Fixed: save the links
 

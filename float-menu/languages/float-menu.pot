@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Float Menu Lite\n"
-"POT-Creation-Date: 2025-07-23 09:29+0300\n"
+"POT-Creation-Date: 2025-11-01 13:26+0200\n"
 "PO-Revision-Date: 2025-06-13 13:53+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -793,7 +793,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: admin/settings/sidebar.php:31 classes/Admin/ListTable.php:290
+#: admin/settings/sidebar.php:31 classes/Admin/ListTable.php:295
 msgid "Deactivate"
 msgstr ""
 
@@ -801,7 +801,7 @@ msgstr ""
 msgid "Test mode"
 msgstr ""
 
-#: admin/settings/sidebar.php:39 classes/Admin/ListTable.php:289
+#: admin/settings/sidebar.php:39 classes/Admin/ListTable.php:294
 msgid "Activate"
 msgstr ""
 
@@ -1014,27 +1014,27 @@ msgstr ""
 msgid "Click for ON."
 msgstr ""
 
-#: classes/Admin/ListTable.php:288
+#: classes/Admin/ListTable.php:293
 msgid "Delate"
 msgstr ""
 
-#: classes/Admin/ListTable.php:291
+#: classes/Admin/ListTable.php:296
 msgid "Test mode ON"
 msgstr ""
 
-#: classes/Admin/ListTable.php:292
+#: classes/Admin/ListTable.php:297
 msgid "Test mode OFF"
 msgstr ""
 
-#: classes/Admin/ListTable.php:341
+#: classes/Admin/ListTable.php:346
 msgid "Filter by tag"
 msgstr ""
 
-#: classes/Admin/ListTable.php:344
+#: classes/Admin/ListTable.php:349
 msgid "All"
 msgstr ""
 
-#: classes/Admin/ListTable.php:357
+#: classes/Admin/ListTable.php:362
 msgid "Filter"
 msgstr ""
 
