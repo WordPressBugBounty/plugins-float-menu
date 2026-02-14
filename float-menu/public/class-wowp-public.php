@@ -24,11 +24,11 @@ defined( 'ABSPATH' ) || exit;
 
 class WOWP_Public {
 
-	private string $pefix;
+	private string $prefix;
 
 	public function __construct() {
 		// prefix for plugin assets
-		$this->pefix = '.min';
+		$this->prefix = '.min';
 		add_shortcode( WOWP_Plugin::SHORTCODE, [ $this, 'shortcode' ] );
 		add_shortcode( WOWP_Plugin::SHORTCODE . '-ready', [ $this, 'shortcode_ready' ] );
 
@@ -51,8 +51,8 @@ class WOWP_Public {
 
 
 		if ( ! empty( $args ) ) {
-			wp_enqueue_style( $handle, $assets . 'css/style' . $this->pefix . '.css', [], $version, $media = 'all' );
-			wp_enqueue_script( $handle, $assets . 'js/floatMenu' . $this->pefix . '.js', array( 'jquery' ), $version,
+			wp_enqueue_style( $handle, $assets . 'css/style' . $this->prefix . '.css', [], $version, $media = 'all' );
+			wp_enqueue_script( $handle, $assets . 'js/floatMenu' . $this->prefix . '.js', array( 'jquery' ), $version,
 				true );
 
 			foreach ( $args as $id => $param ) {
@@ -141,8 +141,8 @@ class WOWP_Public {
 		$version         = WOWP_Plugin::info( 'version' );
 		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
 
-		wp_enqueue_style( $handle, $assets . 'css/style' . $this->pefix . '.css', [], $version, $media = 'all' );
-		wp_enqueue_script( $handle, $assets . 'js/floatMenu' . $this->pefix . '.js', array( 'jquery' ), $version,
+		wp_enqueue_style( $handle, $assets . 'css/style' . $this->prefix . '.css', [], $version, $media = 'all' );
+		wp_enqueue_script( $handle, $assets . 'js/floatMenu' . $this->prefix . '.js', array( 'jquery' ), $version,
 			true );
 
 		$shortcodes = '';

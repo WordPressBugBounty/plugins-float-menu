@@ -99,6 +99,14 @@ $features = [
 			'title' => __( 'User Links', 'float-menu' ),
 			'desc'  => __( 'This includes Login links for effortless account access, Logout links for secure sign-outs, Registration links for simplified account creation, and Password Recovery links for stress-free password retrieval, all readily available within the menu, empowering users to manage their accounts and interact with your website seamlessly. ', 'float-menu' ),
 		],
+		[
+			'title' => __( 'Media & Navigation Control', 'float-menu' ),
+			'desc'  => __( 'Take control of your media players directly from the menu with Play, Pause, Mute, and Volume commands. Plus, integrated browser navigation like Go Back and Go Forward for a smoother browsing experience.', 'float-menu' ),
+		],
+		[
+			'title' => __( 'Copy URL & Bookmark', 'float-menu' ),
+			'desc'  => __( 'Allow users to quickly copy the current page URL to their clipboard or add your site to their browser bookmarks with a single click.', 'float-menu' ),
+		],
 	],
 
 	'icons'              => [
@@ -122,6 +130,10 @@ $features = [
 			'title' => __( 'Hiding/Showing', 'float-menu' ),
 			'desc'  => __( 'Allows you to control the visibility of your floating menus based on the user\'s scroll position on the webpage.', 'float-menu' ),
 			'link'  => 'https://demo.wow-estore.com/float-menu-pro/hide-after-position/',
+		],
+		[
+			'title' => __( 'Timed Appearance', 'float-menu' ),
+			'desc'  => __( 'Set a delay to show or hide the menu after the user has spent a specific amount of time on the page.', 'float-menu' ),
 		],
 		[
 			'title' => __( 'Activate by URL', 'float-menu' ),

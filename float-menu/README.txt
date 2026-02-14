@@ -1,11 +1,11 @@
 === Float menu - awesome floating side menu ===
 Contributors: Wpcalc, lobov
 Donate link: https://wow-estore.com/item/float-menu-pro/
-Tags: menu,  sidebar menu, floating menu, fixed menu, nav menu
+Tags: floating menu, sticky menu, menu, navigation, side menu
 Requires at least: 4.3
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 7.2.2
+Stable tag: 7.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,11 +33,13 @@ The Float Menu makes user interaction with the site more comfortable. It can inc
 
 ### 🎨 **Customization & Design**
 - Create **unlimited menus**.
+- **Horizontal or vertical** menu layout.
 - Position menu **left or right**.
 - Choose from **4 button shapes**: Square, Round, Rounded, Rounded-out.
 - Adjust **spacing between menu items**.
 - Set **custom colors** for buttons and icons.
-- Use **2000+ Font Awesome 6 icons**.
+- Use **2000+ Font Awesome 7 icons**.
+- **Load demo configuration** – get started quickly with pre-made examples.
 - **Test Mode** – show the menu only to administrators while configuring settings.
 
 ### 🔗 **Link & Accessibility Options**
@@ -51,12 +53,16 @@ The Float Menu makes user interaction with the site more comfortable. It can inc
 
 --
 
-= Float Menu can be used for: =
-* Site navigation
-* Main menu
-* Contact block
-* Additional menu
-* User profile navigation and more
+= 🚀 Ideal Uses =
+Float Menu is highly versatile and can be used for various scenarios:
+- **Instant Messaging**: Add quick-access buttons for WhatsApp, Telegram, Skype, or Messenger.
+- **Floating CTA**: Keep "Book Now" or "Get a Quote" buttons always visible to boost sales.
+- **Mobile App Experience**: Create a professional bottom or side navigation bar for mobile users.
+- **Quick Support**: Provide easy access to your Help Center, FAQs, or Support tickets.
+- **Anchor Navigation**: Build a floating table of contents to navigate between long page sections.
+- **Social Presence**: Link to your Instagram, Facebook, LinkedIn, or TikTok profiles.
+- **Membership Access**: Quick links for Login, Register, and User Account pages.
+- **Special Offers**: Highlight time-limited promotions or discount codes.
 
 --
 
@@ -101,14 +107,17 @@ Unlock **advanced features** and take your floating menus to the next level with
 
 --
 
-= Use with other plugins to maximize your results =
-* [Popup Box – create stunning popups triggered by Float Menu](https://wordpress.org/plugins/popup-box/)
-* [Side Menu Lite – alternative floating navigation panel](https://wordpress.org/plugins/side-menu-lite/)
-* [Floating Button – add floating action buttons](https://wordpress.org/plugins/floating-button/)
-* [Sticky Buttons – floating buttons with advanced triggers](https://wordpress.org/plugins/sticky-buttons/)
-* [Bubble Menu – circular floating menu with icons](https://wordpress.org/plugins/bubble-menu/)
-* [WP Coder – customize menu with custom HTML, CSS, and JS](https://wordpress.org/plugins/wp-coder/)
-* [Flexi Menu – advanced floating and sticky menus](https://wordpress.org/plugins/flexi-menu/)
+= 🚀 Maximize Results with Complementary Plugins =
+
+Enhance your website's functionality and user engagement by combining **Float Menu** with these powerful tools from Wow-Company:
+
+- [Popup Box (Modal Windows)](https://wordpress.org/plugins/modal-window/) – Create stunning popups and triggers for your menu items to boost conversions.
+- [Counter Box](https://wordpress.org/plugins/counter-box/) – Easily add counters, timers, and countdowns to highlight urgency and events.
+- [Calculator Builder](https://wordpress.org/plugins/calculator-builder/) – Build custom interactive calculators for lead generation or user utility.
+- [WP Coder](https://wordpress.org/plugins/wp-coder/) – Add custom HTML, CSS, PHP, and JS code snippets to your site and menus easily.
+- [Herd Effects](https://wordpress.org/plugins/mwp-herd-effect/) – Use social proof notifications to increase user trust and performance.
+
+👉 [Explore all plugins by Wow-Company](https://profiles.wordpress.org/wpcalc/#content-plugins)
 
 = Support =
 Search for answers and ask your questions at [support center](https://wordpress.org/support/plugin/float-menu)
@@ -124,10 +133,30 @@ If the menu does not appear, it may be due to **caching**. Try the following ste
 4. **Disable caching temporarily** – if the issue persists, try disabling the caching plugin and check if the menu appears.
 
 = The menu is visible to the site administrator but not to users? =
-Check if the **"Test Mode"** option is enabled. If **Test Mode** is activated, the menu will be visible **only to the site administrator** but not to regular users.
+Check if the **"Test Mode"** option is enabled in the menu settings. If **Test Mode** is activated, the menu will be visible **only to the site administrator** (logged-in users with administrative rights). This is useful for configuring and testing your menu before making it public.
 
-= Can I change the menu position? =
-Yes, you can set the menu to appear on the **left or right side** of the screen in the plugin settings.
+= How do "Mobile Rules" work on mobile devices? =
+When **Mobile Rules** are enabled, the menu uses a two-step interaction on touch screens: the **first click** shows the menu item label (tooltip), and the **second click** opens the link. This prevents accidental navigation and improves user experience on mobile.
+
+= Can I change the menu position or fix overlapping issues? =
+Yes! You can set the menu to appear on the **left or right side**. If the menu is hidden behind other elements or overlaps them, you can adjust the **Z-index** value in the settings. You can also use **Side Offset** and **Top Offset** to move the menu away from the edges or header.
+
+= Can I create a horizontal menu? =
+Yes, starting from version 7.1, you can choose between a **Vertical** or **Horizontal** layout. Horizontal layout is great for creating sticky bars or toolbars at the top or bottom of your site.
+
+= How can I move my menus to another site? =
+The plugin includes an **Import/Export** feature. You can export all your menus or a single menu as a JSON file and then import it into another WordPress site where Float Menu is installed. This is perfect for developers moving from staging to production.
+
+= How can I implement the scenarios mentioned in the "Ideal Uses" section? =
+Most of these cases are very easy to set up:
+- **Messaging & Social**: Create a new item, pick a Font Awesome icon, and add your link (e.g., `https://wa.me/yournumber` for WhatsApp).
+- **Floating CTA & Support**: Use a standard link to your "Contact" or "Booking" page. In the **Pro version**, you can open these in a **Popup** for a better conversion rate.
+- **Mobile Experience**: Switch to the **Horizontal Layout**, position it at the bottom, and enable **Mobile Rules** to optimize label display on touch screens.
+- **Anchor Navigation**: Use links like `#section-id` to jump to specific parts of your page. The **Pro version** adds **Smooth Scrolling** for this.
+- **Membership Access**: Use the dedicated **Login, Register, and Logout** item types already included in the plugin.
+
+= Can I hide the menu on mobile or desktop? =
+Yes, the plugin includes **Responsive Visibility** settings. You can use the **"Hide on smaller screens"** option to disable the menu on mobile devices or **"Hide on larger screens"** to hide it on desktops. You can also set custom breakpoint values (in pixels) for these rules.
 
 = Can I display the menu only on specific pages? =
 Yes! In the **Lite version**, you can:
@@ -144,6 +173,11 @@ If you're using a Multisite WordPress installation, **do not activate** the plug
 
 = Does Float Menu affect website performance? =
 No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impact on your website's performance.
+
+### 🌍 Compatibility & Accessibility
+- **RTL Ready** – Full support for right-to-left languages (Arabic, Hebrew, etc.).
+- **Accessibility** – Includes `aria-label` support for screen readers.
+- **Page Builder Friendly** – Works perfectly with Elementor, Divi, Gutenberg, and Beaver Builder.
 
 == Installation ==
 
@@ -173,6 +207,12 @@ No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impa
 1. Menu
 
 == Changelog ==
+= 7.2.3 =
+* Added: "Ideal Uses" section with 8+ real-world scenarios for the plugin.
+* Added: Comprehensive FAQ entries covering Z-index, Horizontal layout, and Mobile Rules.
+* Improved: Security by adding data escaping in the admin list table to prevent XSS.
+* Improved: Overall code quality and fixed typos in internal properties and UI.
+
 = 7.2.2 =
 * Updated: Font Awesome library upgraded to version **7.1**.
 * Updated: Style for the items list

@@ -32,7 +32,7 @@ class ListTable extends WP_List_Table {
 	}
 
 	public function column_default( $item, $column_name ) {
-		return $item[ $column_name ];
+        return $item[ $column_name ];
 	}
 
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
@@ -290,7 +290,7 @@ class ListTable extends WP_List_Table {
 
 	public function get_bulk_actions(): array {
 		$actions = [
-			'delete'     => __( 'Delate', 'float-menu' ),
+			'delete'     => __( 'Delete', 'float-menu' ),
 			'activate'   => __( 'Activate', 'float-menu' ),
 			'deactivate' => __( 'Deactivate', 'float-menu' ),
 			'test_on'    => __( 'Test mode ON', 'float-menu' ),
