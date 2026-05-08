@@ -68,7 +68,7 @@ class Settings {
 
 		$id = isset( $info['tool_id'] ) ? absint( $info['tool_id'] ) : 0;
 
-		$settings = apply_filters( WOWP_Plugin::PREFIX . '_save_settings', $info['param'] );
+		$settings = apply_filters( WOWP_Plugin::PREFIX . '_save_settings', $info['param'] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		$data    = [
 			'title'  => isset( $info['title'] ) ? sanitize_text_field( wp_unslash( $info['title'] ) ) : '',
@@ -105,7 +105,7 @@ class Settings {
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
-			DBManager::update( [ 'status' => '1' ], [ 'ID' => $id ], [ '%d' ] );
+			DBManager::update( [ 'status' => '1' ], [ 'id' => $id ], [ '%d' ] );
 		}
 
 	}
@@ -115,7 +115,7 @@ class Settings {
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
-			DBManager::update( [ 'status' => '' ], [ 'ID' => $id ], [ '%d' ] );
+			DBManager::update( [ 'status' => '' ], [ 'id' => $id ], [ '%d' ] );
 		}
 
 	}
@@ -125,7 +125,7 @@ class Settings {
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
-			DBManager::update( [ 'mode' => '' ], [ 'ID' => $id ], [ '%d' ] );
+			DBManager::update( [ 'mode' => '' ], [ 'id' => $id ], [ '%d' ] );
 		}
 
 	}
@@ -135,7 +135,7 @@ class Settings {
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : $id;
 
 		if ( ! empty( $id ) ) {
-			DBManager::update( [ 'mode' => '1' ], [ 'ID' => $id ], [ '%d' ] );
+			DBManager::update( [ 'mode' => '1' ], [ 'id' => $id ], [ '%d' ] );
 		}
 	}
 
@@ -172,7 +172,7 @@ class Settings {
 		return $param;
 	}
 
-	public static function option( $name, $option ) {
+	public static function option( $name, $options ) {
 		return $options[ $name ] ?? '';
 	}
 

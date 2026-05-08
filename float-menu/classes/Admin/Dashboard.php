@@ -13,6 +13,8 @@
 
 namespace FloatMenuLite\Admin;
 
+defined( 'ABSPATH' ) || exit;
+
 use FloatMenuLite\WOWP_Plugin;
 
 class Dashboard {
@@ -61,7 +63,7 @@ class Dashboard {
 		if ( $page !== $hook ) {
 			return;
 		}
-		do_action( WOWP_Plugin::PREFIX . '_admin_load_assets' );
+		do_action( WOWP_Plugin::PREFIX . '_admin_load_assets' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		$slug       = WOWP_Plugin::SLUG;
 		$version    = WOWP_Plugin::info( 'version' );
@@ -138,8 +140,8 @@ class Dashboard {
                     <a href="<?php echo esc_url( Link::add_new_item() ); ?>" class="button button-primary">
 						<?php esc_html_e( 'Add New', 'float-menu' ); ?>
                     </a>
-	                <?php do_action( WOWP_Plugin::PREFIX . '_admin_after_button' ); ?>
-					<?php do_action( WOWP_Plugin::PREFIX . '_admin_header_links' ); ?>
+	                <?php do_action( WOWP_Plugin::PREFIX . '_admin_after_button' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound ?>
+					<?php do_action( WOWP_Plugin::PREFIX . '_admin_header_links' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound ?>
                 </div>
             </div>
         </div>
@@ -161,7 +163,7 @@ class Dashboard {
 	public static function menu(): void {
 		$pages = DashboardHelper::get_files( 'pages' );
 
-		$pages = apply_filters(WOWP_Plugin::PREFIX. '_admin_pages_menu', $pages);
+		$pages = apply_filters(WOWP_Plugin::PREFIX. '_admin_pages_menu', $pages); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		$current_page = self::get_current_page();
 
@@ -207,7 +209,7 @@ class Dashboard {
 		$file = DashboardHelper::get_file( $current, 'pages' );
 
 		if ( $file !== false ) {
-			$file = apply_filters( WOWP_Plugin::PREFIX . '_admin_filter_file', $file, $current );
+			$file = apply_filters( WOWP_Plugin::PREFIX . '_admin_filter_file', $file, $current ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 			$page_path = DashboardHelper::get_folder_path( 'pages' ) . '/' . $file;
 

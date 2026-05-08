@@ -2,6 +2,8 @@
 
 namespace FloatMenuLite\Admin;
 
+defined( 'ABSPATH' ) || exit;
+
 use FloatMenuLite\Update\UpdateDB;
 use FloatMenuLite\WOWP_Plugin;
 

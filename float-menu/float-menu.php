@@ -3,7 +3,7 @@
  * Plugin Name:       Float Menu Lite
  * Plugin URI:        https://wow-estore.com/item/float-menu-pro/
  * Description:       Easily create floating menus of varying complexity
- * Version:           7.2.3
+ * Version:           7.2.4
  * Author:            Wow-Company
  * Author URI:        https://wow-estore.com
  * License:           GPL-2.0+
@@ -14,7 +14,7 @@
  * Store URI:         https://wow-estore.com/
  * Author Email:      hey@wow-company.com
  * Plugin Menu:       Float Menu Lite
- * Rating URI:        https://wordpress.org/support/plugin/float-menu/reviews/?filter=5#new-post
+ * Rating URI:        https://wordpress.org/support/plugin/float-menu/reviews/
  * Support URI:       https://wordpress.org/support/plugin/float-menu/
  * Item URI:          https://wow-estore.com/item/float-menu-pro/
  * Documentation:     https://wow-estore.com/documentations/float-menu-lite/

@@ -4,6 +4,8 @@
  *
  */
 
+defined( 'ABSPATH' ) || exit;
+
 use FloatMenuLite\WOWP_Plugin;
 
 $features = [

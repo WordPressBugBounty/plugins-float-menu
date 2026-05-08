@@ -2,7 +2,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-defined( 'ABSPATH' ) || exit;
 $logo    = plugin_dir_url( __FILE__ ) . 'assets/img/Wow-Company.png';
 $img_url = plugin_dir_url( __FILE__ ) . 'assets/img/';
 

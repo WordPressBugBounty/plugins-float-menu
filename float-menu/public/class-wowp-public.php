@@ -39,7 +39,7 @@ class WOWP_Public {
 	public function assets(): void {
 		$handle          = WOWP_Plugin::SLUG;
 		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
-		$assets          = apply_filters( WOWP_Plugin::PREFIX . '_frontend_assets', $assets );
+		$assets          = apply_filters( WOWP_Plugin::PREFIX . '_frontend_assets', $assets ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 		$version         = WOWP_Plugin::info( 'version' );
 		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
 
@@ -137,7 +137,7 @@ class WOWP_Public {
 
 		$handle          = WOWP_Plugin::SLUG;
 		$assets          = plugin_dir_url( __FILE__ ) . 'assets/';
-		$assets          = apply_filters( WOWP_Plugin::PREFIX . '_frontend_assets', $assets );
+		$assets          = apply_filters( WOWP_Plugin::PREFIX . '_frontend_assets', $assets ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 		$version         = WOWP_Plugin::info( 'version' );
 		$url_fontawesome = WOWP_Plugin::url() . 'vendors/fontawesome/css/all.min.css';
 

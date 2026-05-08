@@ -188,7 +188,7 @@ class DBManager {
 		}
 		if ( ! empty( $tags ) ) {
 			foreach ( $tags as $tag ) {
-				echo '<option value="' . esc_attr( $tag ) . '">';
+				echo '<option value="' . esc_attr( $tag ) . '">' . esc_html( $tag ) . '</option>';
 			}
 		}
 	}

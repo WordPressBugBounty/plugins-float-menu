@@ -89,7 +89,7 @@ class Maker {
 			$properties['--fm-label-size'] = $param['labelSize'];
 		}
 
-		$properties = apply_filters( WOWP_Plugin::PREFIX . '_maker_properties', $properties, $param );
+		$properties = apply_filters( WOWP_Plugin::PREFIX . '_maker_properties', $properties, $param ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 
 		if ( ! empty( $properties ) ) {
@@ -171,7 +171,7 @@ class Maker {
 
 		$data['remove'] = true;
 
-		$data = apply_filters( WOWP_Plugin::PREFIX . '_maker_options', $data, $param );
+		$data = apply_filters( WOWP_Plugin::PREFIX . '_maker_options', $data, $param ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		return wp_json_encode( $data );
 	}
@@ -266,7 +266,7 @@ class Maker {
 			$out .= '</a>';
 		}
 
-		$out = apply_filters( WOWP_Plugin::PREFIX . '_maker_link', $out, $this->menu, $this->param, $i, $this->id );
+		$out = apply_filters( WOWP_Plugin::PREFIX . '_maker_link', $out, $this->menu, $this->param, $i, $this->id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		return $out;
 	}
@@ -320,7 +320,7 @@ class Maker {
 				break;
 		}
 
-		$out = apply_filters( WOWP_Plugin::PREFIX . '_maker_action', $out, $menu, $i, $type, $target );
+		$out = apply_filters( WOWP_Plugin::PREFIX . '_maker_action', $out, $menu, $i, $type, $target ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 		return $out;
 	}

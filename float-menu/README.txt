@@ -5,7 +5,7 @@ Tags: floating menu, sticky menu, menu, navigation, side menu
 Requires at least: 4.3
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 7.2.3
+Stable tag: 7.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -207,6 +207,10 @@ No, **Float Menu is lightweight and optimized for speed**, ensuring minimal impa
 1. Menu
 
 == Changelog ==
+= 7.2.4 =
+* Fixed a minor bug with output tags
+* Fixed: a minor bug with code quality
+
 = 7.2.3 =
 * Added: "Ideal Uses" section with 8+ real-world scenarios for the plugin.
 * Added: Comprehensive FAQ entries covering Z-index, Horizontal layout, and Mobile Rules.
