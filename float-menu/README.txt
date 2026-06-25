@@ -3,7 +3,7 @@ Contributors: Wpcalc, lobov
 Donate link: https://wow-estore.com/item/float-menu-pro/
 Tags: floating menu, sticky menu, menu, navigation, side menu
 Requires at least: 4.3
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 7.2.4
 License: GPLv2 or later
